@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Groups - Attendance Manager{% endblock %}
+
+{% block content %}
+    <h2 class="centered">Your Groups</h2>
+    <div>
+        <a href="{{ url_for('create_group') }}" class="button centered">Create New Group</a>
+    </div>
+    <div class="groups-container">
+        {% if groups %}
+            {% for group in groups %}
+                <div class="group-card">
+                    <h3>{{ group.group_name }}</h3>
+                    <p>{{ group.frequency }}</p>
+                    <a href="{{ url_for('view_group', group_id=group.id) }}" class="button">View Group</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="centered">You have no groups. <a href="{{ url_for('create_group') }}">Create one now!</a></p>
+        {% endif %}
+    </div>
+{% endblock %} 

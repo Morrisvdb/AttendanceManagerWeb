@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Create Group - Attendance Manager{% endblock %}
+
+{% block content %}
+    <h2 class="centered">Create a New Group</h2>
+    <form action="{{ url_for('create_group') }}" method="post" class="form-container">
+        <label for="group_name">Group Name:</label>
+        <input type="text" id="group_name" name="group_name" required> <br>
+
+        <label for="frequency">Meeting Frequency:</label>
+        <select id="frequency" name="frequency" required>
+            <option value="7">Weekly</option>
+            <option value="14">Biweekly</option>
+            <option value="28">Monthly (Every 4 weeks)</option>
+        </select> <br>
+
+        <label for="meeting_day">Meeting Day:</label>
+        <select id="meeting_day" name="start_day" required>
+            <option value="0">Monday</option>
+            <option value="1">Tuesday</option>
+            <option value="2">Wednesday</option>
+            <option value="3">Thursday</option>
+            <option value="4">Friday</option>
+            <option value="5">Saturday</option>
+            <option value="6">Sunday</option>
+        </select> <br>
+
+        <label for="meeting_time">Meeting Time:</label>
+        <input type="time" id="meeting_time" name="time" required> <br>
+
+        <button type="submit" class="button">Create Group</button>
+    </form>
+{% endblock %}

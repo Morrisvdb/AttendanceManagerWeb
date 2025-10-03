@@ -1,0 +1,181 @@
+.signup-button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #27ae60;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-left: 0.5rem;
+}
+.signup-button:hover {
+    background-color: #219150;
+}
+/* Profile icon and dropdown styles */
+.profile-menu {
+    position: absolute;
+    top: 1.2rem;
+    right: 2rem;
+    z-index: 10;
+}
+.profile-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 1rem;
+    vertical-align: middle;
+}
+.profile-icon svg {
+    display: block;
+    background: #3498db;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+}
+.profile-dropdown {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.15);
+    min-width: 120px;
+    padding: 0.5rem 0;
+    text-align: left;
+}
+.dropdown-item {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #2d3e50;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+.dropdown-item:hover {
+    background: #f4f6f8;
+}
+/* Base styles */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 0;
+    color: #222;
+}
+
+header, footer {
+    background-color: #2d3e50;
+    color: #fff;
+    padding: 1rem 2rem;
+    text-align: center;
+}
+
+main {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+}
+
+/* Home page styles */
+.home-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #2d3e50;
+    text-align: center;
+}
+
+.home-description {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #555;
+}
+
+.button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #219150;
+    transition: background 0.5s;
+}
+
+.listed-button {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 0.5rem auto;
+    padding: 0.75rem;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-align: center;  
+}
+
+.centered {
+    text-align: center;
+}
+.form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 1rem; /* Added padding for spacing around the form */
+}
+.form-group {
+    margin-bottom: 2rem; /* Increased spacing between form elements */
+}
+.form-group label {
+    display: block;
+    margin-bottom: 0.75rem; /* Slightly increased spacing below label */
+    color: #333;
+}
+.form-group input {
+    width: 100%;
+    padding: 0.75rem; /* Increased input padding for larger spacing */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+.form-group input:focus {
+    border-color: #3498db;
+    outline: none;
+}
+.form-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.form-button:hover {
+    background-color: #219150;
+}
+
+.return-button {
+    display: inline-block;
+    margin-top: 1rem;
+    color: #3498db;
+    text-decoration: none;
+    font-size: 1rem;
+}

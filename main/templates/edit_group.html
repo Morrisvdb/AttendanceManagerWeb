@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Group - Attendance Manager{% endblock %}
+
+{% block content %}
+    <h2 class="centered">Edit Group</h2>
+    <form action="{{ url_for('edit_group', group_id=group.id) }}" method="post" class="form-container">
+        <label for="group_name">Group Name:</label>
+        <input type="text" id="group_name" name="group_name" value="{{ group.group_name }}" required> <br>
+
+        <label for="frequency">Meeting Frequency:</label>
+        <select id="frequency" name="frequency" required>
+            <option value="7" {% if group.frequency == 7 %}selected{% endif %}>Weekly</option>
+            <option value="14" {% if group.frequency == 14 %}selected{% endif %}>Biweekly</option>
+            <option value="28" {% if group.frequency == 28 %}selected{% endif %}>Monthly (Every 4 weeks)</option>
+        </select> <br>
+
+        <label for="meeting_day">Meeting Day:</label>
+        <select id="meeting_day" name="start_day" required>
+            <option value="0" {% if group.start_day == 0 %}selected{% endif %}>Monday</option>
+            <option value="1" {% if group.start_day == 1 %}selected{% endif %}>Tuesday</option>
+            <option value="2" {% if group.start_day == 2 %}selected{% endif %}>Wednesday</option>
+            <option value="3" {% if group.start_day == 3 %}selected{% endif %}>Thursday</option>
+            <option value="4" {% if group.start_day == 4 %}selected{% endif %}>Friday</option>
+            <option value="5" {% if group.start_day == 5 %}selected{% endif %}>Saturday</option>
+            <option value="6" {% if group.start_day == 6 %}selected{% endif %}>Sunday</option>
+        </select> <br>
+
+        <label for="meeting_time">Meeting Time:</label>
+        <input type="time" id="meeting_time" name="time" value="{{ group.time }}" required> <br>
+
+        <button type="submit" class="button">Update Group</button>
+    </form>
+{% endblock %}

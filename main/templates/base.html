@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Attendance Manager{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+</head>
+<body>
+    <header class="header" style="position: relative;">
+        <h1 style="margin: 0;">Attendance Manager</h1>
+        <div class="profile-menu">
+            <button id="profileBtn" class="profile-icon" aria-label="Profile" onclick="toggleProfileMenu()">
+                <!-- Simple SVG user icon -->
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="8" r="4"/>
+                  <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+                </svg>
+            </button>
+            {% if user %}
+
+                <div id="profileDropdown" class="profile-dropdown" style="display: none;">
+                    <a href="{{ url_for('profile') }}" class="dropdown-item">Profile</a>
+                    <a href="{{ url_for('logout') }}" class="dropdown-item">Sign Out</a>
+                </div>
+
+            {% else %}
+
+                <div id="profileDropdown" class="profile-dropdown" style="display: none;">
+                    <a href="{{ url_for('login') }}" class="dropdown-item">Login</a>
+
+                </div>
+            
+            {% endif %}
+        </div>
+        <script>
+        function toggleProfileMenu() {
+            var dropdown = document.getElementById('profileDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+        // Hide dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            var btn = document.getElementById('profileBtn');
+            var dropdown = document.getElementById('profileDropdown');
+            if (!btn || !dropdown) return;
+            if (!btn.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+        </script>
+    </header>
+    <main class="main">
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer class="footer">
+        <p>&copy; 2025 Attendance Manager</p>
+    </footer>
+</body>
+</html>
+
+<link rel="stylesheet" href="{{ url_for('static', filename = 'stylesheet') }}">
