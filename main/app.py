@@ -2,6 +2,7 @@ from flask import request, render_template, make_response, redirect, url_for
 from __init__ import app, API_URL
 import requests
 from functools import wraps
+import datetime
 
 def get_user(f):
     @wraps(f)
@@ -39,8 +40,31 @@ def login_required(f):
 def home(user, key):
     return render_template("home.html", user=user)
 
-@app.route("/signup")
+@app.route("/signup", methods=['GET', 'POST'])
 def signup():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password1 = request.form.get('password1')
+        password2 = request.form.get('password2')
+        if not(username and password1 and password2):
+            return render_template('signup.html', error="Not all boxes are filled in")
+
+        if password1 != password2:
+            return render_template('signup.html', error="Passwords do not match")
+
+        json = {
+            "username": username,
+            "password": password1
+        }
+        r = requests.post(API_URL + "/signup", json=json)
+        if r.status_code == 201:
+            return redirect(url_for('login'))
+        elif r.status_code == 409:
+            return render_template('signup.html', error="Username already in use")
+        elif r.status_code == 422:
+            return render_template('signup.html', error="Malformed request")
+            
+    
     return render_template("signup.html")
 
 @app.route("/login", methods=['POST', 'GET'])
@@ -55,12 +79,15 @@ def login():
         }
         r = requests.post(API_URL + "/login", json=json)
         if r.status_code == 200:
-            key = r.json()['key']
+            if 'key' in r.json():
+                key = r.json()['key']
+            else:
+                return render_template('login.html', error="Unexpected response from server.")
             url = url_for('home')
             resp = make_response(redirect(url))
             resp.set_cookie('Authorization', key)
             return resp
-        elif r.status_code == 401:
+        elif r.status_code == 404 or r.status_code == 401:
             return render_template('login.html', error="Password or Username incorrect.")
         else:
             return render_template('login.html')
@@ -133,7 +160,17 @@ def create_group(user, key):
 def view_group(group_id, user, key):
     r = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
     if r.status_code == 200:
-        return render_template('view_group.html', group = r.json())
+        next_meeting = r.json()['meetings'][-1]
+
+        next_meeting = requests.get(API_URL+"/meetings/" + str(next_meeting), headers={"Authorization": key})
+
+        if next_meeting.status_code == 200:
+            next_meeting = next_meeting.json()['meeting']
+            next_meeting['date_time'] = datetime.datetime.strptime(next_meeting['date_time'], format("%Y-%m-%dT%H:%M:%S"))
+        else:
+            next_meeting = None
+
+        return render_template('view_group.html', group = r.json(), next_meeting=next_meeting)
     else:
         return redirect(url_for('groups'))
 
@@ -154,18 +191,22 @@ def edit_group(group_id, user, key):
             "start_day": start_day,
             "time": time
         }
-        r = requests.put(API_URL+'/groups/'+group_id)
+        r = requests.put(API_URL+'/groups/'+str(group_id), headers={"Authorization": key}, json=json)
+        print(r.status_code)
         if r.status_code == 200:
             return redirect(url_for('view_group', group_id=group_id))
-        else:
+        elif r.status_code == 404:
             r = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
-            if r.status_code == 200:
-                print(r.json())
-                return render_template('edit_group.html', group = r.json())
-        
+            return render_template('edit_group.html', error="Group not found", group = r.json())
+        elif r.status_code == 422:
+            r = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
+            return render_template('edit_group.html', error="Group not found", group = r.json())
+        elif r.status_code == 409:
+            r = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
+            return render_template('edit_group.html', error="Cannot rename group, you already have a group with that name.", group = r.json())
+            
     r = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
     if r.status_code == 200:
-        print(r.json())
         return render_template('edit_group.html', group = r.json())
 
 @app.route('/groups/delete/<int:group_id>', methods = ['GET'])
@@ -176,11 +217,9 @@ def delete_group(group_id, user, key):
     if r.status_code == 204:
         return redirect(url_for("groups"))
     
-    return redirect(url_for("view_group", group_id = group_id))        
+    return redirect(url_for("view_group", group_id = group_id))     
 
-
-
-    
+# TODO: Add meeting routes and attendance marking.   
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=5002)

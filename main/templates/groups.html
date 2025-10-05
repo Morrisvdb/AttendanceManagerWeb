@@ -11,7 +11,23 @@
             {% for group in groups %}
                 <div class="group-card">
                     <h3>{{ group.group_name }}</h3>
-                    <p>{{ group.frequency }}</p>
+                    <p>
+                        {% if group.start_day == 0 %}
+                            Meeting Day: Monday
+                        {% elif group.start_day == 1 %}
+                            Meeting Day: Tuesday
+                        {% elif group.start_day == 2 %}
+                            Meeting Day: Wednesday
+                        {% elif group.start_day == 3 %}
+                            Meeting Day: Thursday
+                        {% elif group.start_day == 4 %}
+                            Meeting Day: Friday
+                        {% elif group.start_day == 5 %}
+                            Meeting Day: Saturday
+                        {% elif group.start_day == 6 %}
+                            Meeting Day: Sunday
+                        {% endif %}
+                    </p>
                     <a href="{{ url_for('view_group', group_id=group.id) }}" class="button">View Group</a>
                 </div>
             {% endfor %}

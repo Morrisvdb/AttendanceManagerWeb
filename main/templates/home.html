@@ -7,8 +7,13 @@
         <!-- <a href="{{ url_for('signup') }}" class="button">Get Started</a> -->
         <h3 class="centered">Getting Started</h3>
 
-        <a href="{{ url_for('groups') }}" class="listed-button button">Groups</a>
-        <a href="#" class="listed-button button">Meetings</a>
+        {% if user %}
+            <a href="{{ url_for('groups') }}" class="listed-button button">Groups</a>
+            <a href="#" class="listed-button button">Meetings</a>
+        {% else %}
+            <a href="{{ url_for('login') }}" class="listed-button button">Login</a>
+        {% endif %}
+        
 
     </div>
 {% endblock %}

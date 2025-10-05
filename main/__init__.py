@@ -1,12 +1,7 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv, find_dotenv, set_key
 from config import Development, Production
 import os, random, string
-
-
-# db = SQLAlchemy()
-
 
 API_URL = "http://localhost:5001"
 
