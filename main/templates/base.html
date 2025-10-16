@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <title>{% block title %}Attendance Manager{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+    <script src="https://kit.fontawesome.com/832e141ab8.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <header class="header" style="position: relative;">
-        <h1 style="margin: 0;">Attendance Manager</h1>
+        <a href="{{ url_for('home') }}" class="no-link-style"><h1 style="margin: 0;">Attendance Manager</h1></a>
         <div class="profile-menu">
             <button id="profileBtn" class="profile-icon" aria-label="Profile" onclick="toggleProfileMenu()">
                 <!-- Simple SVG user icon -->

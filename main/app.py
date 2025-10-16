@@ -35,6 +35,10 @@ def login_required(f):
 
     return decorated_function
 
+@app.errorhandler(404)
+def not_found(e):
+    return render_template("404.html", url=request.url)
+
 @app.route("/")
 @get_user
 def home(user, key):
@@ -120,10 +124,8 @@ def groups(user, key):
     
     r = requests.get(API_URL+"/groups", headers={"Authorization": key})
     if r.status_code == 200:
-        groups = r.json()
-        print(groups)
-    
-        return render_template('groups.html', groups = groups)
+        groups = r.json()    
+        return render_template('groups.html', groups = groups, user=user)
     
 @app.route('/groups/create', methods=['GET', 'POST'])
 @login_required
@@ -135,7 +137,7 @@ def create_group(user, key):
         start_day = request.form.get('start_day')
         time = request.form.get('time')
         if group_name is None or frequency is None or start_day is None or time is None:
-            return render_template('create_group.html')
+            return render_template('create_group.html', user=user)
         json = {
             "group_name": group_name,
             "frequency": frequency,
@@ -143,16 +145,15 @@ def create_group(user, key):
             "time": time
         }
         r = requests.post(API_URL+'/groups', json=json, headers={"Authorization": key})
-        print(r.json())
         if r.status_code == 201:
             return redirect(url_for('groups'))
         elif r.status_code == 409:
-            return render_template('create_group.html', error="Session is invalid or has expired") 
+            return render_template('create_group.html', error="Session is invalid or has expired", user=user) 
         elif r.status_code == 422:
-            return render_template('create_group.html', error="Incomplete request")
+            return render_template('create_group.html', error="Incomplete request", user=user)
         
         
-    return render_template('create_group.html')
+    return render_template('create_group.html', user=user)
 
 @app.route('/groups/view/<int:group_id>')
 @login_required
@@ -160,17 +161,20 @@ def create_group(user, key):
 def view_group(group_id, user, key):
     r = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
     if r.status_code == 200:
-        next_meeting = r.json()['meetings'][-1]
+        if len(r.json()['meetings']) > 0:
+            next_meeting = r.json()['meetings'][-1]
 
-        next_meeting = requests.get(API_URL+"/meetings/" + str(next_meeting), headers={"Authorization": key})
+            next_meeting = requests.get(API_URL+"/meetings/" + str(next_meeting), headers={"Authorization": key})
 
-        if next_meeting.status_code == 200:
-            next_meeting = next_meeting.json()['meeting']
-            next_meeting['date_time'] = datetime.datetime.strptime(next_meeting['date_time'], format("%Y-%m-%dT%H:%M:%S"))
+            if next_meeting.status_code == 200:
+                next_meeting = next_meeting.json()['meeting']
+                next_meeting['date_time'] = datetime.datetime.strptime(next_meeting['date_time'], format("%Y-%m-%dT%H:%M:%S"))
+            else:
+                next_meeting = None
         else:
             next_meeting = None
 
-        return render_template('view_group.html', group = r.json(), next_meeting=next_meeting)
+        return render_template('view_group.html', group = r.json(), next_meeting=next_meeting, user=user)
     else:
         return redirect(url_for('groups'))
 
@@ -184,7 +188,7 @@ def edit_group(group_id, user, key):
         start_day = request.form.get('start_day')
         time = request.form.get('time')
         if group_name is None or frequency is None or start_day is None or time is None:
-            return render_template('create_group.html')
+            return render_template('create_group.html', user=user)
         json = {
             "group_name": group_name,
             "frequency": frequency,
@@ -192,22 +196,21 @@ def edit_group(group_id, user, key):
             "time": time
         }
         r = requests.put(API_URL+'/groups/'+str(group_id), headers={"Authorization": key}, json=json)
-        print(r.status_code)
         if r.status_code == 200:
             return redirect(url_for('view_group', group_id=group_id))
         elif r.status_code == 404:
             r = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
-            return render_template('edit_group.html', error="Group not found", group = r.json())
+            return render_template('edit_group.html', error="Group not found", group = r.json(), user=user)
         elif r.status_code == 422:
             r = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
-            return render_template('edit_group.html', error="Group not found", group = r.json())
+            return render_template('edit_group.html', error="Group not found", group = r.json(), user=user)
         elif r.status_code == 409:
             r = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
-            return render_template('edit_group.html', error="Cannot rename group, you already have a group with that name.", group = r.json())
+            return render_template('edit_group.html', error="Cannot rename group, you already have a group with that name.", group = r.json(), user=user)
             
     r = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
     if r.status_code == 200:
-        return render_template('edit_group.html', group = r.json())
+        return render_template('edit_group.html', group = r.json(), user=user)
 
 @app.route('/groups/delete/<int:group_id>', methods = ['GET'])
 @login_required
@@ -219,7 +222,183 @@ def delete_group(group_id, user, key):
     
     return redirect(url_for("view_group", group_id = group_id))     
 
-# TODO: Add meeting routes and attendance marking.   
+@app.route('/meetings/<int:group_id>')
+@login_required
+@get_user
+def group_meetings(user, key, group_id=None):
+    headers = {"Authorization": key}
+    if group_id is not None:
+        r = requests.get(API_URL+'/groups/'+str(group_id), headers=headers)
+        if r.status_code == 200:
+            # print(r.json())
+            data = {"group_id": group_id}
+            r2 = requests.get(API_URL+'/meetings', json=data, headers=headers)
+            if r2.status_code == 200:
+                meetings = r2.json()['meetings']
+                groups = r.json()
+                # for meeting in meetings:
+                #     print(meeting)
+                    # meeting.date_time = datetime.datetime.strptime(meeting.date_time, format="%Y-%m-%dT%H:%M:%S")
+                return render_template('meetings.html', group=r.json(), user=user, meetings=meetings, groups=groups)
+            
+    return render_template('404.html', user=user, url=request.url)
+    # return render_template('meetings.html', user=user)
+    
+@app.route('/meetings/edit/<int:meeting_id>')
+@login_required
+@get_user
+def edit_meeting(user, key, meeting_id=None):
+    if meeting_id is not None:
+        headers = {"Authorization": key}
+        r = requests.get(API_URL+'/meetings/'+str(meeting_id), headers=headers)
+        meeting = r.json()['meeting']
+        if r.status_code == 200 and meeting:
+            return render_template('edit_meeting.html', user=user, meeting=meeting)
+    
+    return render_template('404.html', user=user, url=request.url)
+
+@app.route('/meetings/attendance/<int:meeting_id>', methods=['GET', 'POST'])
+@login_required
+@get_user
+def meeting_attendance(user, key, meeting_id=None):
+    if request.method == 'POST':
+        raise NotImplementedError 
+    # TODO: Add form reception
+    
+    if meeting_id is not None:
+        headers = {"Authorization": key}
+        r = requests.get(API_URL+'/meetings/'+str(meeting_id), headers=headers)
+        if r.status_code == 200:
+            meeting = r.json()['meeting']
+            if meeting:
+                json = {'group_id': meeting['group_id']}
+                r2 = requests.get(API_URL+'/people',json=json, headers=headers)
+                people = r2.json()['people']
+                print(people)
+                        
+    return render_template('attendances.html', meeting=meeting, people=people)
+
+@app.route('/meetings/view/<int:meeting_id>')
+@login_required
+@get_user
+def view_meeting(user, key, meeting_id=None):
+    if meeting_id is not None:
+        headers = {"Authorization": key}
+        r = requests.get(API_URL+'/meetings/'+str(meeting_id), headers=headers)
+        print(r.json())
+        meeting  =r.json()['meeting']
+        
+        return render_template('view_meeting.html', user=user, meeting=meeting)
+    
+    return render_template('404.html', user=user, url=request.url)
+
+@app.route('/meetings/<int:meeting_id>')
+@login_required
+@get_user
+def meeting(meeting_id, user, key):
+    return render_template('meeting.html', user=user)
+
+@app.route('/people/<int:group_id>')
+@login_required
+@get_user
+def group_people(user, key, group_id=None):
+    if group_id is not None:
+        r = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
+        if r.status_code == 200:
+            r2 = requests.get(API_URL+'/people', headers={"Authorization": key}, json={'group_id': group_id})
+            if r2.status_code == 200:
+                people = r2.json()['people']
+                people = sorted(sorted(people, key=lambda d: d['name']), key=lambda d: int(d['role']), reverse=True)
+                return render_template('group_people.html', group = r.json(), user=user, people=people)
+        
+    return render_template('404.html', url=request.url, user=user)
+  
+@app.route('/person/<int:person_id>')
+@login_required
+@get_user
+def view_person(user, key, person_id=None):
+    if person_id is not None:
+        r = requests.get(API_URL+'/people/'+str(person_id), headers={"Authorization": key})
+        if r.status_code == 200:
+            return render_template('view_person.html', user=user, person=r.json()['person'])
+        
+    return render_template('404.html', user=user, url=request.url)
+    
+@app.route('/people/create/<int:group_id>', methods=['POST', 'GET'])
+@login_required
+@get_user
+def create_person(user, key, group_id=None):
+    if request.method == 'POST':
+        names = request.form.get('names')
+        role = request.form.get('role')
+        
+        # Filter the names and turn them into a list
+        names = ','.join(name.strip() for name in names.split(','))
+        names = names.translate(str.maketrans({',': '<split>', '\n': '<split>', '\r': ''}))
+        names = names.split('<split>')
+        names = list(filter(None, names))
+        
+        people = []
+                
+        for name in names:
+            people.append({'person_name': name, 'group_id': group_id, 'role': int(role)})
+                    
+        r = requests.post(API_URL+'/people', headers={"Authorization": key}, json={"people": people})
+        
+        if r.status_code == 201:
+            return redirect(url_for('group_people', group_id=group_id))
+        
+        return render_template('404.html', error="Group Not Found", user=user)
+    
+    if group_id is not None:
+        r = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
+        if r.status_code == 200:
+            return render_template("create_person.html", group=r.json(), user=user)
+        
+    return render_template('404.html', url=request.url, user=user)
+
+@app.route('/people/delete/<int:person_id>')
+@login_required
+@get_user
+def delete_person(user, key, person_id=None):
+    if person_id is not None:
+        r = requests.get(API_URL+'/people/'+str(person_id), headers={"Authorization": key})
+        if r.status_code == 200:
+            group_id = r.json()['person']['group_id']
+            r2 = requests.delete(API_URL+'/people/'+str(person_id), headers={"Authorization": key})
+            if r2.status_code == 204 or r2.status_code == 200:
+                return redirect(url_for('group_people', group_id=group_id))
+    
+    return render_template('404.html', user=user, url=request.url)
+
+@app.route('/people/edit/<int:person_id>', methods = ['GET', 'POST'])
+@login_required
+@get_user
+def edit_person(user, key, person_id=None):
+    headers = {"Authorization": key}
+    if request.method == 'POST':
+        name = request.form.get('name')
+        role = request.form.get('role')
+        
+        data = {
+            "person_name": name,
+            "role": role
+        }
+        
+        r = requests.put(API_URL+"/people/"+str(person_id), headers=headers, json=data)
+        if r.status_code == 409:
+            return render_template('edit_person.html', person=r.json()['person'], error="You already have someone with that name in this group.")
+        elif r.status_code == 200:
+            group_id = r.json()['person']['group_id']
+            return redirect(url_for('group_people', group_id=group_id))
+    
+    if person_id is not None:
+        r = requests.get(API_URL+'/people/'+str(person_id), headers=headers)
+        if r.status_code == 200:
+            return render_template('edit_person.html', person=r.json()['person'])
+        
+        
+    return render_template("404.html", url=request.url, user=user)
 
 if __name__ == '__main__':
     app.run(port=5002)

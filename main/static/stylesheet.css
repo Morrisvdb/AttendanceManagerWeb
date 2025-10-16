@@ -1,3 +1,113 @@
+/* Card layout for people list */
+.card-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin: 2rem 0;
+    justify-items: center;
+    align-items: stretch;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.person-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.10);
+    padding: 1.25rem 1.5rem;
+    min-width: 180px;
+    max-width: 220px;
+    flex: 1 1 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: box-shadow 0.2s;
+}
+.person-card:hover {
+    box-shadow: 0 4px 16px rgba(44, 62, 80, 0.18);
+}
+.person-name {
+    font-size: 1.15rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #2d3e50;
+}
+.person-role {
+    font-size: 0.95rem;
+    color: #888;
+    background: #f4f6f8;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+}
+.role-1 {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+.role-2 {
+    background: #c3e6cb;
+    color: #155724;
+}
+
+
+/* Tooltip styles */
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 160px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 0.5rem;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-size: 0.95rem;
+}
+
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+/* Base styles */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 0;
+    color: #222;
+}
+
+header, footer {
+    background-color: #2d3e50;
+    color: #fff;
+    padding: 1rem 2rem;
+    text-align: center;
+}
+
+main {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+}
+
+form br {
+    line-height: 200%;
+}
+
 .signup-button {
     display: inline-block;
     padding: 0.75rem 1.5rem;
@@ -57,30 +167,6 @@
 .dropdown-item:hover {
     background: #f4f6f8;
 }
-/* Base styles */
-body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background-color: #f4f6f8;
-    margin: 0;
-    padding: 0;
-    color: #222;
-}
-
-header, footer {
-    background-color: #2d3e50;
-    color: #fff;
-    padding: 1rem 2rem;
-    text-align: center;
-}
-
-main {
-    max-width: 900px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
-}
 
 /* Home page styles */
 .home-title {
@@ -132,7 +218,11 @@ main {
 
 .centered {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+
 .form-container {
     max-width: 400px;
     margin: 0 auto;
@@ -143,14 +233,16 @@ main {
 }
 .form-group label {
     display: block;
-    margin-bottom: 0.75rem; /* Slightly increased spacing below label */
+    float: left;
+    margin-bottom: 0; /* Slightly increased spacing below label */
     color: #333;
+    font-size: 0.8rem;
 }
 .form-group input {
     width: 100%;
-    padding: 0.75rem; /* Increased input padding for larger spacing */
+    padding: 0.8rem; /* Increased input padding for larger spacing */
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 5px;
     font-size: 1rem;
 }
 .form-group input:focus {
@@ -190,4 +282,35 @@ main {
 .alert-danger {
     background-color: #e74c3c;
     color: #fff;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+input, label {
+    display:block
+}
+
+.no-link-style {
+    color: inherit;
+    text-decoration: none;
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.attendance-table th, .attendance-table td {
+    border: 1px solid #ddd;
+    padding: 0.75rem;
+    text-align: center;
+}
+
+.attendance-table input[type="checkbox"] {
+    display: block;
+    margin: 0 auto;
 }

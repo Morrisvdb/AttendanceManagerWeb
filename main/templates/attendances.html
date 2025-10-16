@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Attendances - Attendance Manager{% endblock %}
+
+{% block content %}
+    <h2 class="centered">Attendances for {{ meeting.group_name }} on {{ meeting.date_time.split("T")[0] }} at {{ meeting.date_time.split("T")[1][:5] }}</h2>
+    <a href="{{ url_for('group_meetings', group_id=meeting.group_id) }}" class="return-button">< Back</a>
+    <div class="form-container">
+        <form method="POST" action="{{ url_for('meeting_attendance', meeting_id=meeting.id) }}">
+            <table class="attendance-table">
+                <th>
+                    Name
+                </th>
+                <th>
+                    Presence
+                </th>
+                <th>
+                    Late?
+                </th>
+                <th>
+                    Material
+                </th>
+                {% for person in people %}
+                    <tr>
+                        <td>{{ person.name }}</td>
+                        <td>
+                            <input type="checkbox" id="{{ person.id }}_presence" name="{{ person.id }}_presence" {% if person.attended %}checked{% endif %}>
+                        </td>
+                        <td>
+                            <input type="checkbox" id="{{ person.id }}_late" name="{{ person.id }}_late" {% if person.late %}checked{% endif %}>
+                        </td>
+                        <td>
+                            <input type="checkbox" id="{{ person.id }}_material" name="{{ person.id }}_material" {% if person.material %}checked{% endif %}>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+            </table>
+            <button type="submit" class="button">Save Attendances</button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Meetings - Attendance Manager{% endblock %}
+
+{% block content %}
+    <h2 class="centered">Meetings in {{ group.group_name }}</h2>
+    <a href="{{ url_for('view_group', group_id=group.id) }}" class="return-button">< Back</a>
+    <div class="container centered">
+        <div class="card-list">
+            {% for meeting in meetings %}
+                <a href="{{ url_for('view_meeting', meeting_id=meeting.id) }}" class="no-link-style">
+                    <div class="meeting-card">
+                        <div class="meeting-name">{{ meeting.group_name }}</div>
+                        <div class="meeting-date">
+                            {{ groups.group_name }} - {{ meeting.date_time.split("T")[0] }} at {{ meeting.date_time.split("T")[1][:5] }}
+                        </div>
+                    </div>
+                </a>    
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

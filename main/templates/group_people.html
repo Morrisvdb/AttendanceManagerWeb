@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Group People - Attendance Manager{% endblock %}
+
+{% block content %}
+    <h2 class="centered">People in {{ group.group_name }}</h2>
+    <a href="{{ url_for('view_group', group_id=group.id) }}" class="return-button">< Back</a>
+    <div class="container centered">
+        {% if people %}
+            <div class="card-list">
+                {% for person in people %}
+                    {% if person.role == 2 %}
+                        <a href="{{ url_for('view_person', person_id=person.id) }}" class="no-link-style">
+                            <div class="person-card">
+                                <div class="person-name">{{ person.name }}</div>
+                                <div class="person-role role-2">
+                                    Leader
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+
+                    {% if person.role == 1 %}
+                        <a href="{{ url_for('view_person', person_id=person.id) }}" class="no-link-style">
+                            <div class="person-card">
+                                <div class="person-name">{{ person.name }}</div>
+                                <div class="person-role role-1">
+                                    Counsil
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+
+                    {% if person.role == 0 %}
+                        <a href="{{ url_for('view_person', person_id=person.id) }}" class="no-link-style">
+                            <div class="person-card">
+                                <div class="person-name">{{ person.name }}</div>
+                                <div class="person-role">
+                                    Member
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No people in this group.</p>
+        {% endif %}
+        <a href="{{ url_for('create_person', group_id=group.id) }}" class="button"><i class="fa-solid fa-plus"></i> Add Person</a>
+    </div>
+{% endblock %}

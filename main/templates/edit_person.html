@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Edit Person - Attendance Manager{% endblock %}
+{% block content %}
+    <h2 class="centered">Edit Person</h2>
+    <a href="{{ url_for('view_person', person_id=person.id) }}" class="return-button">< Back</a>
+    <div class="form-container">
+        <form method="POST" action="{{ url_for('edit_person', person_id=person.id) }}">
+            <label for="name">Name:</label>
+            <input type="text" name="name" id="name" value="{{ person.name }}" required>
+
+            <label for="role">Role: </label>
+            <select name="role" id="role">  
+                <option value="0" {% if person.role == 0 %}selected{% endif %}>Member</option>
+                <option value="1" {% if person.role == 1 %}selected{% endif %}>Counsil</option>
+                <option value="2" {% if person.role == 2 %}selected{% endif %}>Leader</option>
+            </select> <br>
+
+            <button type="submit" class="button"><i class="fa-solid fa-pen-to-square"></i> Save Changes</button>
+            {% if error %}
+                <div class="alert alert-danger mt-3">{{ error }}</div>
+            {% endif %}
+        </form>
+    </div>
+{% endblock %}
