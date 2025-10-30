@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<script src="{{ url_for('static', filename='confirmDanger.js') }}"></script>
+
+<div class="centered">
+    <h2>Profile</h2>
+    <p>Welcome, {{ user.username }}!</p>
+    <div>
+        <a href="{{ url_for('logout') }}" class="button">Sign Out</a>
+        <a href="{{ url_for('delete_profile', isConfirmed=true) }}" class="button alert-danger" onclick="return confirmDanger()">Delete Account</a>
+    </div>  
+</div>
+{% endblock %}

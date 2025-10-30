@@ -4,6 +4,9 @@ import requests
 from functools import wraps
 import datetime
 
+# TODO: Improve error handeling. --> not 404.html for everything :facepalm:
+# TODO: update the meeting view to include people and move the attendance button to the view instead of the edit
+
 def get_user(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -115,7 +118,22 @@ def logout(user, key):
 @login_required
 @get_user
 def profile(user, key):
-    raise NotImplementedError
+    return render_template('profile.html', user=user, key=key)
+        
+@app.route('/profile/delete/<isConfirmed>')
+@login_required
+@get_user
+def delete_profile(user, key, isConfirmed):
+    if isConfirmed:
+        r = requests.delete(API_URL+'/user', headers={'Authorization': key})
+        if r.status_code == 204:
+            return redirect(url_for('home'))
+        else:
+            return redirect(url_for('profile'))
+    else:
+        return redirect(url_for('profile'))
+        
+        
         
 @app.route('/groups')
 @login_required
@@ -244,6 +262,43 @@ def group_meetings(user, key, group_id=None):
     return render_template('404.html', user=user, url=request.url)
     # return render_template('meetings.html', user=user)
     
+@app.route('/meetings/upcomming', methods=['GET', 'POST'])
+@login_required
+@get_user
+def upcomming_meetings(user, key):
+    future_only = True
+    canceled = False
+    group = None
+    if request.method == 'POST':
+        future_only = request.form.get('future_only')
+        canceled = request.form.get('canceled')
+        group = request.form.get('group')
+        if group == 'all':
+            group = None
+        # Let user filter meetings, default `future_only:True`
+    
+    
+    
+    headers = {"Authorization": key}
+    data = {'future_only': future_only, 'canceled': canceled, 'group_id': group}
+    
+    groups_r = requests.get(API_URL+"/groups", headers=headers)
+    if groups_r.status_code == 200:
+        groups = groups_r.json()
+    
+    r = requests.get(API_URL+'/meetings', headers=headers, json=data)
+    if r.status_code == 200:
+        meetings = r.json()['meetings']
+        
+        for meeting in meetings:
+            r2 = requests.get(API_URL+'/groups/'+str(meeting['group_id']), headers=headers)
+            if r2.status_code == 200:
+                meeting['group'] = r2.json()
+    
+        return render_template('meetings_upcomming.html', meetings = meetings, groups=groups, future_only=future_only, canceled=canceled, selected_group=group)
+            
+    return render_template('404.html', user=user, key=key)
+
 @app.route('/meetings/edit/<int:meeting_id>')
 @login_required
 @get_user
@@ -267,16 +322,26 @@ def meeting_attendance(user, key, meeting_id=None):
     
     if meeting_id is not None:
         headers = {"Authorization": key}
-        r = requests.get(API_URL+'/meetings/'+str(meeting_id), headers=headers)
-        if r.status_code == 200:
-            meeting = r.json()['meeting']
-            if meeting:
-                json = {'group_id': meeting['group_id']}
-                r2 = requests.get(API_URL+'/people',json=json, headers=headers)
-                people = r2.json()['people']
-                print(people)
-                        
-    return render_template('attendances.html', meeting=meeting, people=people)
+        meeting_request = requests.get(API_URL+'/meetings/'+str(meeting_id), headers=headers)
+        if meeting_request.status_code == 200:
+            meeting = meeting_request.json()['meeting']
+            
+            people_request = requests.get(API_URL+'/people', json={'group_id':meeting['group_id']}, headers=headers)
+            if people_request.status_code == 200:
+                people = people_request.json()['people']
+            
+            meeting_attendance_request = requests.get(API_URL+'/attendance/'+str(meeting['id']), headers=headers)
+            
+            if meeting_attendance_request.status_code == 200:
+                attendances = meeting_attendance_request.json()['attendances']
+                for attendance in attendances:
+                    for person in people:
+                        if person['id'] == attendance['person_id']:
+                            attendance['person'] = person
+                            
+    print(attendances)
+                            
+    return render_template('attendances.html', meeting=meeting, attendances=attendances)
 
 @app.route('/meetings/view/<int:meeting_id>')
 @login_required
@@ -379,10 +444,12 @@ def edit_person(user, key, person_id=None):
     if request.method == 'POST':
         name = request.form.get('name')
         role = request.form.get('role')
+        default_presence = request.form.get('default_presence')
         
-        data = {
+        data = {    
             "person_name": name,
-            "role": role
+            "role": role,
+            "default_presence": default_presence
         }
         
         r = requests.put(API_URL+"/people/"+str(person_id), headers=headers, json=data)

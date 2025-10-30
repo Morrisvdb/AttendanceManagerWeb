@@ -19,17 +19,17 @@
                 <th>
                     Material
                 </th>
-                {% for person in people %}
+                {% for attendance in attendances %}
                     <tr>
-                        <td>{{ person.name }}</td>
+                        <td>{{ attendance.person.name }}</td>
                         <td>
-                            <input type="checkbox" id="{{ person.id }}_presence" name="{{ person.id }}_presence" {% if person.attended %}checked{% endif %}>
+                            <input type="checkbox" id="{{ attendance.person_id }}_presence" name="{{ attendance.person_id }}_presence" {% if attendance.presence %}checked{% endif %}>
                         </td>
                         <td>
-                            <input type="checkbox" id="{{ person.id }}_late" name="{{ person.id }}_late" {% if person.late %}checked{% endif %}>
+                            <input type="checkbox" id="{{ attendance.person_id }}_late" name="{{ attendance.person_id }}_late"{% if attendance.presence == 2 %}checked{% endif %}>
                         </td>
                         <td>
-                            <input type="checkbox" id="{{ person.id }}_material" name="{{ person.id }}_material" {% if person.material %}checked{% endif %}>
+                            <input type="checkbox" id="{{ attendance.person_id }}_material" name="{{ attendance.person_id }}_material" {% if attendance.material %}checked{% endif %}>
                         </td>
 
                     </tr>

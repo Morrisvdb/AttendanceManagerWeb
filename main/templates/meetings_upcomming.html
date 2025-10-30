@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Meetings - Attendance Manager{% endblock %}
+
+{% block content %}
+    <h2 class="centered">Meetings</h2>
+    <div class="container centered">
+        <form method="POST">
+            <!-- TODO: Maybe want date filter -->
+            <table class="attendance-table">
+                <th>
+                    Future Only
+                </th>
+                <th>
+                    Canceled
+                </th>
+                <th>
+                    Group
+                </th>
+
+                <tr>
+                    <td>
+                        <input type="checkbox" name="future_only" id="future_only" {% if future_only %}checked{% endif %}>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="canceled" id="canceled" {% if canceled%}checked{% endif %}>
+                    </td>
+                    <td>
+                        <select name="group" id="group">
+                            <option value="all">All Groups</option>
+                            {% for group in groups %}
+                                <option value="{{ group.id }}" {% if selected_group|int == group.id|int %}selected{% endif %}>{{ group.group_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <button type="submit" class="button">Filter</button>
+        </form>
+    </div>
+        <div class="card-list centered">
+            {% for meeting in meetings %}
+                <a href="{{ url_for('view_meeting', meeting_id=meeting.id) }}" class="no-link-style">
+                    <div class="meeting-card">
+                        <div class="meeting-name">{{ meeting.group_name }}</div>
+                        <div class="meeting-date">
+                            {{ meeting.group.group_name }} - {{ meeting.date_time.split("T")[0] }} at {{ meeting.date_time.split("T")[1][:5] }}
+                        </div>
+                    </div>
+                </a>    
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
