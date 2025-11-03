@@ -14,7 +14,7 @@
 .person-card {
     background: #fff;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.10);
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.175);
     padding: 1.25rem 1.5rem;
     min-width: 180px;
     max-width: 220px;
@@ -27,6 +27,38 @@
 .person-card:hover {
     box-shadow: 0 4px 16px rgba(44, 62, 80, 0.18);
 }
+
+.meeting-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.175);
+    padding: 1.25rem 1.5rem;
+    min-width: 180px;
+    max-width: 220px;
+    flex: 1 1 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: box-shadow 0.2s;
+}
+.meeting-card:hover {
+    box-shadow: 0 4px 16px rgba(44, 62, 80, 0.18);
+}
+
+.meeting-name {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.75rem;
+    color: #2d3e50;
+}
+
+.meeting-date {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #2d3e50;
+}
+
 .person-name {
     font-size: 1.15rem;
     font-weight: bold;
@@ -47,6 +79,45 @@
 .role-2 {
     background: #c3e6cb;
     color: #155724;
+}
+
+.person-attendance-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.175);
+    padding: 1.25rem 1.5rem;
+    min-width: 180px;
+    max-width: 250px;
+    flex: 1 1 180px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    transition: box-shadow 0.2s;
+}
+
+.person-row {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.person-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem; /* small gap between name and role (stacked) */
+    align-items: flex-start;
+}
+
+.person-attendance-status {
+    margin-left: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.presence-checkbox {
+    width: 18px;
+    height: 18px;
 }
 
 

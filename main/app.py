@@ -1,4 +1,4 @@
-from flask import request, render_template, make_response, redirect, url_for
+from flask import request, render_template, make_response, redirect, url_for, abort
 from __init__ import app, API_URL
 import requests
 from functools import wraps
@@ -6,6 +6,7 @@ import datetime
 
 # TODO: Improve error handeling. --> not 404.html for everything :facepalm:
 # TODO: update the meeting view to include people and move the attendance button to the view instead of the edit
+# TODO: Make seperate pre-meeting and in-meeting attendance change screens
 
 def get_user(f):
     @wraps(f)
@@ -338,10 +339,11 @@ def meeting_attendance(user, key, meeting_id=None):
                     for person in people:
                         if person['id'] == attendance['person_id']:
                             attendance['person'] = person
-                            
-    print(attendances)
-                            
-    return render_template('attendances.html', meeting=meeting, attendances=attendances)
+                                                        
+                return render_template('attendances.html', meeting=meeting, attendances=attendances)
+            
+            else:
+                return abort(meeting_attendance_request.status_code)
 
 @app.route('/meetings/view/<int:meeting_id>')
 @login_required
@@ -350,12 +352,32 @@ def view_meeting(user, key, meeting_id=None):
     if meeting_id is not None:
         headers = {"Authorization": key}
         r = requests.get(API_URL+'/meetings/'+str(meeting_id), headers=headers)
-        print(r.json())
-        meeting  =r.json()['meeting']
-        
-        return render_template('view_meeting.html', user=user, meeting=meeting)
+        if r.status_code == 200:
+            meeting = r.json()['meeting']
+            
+            people_request = requests.get(API_URL+'/people', json={'group_id': meeting['group_id']}, headers=headers)
+            if people_request.status_code == 200:
+                people = people_request.json()['people']
+                people = sorted(sorted(people, key=lambda d: d['name']), key=lambda d: int(d['role']), reverse=True) # Sort the higher roles before the lower ones
+
+                
+                meeting_attendance_request = requests.get(API_URL+'/attendance/'+str(meeting['id']), headers=headers)
+                
+                if meeting_attendance_request.status_code == 200:
+                    for person in people:
+                        for attendance in meeting_attendance_request.json()['attendances']:
+                            if attendance['person_id'] == person['id']:
+                                person['attendance'] = attendance
+                else:
+                    return abort(meeting_attendance_request.status_code)
+                        
+                return render_template('view_meeting.html', user=user, meeting=meeting, people=people)
+            else:
+                return abort(people_request.status_code)
+        else:
+            return abort(r.status_code)
     
-    return render_template('404.html', user=user, url=request.url)
+    return abort(404)
 
 @app.route('/meetings/<int:meeting_id>')
 @login_required

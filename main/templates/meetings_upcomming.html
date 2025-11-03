@@ -41,9 +41,9 @@
             {% for meeting in meetings %}
                 <a href="{{ url_for('view_meeting', meeting_id=meeting.id) }}" class="no-link-style">
                     <div class="meeting-card">
-                        <div class="meeting-name">{{ meeting.group_name }}</div>
+                        <div class="meeting-name">{{ meeting.group.group_name }}</div>
                         <div class="meeting-date">
-                            {{ meeting.group.group_name }} - {{ meeting.date_time.split("T")[0] }} at {{ meeting.date_time.split("T")[1][:5] }}
+                            {{ meeting.date_time.split("T")[0] }} at {{ meeting.date_time.split("T")[1][:5] }}
                         </div>
                     </div>
                 </a>    

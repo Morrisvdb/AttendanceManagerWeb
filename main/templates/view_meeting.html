@@ -8,5 +8,47 @@
     <div class="form-container">
         <p><strong>Date and Time:</strong> {{ meeting.date_time }}</p>
         <a href="{{ url_for('edit_meeting', meeting_id=meeting.id) }}" class="button">Edit Meeting</a>
+        <!-- <a href="{{ url_for('meeting_attendance', meeting_id=meeting.id) }}" class="button">Attendances</a> -->
+
+    </div>
+    <div class="container centered">
+        {% if people %}
+            <div class="card-list">
+                {% for person in people %}
+                    <a href="{{ url_for('view_person', person_id=person.id) }}" class="no-link-style">
+                        <div class="person-attendance-card">
+                            <div class="person-row">
+                                <div class="person-info">
+                                    <div class="person-name">{{ person.name }}</div>
+                                    <div class="person-role {% if person.role == 2 %}role-2{% elif person.role == 1 %}role-1{% endif %}">
+                                        {% if person.role == 2 %}Leader{% elif person.role == 1 %}Counsil{% else %}Member{% endif %}
+                                    </div>
+                                    
+                                </div>
+
+                                <div class="person-attendance-status">
+                                    <label class="presence-label">
+                                        <input type="checkbox" name="presence" class="presence-checkbox" aria-label="Present"
+                                        {% if person.attendance.presence %} checked{% endif %}>
+                                    </label>
+                                    {% if person.attendance.presence == 2 or person.default_presence == 2 %}
+                                        <div class="person-role">
+                                            Late
+                                        </div>                                        
+                                    {% endif %}
+                                    {% if person.attendance.presence == 3 %}
+                                        <div class="person-role">
+                                            Excused
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No people in this group.</p>
+        {% endif %}
     </div>
 {% endblock %}

@@ -9,7 +9,6 @@
             <label for="date_time">Date and Time:</label>
             <input type="datetime-local" id="date_time" name="date_time" value="{{ meeting.date_time }}" required> <br>
 
-            <a href="{{ url_for('meeting_attendance', meeting_id=meeting.id) }}" class="button">Attendances</a>
 
             <button type="submit" class="button">Save Changes</button>
         </form>
