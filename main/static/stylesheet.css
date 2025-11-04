@@ -81,6 +81,11 @@
     color: #155724;
 }
 
+.status-badge-orange {
+    background-color: #ffe5d8;
+    color: #0c5460
+}
+
 .person-attendance-card {
     background: #fff;
     border-radius: 10px;
@@ -384,4 +389,15 @@ input, label {
 .attendance-table input[type="checkbox"] {
     display: block;
     margin: 0 auto;
+}
+
+.multiselect {
+    width: 100%;
+    height: 150px;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #fff;
+    cursor: pointer;
 }

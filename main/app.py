@@ -3,6 +3,7 @@ from __init__ import app, API_URL
 import requests
 from functools import wraps
 import datetime
+import re
 
 # TODO: Improve error handeling. --> not 404.html for everything :facepalm:
 # TODO: update the meeting view to include people and move the attendance button to the view instead of the edit
@@ -300,50 +301,61 @@ def upcomming_meetings(user, key):
             
     return render_template('404.html', user=user, key=key)
 
-@app.route('/meetings/edit/<int:meeting_id>')
+@app.route('/meetings/edit/<int:meeting_id>', methods=['GET', 'POST'])
 @login_required
 @get_user
 def edit_meeting(user, key, meeting_id=None):
+    # TODO: fix preselected attendances - fix organiser set
+    if request.method == 'POST':
+        datetime_form = request.form.get('date_time')
+        organisers = request.form.getlist('organiser')
+        print(organisers)
+    
     if meeting_id is not None:
         headers = {"Authorization": key}
         r = requests.get(API_URL+'/meetings/'+str(meeting_id), headers=headers)
         meeting = r.json()['meeting']
         if r.status_code == 200 and meeting:
-            return render_template('edit_meeting.html', user=user, meeting=meeting)
+            payload = {'group_id': meeting['group_id']}
+            people_request = requests.get(API_URL+'/people', json=payload, headers=headers)
+            if people_request.status_code == 200:
+                people = people_request.json()['people']
+                return render_template('edit_meeting.html', user=user, meeting=meeting, people=people)
+            return abort(people_request.status_code)
     
-    return render_template('404.html', user=user, url=request.url)
+        return abort(r.status_code)
 
-@app.route('/meetings/attendance/<int:meeting_id>', methods=['GET', 'POST'])
+    return abort(404)
+
+@app.route('/meetings/attendance/post/<int:meeting_id>', methods=['POST'])
 @login_required
 @get_user
 def meeting_attendance(user, key, meeting_id=None):
     if request.method == 'POST':
-        raise NotImplementedError 
-    # TODO: Add form reception
-    
-    if meeting_id is not None:
+        raw = request.form.to_dict(flat=False)
+        presence_map = {}
+        
+        for key_str, vlist in raw.items():            
+            m = re.match(r'^presence\[(\d+)\]$', key_str)
+            if not m:
+                continue
+            pid = int(m.group(1))
+            last_val = vlist[-1] if vlist else '0'
+            try:
+                presence_map[pid] = int(last_val)
+            except (ValueError, TypeError):
+                presence_map[pid] = last_val
+                
         headers = {"Authorization": key}
-        meeting_request = requests.get(API_URL+'/meetings/'+str(meeting_id), headers=headers)
-        if meeting_request.status_code == 200:
-            meeting = meeting_request.json()['meeting']
             
-            people_request = requests.get(API_URL+'/people', json={'group_id':meeting['group_id']}, headers=headers)
-            if people_request.status_code == 200:
-                people = people_request.json()['people']
-            
-            meeting_attendance_request = requests.get(API_URL+'/attendance/'+str(meeting['id']), headers=headers)
-            
-            if meeting_attendance_request.status_code == 200:
-                attendances = meeting_attendance_request.json()['attendances']
-                for attendance in attendances:
-                    for person in people:
-                        if person['id'] == attendance['person_id']:
-                            attendance['person'] = person
-                                                        
-                return render_template('attendances.html', meeting=meeting, attendances=attendances)
-            
-            else:
-                return abort(meeting_attendance_request.status_code)
+        for person_id, presence in presence_map.items():
+            payload = {'presence': presence}
+            attendance_request = requests.post(API_URL+'/attendance/'+str(meeting_id)+'/'+str(person_id), headers=headers, json=payload)
+            if attendance_request.status_code != 201:
+                return abort(attendance_request.status_code)
+        
+        return redirect(url_for('view_meeting', meeting_id = meeting_id))
+                
 
 @app.route('/meetings/view/<int:meeting_id>')
 @login_required
