@@ -6,10 +6,16 @@
 
     <h2 class="centered">Edit Meeting</h2>
     <a href="{{ url_for('view_meeting', meeting_id=meeting.id) }}" class="return-button">< Back</a>
+
     <div class="form-container centered">
         <form method="POST" action="{{ url_for('edit_meeting', meeting_id=meeting.id) }}">
             <label for="date_time">Date and Time:</label>
             <input type="datetime-local" id="date_time" name="date_time" value="{{ meeting.date_time }}" required> <br>
+
+            <span style="display:flex; gap:8px;">
+                <label for="canceled" style="margin:0;">Canceled: </label>
+                <input type="checkbox" name="canceled" id="canceled" {% if meeting.canceled %}checked{% endif %}>
+            </span> <br>
 
             <span class="tooltip-container">
                 <i class="fa-solid fa-circle-question"></i>
@@ -19,7 +25,7 @@
             <input type="text" name="filter_people" id="filter_people" oninput="updateOrganiserSelect()">
             <select name="organiser" id="organiser" class="multiselect" multiple>
                 {% for person in people %}
-                    <option value="{{ person.id }}" {% if person.id in meeting.organiser_ids %}selected{% endif %}>{{ person.name }}</option>
+                    <option value="{{ person.id }}" {% if person.id in organisers %}selected{% endif %}>{{ person.name }}</option>
                 {% endfor %}
             </select> <br>
 
