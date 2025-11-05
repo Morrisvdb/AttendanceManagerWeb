@@ -8,6 +8,7 @@ import re
 
 # TODO: Improve error handeling. --> not 404.html for everything :facepalm:
 # TODO: Make seperate pre-meeting and in-meeting attendance change screens
+# TODO: Material check and missing count.
 
 def get_user(f):
     @wraps(f)
@@ -577,4 +578,4 @@ def edit_person(user, key, person_id=None):
     return abort(404)
 
 if __name__ == '__main__':
-    app.run(port=5002, host = "0.0.0.0")
+    app.run(port=5003, host = "0.0.0.0")
