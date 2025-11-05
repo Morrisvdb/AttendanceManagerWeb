@@ -13,7 +13,34 @@
     </div>
     <div class="container centered">
         <form action="{{ url_for('meeting_attendance', meeting_id=meeting.id) }}" method="post">
+            {% if device.is_mobile %}
+                <select name="attendance_type" id="attendance_type">
+                    <option value="before">Before Meeting</option>
+                    <option value="during">During Meeting</option> 
+                </select> <br> 
+
+                <span class="tooltip-container">
+                    <i class="fa-solid fa-circle-question"></i>
+                    <span class="tooltip-text">A checked box indicates the person will be present at the meeting. <br>Warning, check the drop down to select whether it is before the meeting or during! (calling in sick ect.)</span>
+                </span>
+                <br>
+            {% endif %}
+
+            
             <button type="submit" class="button">Save Attendances</button>
+
+            {% if device.is_mobile == false %}
+                <span class="tooltip-container">
+                    <i class="fa-solid fa-circle-question"></i>
+                    <span class="tooltip-text">A checked box indicates the person will be present at the meeting. <br>Warning, check the drop down to select whether it is before the meeting or during! (calling in sick ect.)</span>
+                </span>
+
+                <select name="attendance_type" id="attendance_type">
+                    <option value="before">Before Meeting</option>
+                    <option value="during">During Meeting</option> 
+                </select> <br> <br>
+            {% endif %}
+
             {% if people %}
                 <div class="card-list">
                     {% for person in people %}
@@ -33,7 +60,7 @@
                                                     <!-- send explicit per-person keys: presence[<id>] -->
                                                     <input type="hidden" name="presence[{{ person.id }}]" value="0">
                                                     <input type="checkbox" name="presence[{{ person.id }}]" value="1" id="presence-{{ person.id }}" class="presence-checkbox" onclick="event.stopPropagation();"
-                                                    {% if person.attendance.presence %} checked{% endif %}>
+                                                    {% if person.attendance.presence == 1 %} checked{% endif %}>
                                                 </label>
                                         &nbsp;
                                         {% if person.attendance.presence == 2 or person.default_presence == 2 %}
@@ -42,7 +69,7 @@
                                             </div>                                        
                                         {% endif %}
                                         {% if person.attendance.presence == 3 %}
-                                            <div class="person-role">
+                                            <div class="person-role status-badge-teal">
                                                 Excused
                                             </div>
                                         {% endif %}

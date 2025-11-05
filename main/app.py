@@ -1,4 +1,5 @@
-from flask import request, render_template, make_response, redirect, url_for, abort
+from flask import request, render_template, make_response, redirect, url_for, abort, g
+from user_agents import parse
 from __init__ import app, API_URL
 import requests
 from functools import wraps
@@ -33,11 +34,28 @@ def login_required(f):
         
         if r.status_code == 200:
             return f(*args, **kwargs)
-            # return f(*args, **kwargs, user = r.json()['user'], key = AuthKey)
         else:
             return render_template('login_required.html')
 
     return decorated_function
+
+# Share the device type with jinja
+@app.before_request
+def detect_device():
+    ua_string = request.headers.get('User-Agent', '')
+    ua = parse(ua_string)
+    g.device = {
+        'is_mobile': ua.is_mobile,
+        'is_tablet': ua.is_tablet,
+        'is_pc': ua.is_pc,
+        'browser': ua.browser.family,
+        'os': ua.os.family,
+    }
+
+@app.context_processor
+def inject_device():
+    return {'device': getattr(g, 'device', {})}
+
 
 @app.errorhandler(404)
 def not_found(e):
@@ -361,6 +379,8 @@ def edit_meeting(user, key, meeting_id=None):
 @get_user
 def meeting_attendance(user, key, meeting_id=None):
     if request.method == 'POST':
+        attendance_type = request.form.get('attendance_type')
+                
         raw = request.form.to_dict(flat=False)
         presence_map = {}
         
@@ -378,7 +398,21 @@ def meeting_attendance(user, key, meeting_id=None):
         headers = {"Authorization": key}
             
         for person_id, presence in presence_map.items():
+            attendance_request_get = requests.get(API_URL+'/attendance/'+str(meeting_id)+'/'+str(person_id), headers=headers)
+            print(attendance_request_get.json())
+            if attendance_request_get.status_code != 200:
+                return abort(attendance_request_get.status_code)
+            
+            attendance = attendance_request_get.json()['attendance']
+            
             payload = {'presence': presence}
+            if attendance_type == "before":
+                if presence == 0:
+                    payload = {'presence': 3}
+            else:
+                if attendance['presence'] == 3:
+                    payload = {'presence': 3}
+                    
             attendance_request = requests.post(API_URL+'/attendance/'+str(meeting_id)+'/'+str(person_id), headers=headers, json=payload)
             if attendance_request.status_code != 201:
                 return abort(attendance_request.status_code)
@@ -543,4 +577,4 @@ def edit_person(user, key, person_id=None):
     return abort(404)
 
 if __name__ == '__main__':
-    app.run(port=5002)
+    app.run(port=5002, host = "0.0.0.0")

@@ -86,12 +86,17 @@
     color: #0c5460
 }
 
+.status-badge-teal {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
 .person-attendance-card {
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(44, 62, 80, 0.175);
     padding: 1.25rem 1.5rem;
-    min-width: 180px;
+    min-width: 220px;
     max-width: 250px;
     flex: 1 1 180px;
     display: flex;
@@ -401,3 +406,157 @@ input, label {
     background-color: #fff;
     cursor: pointer;
 }
+
+select {
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+
+/* ----------------------
+   Responsive Design
+   ---------------------- */
+
+/* Global Responsive Foundations
+   Apply to all screen sizes for better mobile-first design */
+*, *::before, *::after { 
+    box-sizing: border-box; 
+}
+
+/* Responsive Media */
+img, svg { 
+    max-width: 100%; 
+    height: auto; 
+    display: block; 
+}
+
+/* Touch-friendly Targets (iOS minimum is 44px) */
+button, 
+input[type="button"], 
+input[type="submit"], 
+.form-button, 
+.button, 
+.signup-button {
+    min-height: 44px;
+}
+
+/* Breakpoint: Tablet & Small Desktops (≤900px)
+@media (max-width: 900px) {
+    .card-list {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 720px;
+        gap: 1rem;
+    }
+    main {
+        margin: 1rem;
+        padding: 1.25rem;
+    }
+    .person-card, 
+    .meeting-card, 
+    .person-attendance-card {
+        max-width: none;
+        width: 100%;
+        min-width: 0;
+    }
+} */
+
+/* Breakpoint: Mobile Phones (≤600px) */
+@media (max-width: 600px) {
+    /* Layout: Stack all grid items */
+    .card-list {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+
+
+
+        /* display: grid; */
+        /* grid-template-columns: repeat(3, 1fr); */
+        gap: 1.5rem;
+        margin: 2rem 0;
+        justify-items: center;
+        align-items: stretch;
+        max-width: 950px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Header: Compact & Flexible */
+    header, footer {
+        padding: 0.75rem 1rem;
+        text-align: left;
+    }
+    header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    header h1 { 
+        font-size: 1.1rem; 
+        margin: 0; 
+    }
+
+    /* Navigation & Profile */
+    .profile-menu {
+        position: static;
+        margin-left: 0.5rem;
+        top: auto;
+        right: auto;
+    }
+    .profile-dropdown {
+        position: absolute;
+        top: 48px;
+        right: 1rem;
+        left: auto;
+    }
+
+    /* Content Areas */
+    main {
+        max-width: 100%;
+        margin: 0.75rem;
+        padding: 1rem;
+        border-radius: 6px;
+    }
+    .home-title { font-size: 1.6rem; }
+    .home-description { font-size: 1rem; }
+    .form-container { 
+        max-width: 100%; 
+        padding: 0.5rem; 
+    }
+
+    /* Tables: Horizontal Scroll for Dense Data */
+    .attendance-table { 
+        display: block; 
+        overflow-x: auto; 
+        width: 100%; 
+    }
+    .attendance-table th, 
+    .attendance-table td { 
+        white-space: nowrap; 
+    }
+
+    /* Mobile-friendly Tooltips */
+    .tooltip-text {
+        left: 0;
+        right: auto;
+        transform: none;
+        bottom: calc(100% + 0.25rem);
+    }
+
+    /* Full-width Buttons */
+    .listed-button, 
+    .form-button { 
+        width: 100%; 
+        max-width: 100%; 
+    }
+}
+
+/* Breakpoint: Medium Screens (901px-1200px)
+   Optimized 3-column layout */
+/* @media (min-width: 901px) and (max-width: 1200px) {
+    .card-list { 
+        grid-template-columns: repeat(3, 1fr); 
+        max-width: 900px; 
+    }
+} */
