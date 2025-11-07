@@ -7,8 +7,6 @@ import datetime
 import re
 
 # TODO: Improve error handeling. --> not 404.html for everything :facepalm:
-# TODO: Make seperate pre-meeting and in-meeting attendance change screens
-# TODO: Material check and missing count.
 
 def get_user(f):
     @wraps(f)
@@ -30,10 +28,10 @@ def login_required(f):
     def decorated_function(*args, **kwargs):
         AuthKey = request.cookies.get("Authorization")
         headers = {"Authorization": AuthKey}
-        r = requests.get(API_URL+"/user", headers=headers)
+        auth_request = requests.get(API_URL+"/user", headers=headers)
         
         
-        if r.status_code == 200:
+        if auth_request.status_code == 200:
             return f(*args, **kwargs)
         else:
             return render_template('login_required.html')
@@ -83,12 +81,12 @@ def signup():
             "username": username,
             "password": password1
         }
-        r = requests.post(API_URL + "/signup", json=json)
-        if r.status_code == 201:
+        signup_request = requests.post(API_URL + "/signup", json=json)
+        if signup_request.status_code == 201:
             return redirect(url_for('login'))
-        elif r.status_code == 409:
+        elif signup_request.status_code == 409:
             return render_template('signup.html', error="Username already in use")
-        elif r.status_code == 422:
+        elif signup_request.status_code == 422:
             return render_template('signup.html', error="Malformed request")
             
     
@@ -104,17 +102,17 @@ def login():
             "username": username,
             "password": password
         }
-        r = requests.post(API_URL + "/login", json=json)
-        if r.status_code == 200:
-            if 'key' in r.json():
-                key = r.json()['key']
+        login_request = requests.post(API_URL + "/login", json=json)
+        if login_request.status_code == 200:
+            if 'key' in login_request.json():
+                key = login_request.json()['key']
             else:
                 return render_template('login.html', error="Unexpected response from server.")
             url = url_for('home')
             resp = make_response(redirect(url))
             resp.set_cookie('Authorization', key)
             return resp
-        elif r.status_code == 404 or r.status_code == 401:
+        elif login_request.status_code == 404 or login_request.status_code == 401:
             return render_template('login.html', error="Password or Username incorrect.")
         else:
             return render_template('login.html')
@@ -126,13 +124,12 @@ def login():
 @login_required
 @get_user
 def logout(user, key):
-    r = requests.delete(API_URL+'/login', headers={'Authorization': key})
-    if r.status_code == 200:
-        resp = make_response(redirect(url_for('home')))
-        resp.set_cookie("Authorization", "", expires=0)
-        return resp
-    else:
-        return url_for('home')
+    logout_request = requests.delete(API_URL+'/login', headers={'Authorization': key})
+    if logout_request.status_code != 200:
+        return abort(logout_request.status_code)
+    resp = make_response(redirect(url_for('home')))
+    resp.set_cookie("Authorization", "", expires=0)
+    return resp
     
 @app.route('/profile')
 @login_required
@@ -145,11 +142,10 @@ def profile(user, key):
 @get_user
 def delete_profile(user, key, isConfirmed):
     if isConfirmed:
-        r = requests.delete(API_URL+'/user', headers={'Authorization': key})
-        if r.status_code == 204:
-            return redirect(url_for('home'))
-        else:
-            return redirect(url_for('profile'))
+        profile_delete_request = requests.delete(API_URL+'/user', headers={'Authorization': key})
+        if profile_delete_request.status_code != 204:
+            return abort(profile_delete_request)
+        return redirect(url_for('home'))
     else:
         return redirect(url_for('profile'))
         
@@ -159,12 +155,12 @@ def delete_profile(user, key, isConfirmed):
 @login_required
 @get_user
 def groups(user, key):
-    
-    r = requests.get(API_URL+"/groups", headers={"Authorization": key})
-    if r.status_code == 200:
-        groups = r.json()    
-        return render_template('groups.html', groups = groups, user=user)
-    return abort(r.status_code)
+    group_request = requests.get(API_URL+"/groups", headers={"Authorization": key})
+    if group_request.status_code != 200:
+        return abort(group_request.status_code)
+        
+    groups = group_request.json()    
+    return render_template('groups.html', groups = groups, user=user)
     
 @app.route('/groups/create', methods=['GET', 'POST'])
 @login_required
@@ -183,13 +179,15 @@ def create_group(user, key):
             "start_day": start_day,
             "time": time
         }
-        r = requests.post(API_URL+'/groups', json=json, headers={"Authorization": key})
-        if r.status_code == 201:
+        group_request = requests.post(API_URL+'/groups', json=json, headers={"Authorization": key})
+        if group_request.status_code == 201:
             return redirect(url_for('groups'))
-        elif r.status_code == 409:
+        elif group_request.status_code == 409:
             return render_template('create_group.html', error="Session is invalid or has expired", user=user) 
-        elif r.status_code == 422:
+        elif group_request.status_code == 422:
             return render_template('create_group.html', error="Incomplete request", user=user)
+        else:
+            return abort(group_request.status_code)
         
         
     return render_template('create_group.html', user=user)
@@ -198,10 +196,10 @@ def create_group(user, key):
 @login_required
 @get_user
 def view_group(group_id, user, key):
-    r = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
-    if r.status_code == 200:
-        if len(r.json()['meetings']) > 0:
-            next_meeting = r.json()['meetings'][-1]
+    group_request = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
+    if group_request.status_code == 200:
+        if len(group_request.json()['meetings']) > 0:
+            next_meeting = group_request.json()['meetings'][-1]
 
             next_meeting = requests.get(API_URL+"/meetings/" + str(next_meeting), headers={"Authorization": key})
 
@@ -213,9 +211,9 @@ def view_group(group_id, user, key):
         else:
             next_meeting = None
 
-        return render_template('view_group.html', group = r.json(), next_meeting=next_meeting, user=user)
+        return render_template('view_group.html', group = group_request.json(), next_meeting=next_meeting, user=user)
     else:
-        return redirect(url_for('groups'))
+        return abort(group_request.status_code)
     
 @app.route('/groups/material/view/log/<int:group_id>')
 @login_required
@@ -255,30 +253,28 @@ def edit_group(group_id, user, key):
             "start_day": start_day,
             "time": time
         }
-        r = requests.put(API_URL+'/groups/'+str(group_id), headers={"Authorization": key}, json=json)
-        if r.status_code == 200:
-            return redirect(url_for('view_group', group_id=group_id))
-        elif r.status_code == 404:
-            r = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
-            return render_template('edit_group.html', error="Group not found", group = r.json(), user=user)
-        elif r.status_code == 422:
-            r = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
-            return render_template('edit_group.html', error="Group not found", group = r.json(), user=user)
-        elif r.status_code == 409:
-            r = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
-            return render_template('edit_group.html', error="Cannot rename group, you already have a group with that name.", group = r.json(), user=user)
+        group_request = requests.put(API_URL+'/groups/'+str(group_id), headers={"Authorization": key}, json=json)
+        if group_request.status_code == 409:
+            group_request = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
+            return render_template('edit_group.html', error="Cannot rename group, you already have a group with that name.", group = group_request.json(), user=user)
+        
+        if group_request.status_code != 200:
+            return abort(group_request.status_code)
+        return redirect(url_for('view_group', group_id=group_id))
             
-    r = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
-    if r.status_code == 200:
-        return render_template('edit_group.html', group = r.json(), user=user)
+    group_request = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
+    if group_request.status_code == 200:
+        return render_template('edit_group.html', group = group_request.json(), user=user)
 
 @app.route('/groups/delete/<int:group_id>', methods = ['GET'])
 @login_required
 @get_user
 def delete_group(group_id, user, key):
-    r = requests.delete(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
-    if r.status_code == 204:
+    group_request = requests.delete(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
+    if group_request.status_code == 204:
         return redirect(url_for("groups"))
+    else:
+        return abort(group_request.status_code)
     
     return redirect(url_for("view_group", group_id = group_id))     
 
@@ -322,13 +318,13 @@ def upcomming_meetings(user, key):
     headers = {"Authorization": key}
     data = {'future_only': future_only, 'canceled': canceled, 'group_id': group}
     
-    groups_r = requests.get(API_URL+"/groups", headers=headers)
-    if groups_r.status_code == 200:
-        groups = groups_r.json()
+    groups_request = requests.get(API_URL+"/groups", headers=headers)
+    if groups_request.status_code == 200:
+        groups = groups_request.json()
     
-    r = requests.get(API_URL+'/meetings', headers=headers, json=data)
-    if r.status_code == 200:
-        meetings = r.json()['meetings']
+    meeting_request = requests.get(API_URL+'/meetings', headers=headers, json=data)
+    if meeting_request.status_code == 200:
+        meetings = meeting_request.json()['meetings']
         
         for meeting in meetings:
             r2 = requests.get(API_URL+'/groups/'+str(meeting['group_id']), headers=headers)
@@ -433,9 +429,9 @@ def meeting_materials(user, key, meeting_id=None):
 def view_meeting_materials(user, key, meeting_id=None):
     if meeting_id is not None:
         headers = {"Authorization": key}
-        r = requests.get(API_URL+'/meetings/'+str(meeting_id), headers=headers)
-        if r.status_code == 200:
-            meeting = r.json()['meeting']
+        meeting_request = requests.get(API_URL+'/meetings/'+str(meeting_id), headers=headers)
+        if meeting_request.status_code == 200:
+            meeting = meeting_request.json()['meeting']
             
             people_request = requests.get(API_URL+'/people', json={'group_id': meeting['group_id']}, headers=headers)
             if people_request.status_code == 200:
@@ -457,7 +453,7 @@ def view_meeting_materials(user, key, meeting_id=None):
             else:
                 return abort(people_request.status_code)
         else:
-            return abort(r.status_code)
+            return abort(meeting_request.status_code)
     
     return abort(404)
 
@@ -523,9 +519,9 @@ def meeting_attendance(user, key, meeting_id=None):
 def view_meeting(user, key, meeting_id=None):
     if meeting_id is not None:
         headers = {"Authorization": key}
-        r = requests.get(API_URL+'/meetings/'+str(meeting_id), headers=headers)
-        if r.status_code == 200:
-            meeting = r.json()['meeting']
+        meeting_request = requests.get(API_URL+'/meetings/'+str(meeting_id), headers=headers)
+        if meeting_request.status_code == 200:
+            meeting = meeting_request.json()['meeting']
             
             people_request = requests.get(API_URL+'/people', json={'group_id': meeting['group_id']}, headers=headers)
             if people_request.status_code == 200:
@@ -549,7 +545,7 @@ def view_meeting(user, key, meeting_id=None):
             else:
                 return abort(people_request.status_code)
         else:
-            return abort(r.status_code)
+            return abort(meeting_request.status_code)
     
     return abort(404)
 
