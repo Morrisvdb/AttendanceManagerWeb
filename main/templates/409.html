@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}404 Not Found - Attendance Manager{% endblock %}
+{% block title %}409 Conflict - Attendance Manager{% endblock %}
 
 {% block content %}
     <div class="centered">
-        <h2>404 Not Found</h2>
-        <p>The requested resource was not found on the server.</p>
-        <p>Submitted URL: {{ url }}</p>
+        <h2>409 Conflict</h2>
+        <p>The requested resource conflicts with the current state of the server. E.g. the name of that group/person is already in use.</p>
         <div>
             <a href="{{ url_for('home') }}" class="button"><i class="fa-solid fa-house"></i> Go to Home</a>
         </div>

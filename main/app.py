@@ -56,9 +56,18 @@ def inject_device():
     return {'device': getattr(g, 'device', {})}
 
 
+@app.errorhandler(401)
+def not_found(e):
+    return render_template("401.html")
+
 @app.errorhandler(404)
 def not_found(e):
     return render_template("404.html", url=request.url)
+
+@app.errorhandler(409)
+def not_found(e):
+    return render_template("409.html")
+
 
 @app.route("/")
 @get_user

@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}404 Not Found - Attendance Manager{% endblock %}
+{% block title %}401 Unauthorized - Attendance Manager{% endblock %}
 
 {% block content %}
     <div class="centered">
-        <h2>404 Not Found</h2>
-        <p>The requested resource was not found on the server.</p>
-        <p>Submitted URL: {{ url }}</p>
+        <h2>401 Unauthorized</h2>
+        <p>You do not have the right permissions to access this resource.</p>
         <div>
             <a href="{{ url_for('home') }}" class="button"><i class="fa-solid fa-house"></i> Go to Home</a>
         </div>
