@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <button onclick="history.back()" class="return-button">< Back</button>
+
+    <h2 class="centered">Material Log for {{ group.group_name }}</h2>
+
+    <div class="centered">
+        <table class="attendance-table">
+            <tr>
+                <th>Name: </th>
+                <th>Stripes: </th>
+                <th>Clear Marks: </th>
+            </tr>
+            
+            {% for person in people %}
+                {% if person.missing_material > 0 %}
+                    <tr>
+                        <td>{{ person.name }}</td>
+                        <td {% if person.missing_material > 2 %}class="redtablecell"{% endif %}>
+                            <a href="#" class="no-link-style">
+                                <span>
+                                    {% for i in range(person.missing_material) %}
+                                        <i class="fa-solid fa-xmark"></i>
+                                    {% endfor %}
+                                </span>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('clear_checks', person_id=person.id) }}" class="button" {% if person.missing_material < 3 %}onclick="return confirm('Are you sure? This person does not have 3 checks yet.')"{% endif %}>Clear Marks</a>
+                        </td>
+                    </tr>
+                {% endif %}
+                
+            {% endfor %}
+        </table>
+    </div>
+
+    
+
+{% endblock %}

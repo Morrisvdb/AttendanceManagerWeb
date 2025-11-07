@@ -1,6 +1,6 @@
 from flask import Flask
 from dotenv import load_dotenv, find_dotenv, set_key
-from config import Development, Production
+from main.config import Development, Production
 import os, random, string
 
 API_URL = "http://localhost:5001"

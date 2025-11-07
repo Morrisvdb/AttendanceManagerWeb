@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}View Meeting Materials - Attendance Manager{% endblock %}
+
+{% block content %}
+    <script src="{{ url_for('static', filename='selectAllCheckboxesInForm.js') }}"></script>
+
+    <h2 class="centered">Meeting Details</h2>
+    <a href="{{ url_for('view_meeting', meeting_id=meeting.id) }}" class="return-button">< Back</a>
+    <div class="form-container centered">
+        <p><strong>Date and Time:</strong> {{ meeting.date_time }}</p>
+        {% if meeting.canceled %} <p><strong>Canceled</strong></p> {% endif %}
+
+
+
+    </div>
+    <div class="container centered">
+        <fieldset {% if meeting.canceled %}disabled="disabled" class="disabled-form"{% endif %}>
+            <form action="{{ url_for('meeting_materials', meeting_id=meeting.id) }}" method="post">            
+                <button type="submit" class="button">Save Materials</button>
+                <button onclick="selectAllCheckboxesInForm()" type="button" class="button">Select All</button>
+
+                {% if people %}
+                    <div class="card-list">
+                        {% for person in people %}
+                            <a href="{{ url_for('view_person', person_id=person.id) }}" class="no-link-style">
+                                <div class="person-attendance-card">
+                                    <div class="person-row">
+                                        <div class="person-info">
+                                            <div class="person-name">{{ person.name }}</div>
+                                            <div class="person-role {% if person.role == 2 %}role-2{% elif person.role == 1 %}role-1{% endif %}">
+                                                {% if person.role == 2 %}Leader{% elif person.role == 1 %}Counsil{% else %}Member{% endif %}
+                                            </div>
+                                            
+                                        </div>
+
+                                        <div class="person-attendance-status">
+                                                    <label class="presence-label">
+                                                        <!-- send explicit per-person keys: presence[<id>] -->
+                                                        <input type="hidden" name="material[{{ person.id }}]" value="0">
+                                                        <input type="checkbox" name="material[{{ person.id }}]" value="1" id="material-{{ person.id }}" class="presence-checkbox" onclick="event.stopPropagation();"
+                                                        {% if person.attendance.material == 1 %} checked{% endif %}>
+                                                    </label>
+                                            &nbsp;
+                                            {% if person.attendance.material == 0 %}
+                                                <div class="person-role status-badge-red">
+                                                    Incomplete
+                                                </div>
+                                            {% elif person.attendance.material %}
+                                                <div class="person-role status-badge-teal">
+                                                    Complete
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No people in this group.</p>
+                {% endif %}
+            </form>
+        </fieldset>
+    </div>
+{% endblock %}

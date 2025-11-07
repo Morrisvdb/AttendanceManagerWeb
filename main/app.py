@@ -1,6 +1,6 @@
 from flask import request, render_template, make_response, redirect, url_for, abort, g
 from user_agents import parse
-from __init__ import app, API_URL
+from main.__init__ import app, API_URL
 import requests
 from functools import wraps
 import datetime
@@ -164,6 +164,7 @@ def groups(user, key):
     if r.status_code == 200:
         groups = r.json()    
         return render_template('groups.html', groups = groups, user=user)
+    return abort(r.status_code)
     
 @app.route('/groups/create', methods=['GET', 'POST'])
 @login_required
@@ -215,6 +216,27 @@ def view_group(group_id, user, key):
         return render_template('view_group.html', group = r.json(), next_meeting=next_meeting, user=user)
     else:
         return redirect(url_for('groups'))
+    
+@app.route('/groups/material/view/log/<int:group_id>')
+@login_required
+@get_user
+def view_group_material_log(user, key, group_id=None):
+    headers = {"Authorization": key}
+    payload = {"group_id": group_id}
+    
+    group_request = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
+    if group_request.status_code != 200:
+        return abort(group_request.status_code)
+    
+    group = group_request.json()
+    
+    people_request = requests.get(API_URL+"/people", json=payload, headers=headers)
+    if people_request.status_code != 200:
+        return abort(people_request.status_code)
+    people = people_request.json()['people']
+    
+    
+    return render_template('view_group_material_log.html', user=user, people=people, group=group)
 
 @app.route('/groups/edit/<int:group_id>', methods=['GET', 'POST'])
 @login_required
@@ -326,7 +348,6 @@ def edit_meeting(user, key, meeting_id=None):
     if request.method == 'POST':
         datetime_form = request.form.get('date_time')
         canceled = True if request.form.get('canceled') == 'on' else False
-        print(canceled)
         organisers = request.form.getlist('organiser')
         payload = {'date_time': datetime_form, 'canceled': canceled}
         meeting_request = requests.put(API_URL+'/meetings/'+str(meeting_id), headers=headers, json=payload)
@@ -375,7 +396,84 @@ def edit_meeting(user, key, meeting_id=None):
 
     return abort(404)
 
-@app.route('/meetings/attendance/post/<int:meeting_id>', methods=['POST'])
+@app.route('/meetings/materials/post/<int:meeting_id>', methods=['POST'])
+@login_required
+@get_user
+def meeting_materials(user, key, meeting_id=None):
+    if request.method == 'POST':
+        attendance_type = request.form.get('attendance_type')
+
+        raw = request.form.to_dict(flat=False)
+        presence_map = {}
+        
+        for key_str, vlist in raw.items():            
+            m = re.match(r'^material\[(\d+)\]$', key_str)
+            if not m:
+                continue
+            pid = int(m.group(1))
+            last_val = vlist[-1] if vlist else '0'
+            try:
+                presence_map[pid] = int(last_val)
+            except (ValueError, TypeError):
+                presence_map[pid] = last_val
+                
+        headers = {"Authorization": key}
+            
+        for person_id, material in presence_map.items():            
+            payload = {'material': material}
+            attendance_request = requests.post(API_URL+'/attendance/'+str(meeting_id)+'/'+str(person_id), headers=headers, json=payload)
+            if attendance_request.status_code != 201:
+                return abort(attendance_request.status_code)
+        
+        return redirect(url_for('view_meeting', meeting_id = meeting_id))     
+                
+@app.route('/meetings/view/material/<int:meeting_id>')
+@login_required
+@get_user
+def view_meeting_materials(user, key, meeting_id=None):
+    if meeting_id is not None:
+        headers = {"Authorization": key}
+        r = requests.get(API_URL+'/meetings/'+str(meeting_id), headers=headers)
+        if r.status_code == 200:
+            meeting = r.json()['meeting']
+            
+            people_request = requests.get(API_URL+'/people', json={'group_id': meeting['group_id']}, headers=headers)
+            if people_request.status_code == 200:
+                people = people_request.json()['people']
+                people = sorted(sorted(people, key=lambda d: d['name']), key=lambda d: int(d['role']), reverse=True) # Sort the higher roles before the lower ones
+
+                
+                meeting_attendance_request = requests.get(API_URL+'/attendance/'+str(meeting['id']), headers=headers)
+                
+                if meeting_attendance_request.status_code == 200:
+                    for person in people:
+                        for attendance in meeting_attendance_request.json()['attendances']:
+                            if attendance['person_id'] == person['id']:
+                                person['attendance'] = attendance
+                else:
+                    return abort(meeting_attendance_request.status_code)
+                        
+                return render_template('view_meeting_materials.html', user=user, meeting=meeting, people=people)
+            else:
+                return abort(people_request.status_code)
+        else:
+            return abort(r.status_code)
+    
+    return abort(404)
+
+@app.route('/person/<int:person_id>/materials/clear_checks')
+@login_required
+@get_user
+def clear_checks(user, key, person_id=None):
+    headers = {"Authorization": key}
+    payload = {"material_count": 1}
+    person_clear_request = requests.put(API_URL+'/people/'+str(person_id), headers=headers, json=payload)
+    if person_clear_request.status_code != 200:
+        return abort(person_clear_request.status_code)
+    
+    return redirect(url_for('view_group_material_log', group_id = person_clear_request.json()['person']['group_id']))
+
+@app.route('/meetings/<int:meeting_id>/attendance/post', methods=['POST'])
 @login_required
 @get_user
 def meeting_attendance(user, key, meeting_id=None):
@@ -400,7 +498,6 @@ def meeting_attendance(user, key, meeting_id=None):
             
         for person_id, presence in presence_map.items():
             attendance_request_get = requests.get(API_URL+'/attendance/'+str(meeting_id)+'/'+str(person_id), headers=headers)
-            print(attendance_request_get.json())
             if attendance_request_get.status_code != 200:
                 return abort(attendance_request_get.status_code)
             
@@ -419,7 +516,6 @@ def meeting_attendance(user, key, meeting_id=None):
                 return abort(attendance_request.status_code)
         
         return redirect(url_for('view_meeting', meeting_id = meeting_id))
-                
 
 @app.route('/meetings/view/<int:meeting_id>')
 @login_required
@@ -440,7 +536,9 @@ def view_meeting(user, key, meeting_id=None):
                 meeting_attendance_request = requests.get(API_URL+'/attendance/'+str(meeting['id']), headers=headers)
                 
                 if meeting_attendance_request.status_code == 200:
+                    print(meeting_attendance_request.json())
                     for person in people:
+                        print(person)
                         for attendance in meeting_attendance_request.json()['attendances']:
                             if attendance['person_id'] == person['id']:
                                 person['attendance'] = attendance
@@ -578,4 +676,4 @@ def edit_person(user, key, person_id=None):
     return abort(404)
 
 if __name__ == '__main__':
-    app.run(port=5003, host = "0.0.0.0")
+    app.run(port=5002, host = "0.0.0.0")

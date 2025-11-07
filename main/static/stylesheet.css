@@ -64,7 +64,12 @@
     font-weight: bold;
     margin-bottom: 0.5rem;
     color: #2d3e50;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
 }
+
 .person-role {
     font-size: 0.95rem;
     color: #888;
@@ -81,14 +86,19 @@
     color: #155724;
 }
 
+.status-badge-teal {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
 .status-badge-orange {
     background-color: #ffe5d8;
     color: #0c5460
 }
 
-.status-badge-teal {
-    background-color: #d1ecf1;
-    color: #0c5460;
+.status-badge-red {
+    background-color: #f8d7da;
+    color: #721c24;
 }
 
 .person-attendance-card {
@@ -96,8 +106,8 @@
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(44, 62, 80, 0.175);
     padding: 1.25rem 1.5rem;
-    min-width: 220px;
-    max-width: 250px;
+    width: 270px;
+    max-width: 270px;
     flex: 1 1 180px;
     display: flex;
     flex-direction: row;
@@ -110,6 +120,7 @@
     width: 100%;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
 }
 
 .person-info {
@@ -117,12 +128,15 @@
     flex-direction: column;
     gap: 0.25rem; /* small gap between name and role (stacked) */
     align-items: flex-start;
+    flex: 1;
+    min-width: 0;
 }
 
 .person-attendance-status {
-    margin-left: 1rem;
     display: flex;
     align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
 }
 
 .presence-checkbox {
@@ -353,6 +367,15 @@ form br {
     font-size: 1rem;
 }
 
+.return-button {
+    background: none;
+    border: none;
+    color: #3498db;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0;
+}
+
 .alert {
     padding: 0.75rem 1rem;
     border-radius: 4px;
@@ -414,6 +437,28 @@ select {
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
 }
 
+fieldset {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.disabled-form {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.truncated-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.redtablecell {
+    background-color: #f8d7da;
+}
+
 
 /* ----------------------
    Responsive Design
@@ -442,25 +487,6 @@ input[type="submit"],
     min-height: 44px;
 }
 
-/* Breakpoint: Tablet & Small Desktops (≤900px)
-@media (max-width: 900px) {
-    .card-list {
-        grid-template-columns: repeat(2, 1fr);
-        max-width: 720px;
-        gap: 1rem;
-    }
-    main {
-        margin: 1rem;
-        padding: 1.25rem;
-    }
-    .person-card, 
-    .meeting-card, 
-    .person-attendance-card {
-        max-width: none;
-        width: 100%;
-        min-width: 0;
-    }
-} */
 
 /* Breakpoint: Mobile Phones (≤600px) */
 @media (max-width: 600px) {
