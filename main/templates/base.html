@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Attendance Manager{% endblock %}</title>
+    <title>{% block title %}{% endblock %} - Attendance Manager</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
     <script src="https://kit.fontawesome.com/832e141ab8.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -22,14 +22,14 @@
             {% if user %}
 
                 <div id="profileDropdown" class="profile-dropdown" style="display: none;">
-                    <a href="{{ url_for('profile') }}" class="dropdown-item">Profile</a>
-                    <a href="{{ url_for('logout') }}" class="dropdown-item">Sign Out</a>
+                    <a href="{{ url_for('profile') }}" class="dropdown-item">{{ _("Profile") }}</a>
+                    <a href="{{ url_for('logout') }}" class="dropdown-item">{{ _("Sign Out") }}</a>
                 </div>
 
             {% else %}
 
                 <div id="profileDropdown" class="profile-dropdown" style="display: none;">
-                    <a href="{{ url_for('login') }}" class="dropdown-item">Login</a>
+                    <a href="{{ url_for('login') }}" class="dropdown-item">{{ _("Login") }}</a>
 
                 </div>
             

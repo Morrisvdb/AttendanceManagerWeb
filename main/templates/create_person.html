@@ -5,23 +5,23 @@
     <a href="{{ url_for('view_group', group_id=group.id) }}" class="return-button">< Back</a>
     <div class="form-container">
         <form method="POST" action="{{ url_for('create_person', group_id=group.id) }}">
-            <label for="names">Names:
+            <label for="names">{{ _("Names:") }}
                 <span class="tooltip-container">
                     <i class="fa-solid fa-circle-question"></i>
-                    <span class="tooltip-text">Enter one name per line. <br> Or seperate the names with a comma</span>
+                    <span class="tooltip-text">{{ _("Enter one name per line.") }} <br> {{ _("Or seperate the names with a comma") }}</span>
                 </span>
             </label>
 
             <textarea name="names" id="names" rows="5" style="width: 100%; resize:none;" required></textarea>
 
-            <label for="role">Role: </label>
+            <label for="role">{{ _("Role:") }} </label>
             <select name="role" id="role">  
-                <option value="0">Member</option>
-                <option value="1">Counsil</option>
-                <option value="2">Leader</option>
+                <option value="0">{{ _("Member") }}</option>
+                <option value="1">{{ _("Counsil") }}</option>
+                <option value="2">{{ _("Leader") }}</option>
             </select> <br>
 
-            <button type="submit" class="button"><i class="fa-solid fa-plus"></i> Add Person</button>
+            <button type="submit" class="button"><i class="fa-solid fa-plus"></i> {{ _("Add Person") }}</button>
         </form>
     </div>
 {% endblock %}

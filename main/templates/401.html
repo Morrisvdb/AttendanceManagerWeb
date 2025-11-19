@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}401 Unauthorized - Attendance Manager{% endblock %}
+{% block title %}401 Unauthorized{% endblock %}
 
 {% block content %}
     <div class="centered">
         <h2>401 Unauthorized</h2>
-        <p>You do not have the right permissions to access this resource.</p>
+        <p>{{ _("You do not have the right permissions to access this resource.") }}</p>
         <div>
-            <a href="{{ url_for('home') }}" class="button"><i class="fa-solid fa-house"></i> Go to Home</a>
+            <a href="{{ url_for('home') }}" class="button"><i class="fa-solid fa-house"></i> {{ _("Go to Home") }}</a>
         </div>
     </div>
 {% endblock %}

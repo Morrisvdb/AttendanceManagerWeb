@@ -1,4 +1,4 @@
-from flask import request, render_template, make_response, redirect, url_for, abort, g
+from flask import request, render_template, make_response, redirect, url_for, abort, g, session
 from user_agents import parse
 from main.__init__ import app, API_URL
 import requests
@@ -55,6 +55,9 @@ def detect_device():
 def inject_device():
     return {'device': getattr(g, 'device', {})}
 
+@app.errorhandler(400)
+def bad_request(e):
+    return render_template('400.html')
 
 @app.errorhandler(401)
 def not_found(e):
@@ -74,6 +77,29 @@ def not_found(e):
 def home(user, key):
     return render_template("home.html", user=user)
 
+@app.route('/locale/<string:locale>')
+@get_user
+def change_locale(user, key, locale):
+    """Changes the locale of the current browser to the given string. 
+    If the user is logged in it will also add the locale to their profile
+
+    Args:
+        locale (string): The locale to change to. Is of app config BABEL_SUPPORTED_LOCALES
+    """
+    print(request.cookies.get('locale'))
+    if locale not in app.config['BABEL_SUPPORTED_LOCALES']:
+        return abort(400)
+    
+    try:
+        previous_url = session.pop('origin')
+    except KeyError:
+        previous_url = 'home'
+        
+    if user is not None:
+        resp = make_response(redirect(url_for(previous_url)))
+        resp.set_cookie('locale', locale)
+        return resp
+    
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':

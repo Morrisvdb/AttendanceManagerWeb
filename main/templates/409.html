@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}409 Conflict - Attendance Manager{% endblock %}
+{% block title %}409 Conflict{% endblock %}
 
 {% block content %}
     <div class="centered">
         <h2>409 Conflict</h2>
-        <p>The requested resource conflicts with the current state of the server. E.g. the name of that group/person is already in use.</p>
+        <p>{{ _("The requested resource conflicts with the current state of the server. E.g. the name of that group/person is already in use.") }}</p>
         <div>
-            <a href="{{ url_for('home') }}" class="button"><i class="fa-solid fa-house"></i> Go to Home</a>
+            <a href="{{ url_for('home') }}" class="button"><i class="fa-solid fa-house"></i> {{ _("Go to Home") }}</a>
         </div>
     </div>
 {% endblock %}

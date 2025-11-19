@@ -1,10 +1,16 @@
-from flask import Flask
+from flask import Flask, request
+from flask_babel import Babel
 from dotenv import load_dotenv, find_dotenv, set_key
 from main.config import Development, Production
 import os, random, string
 
 API_URL = "http://localhost:5001"
 
+def get_locale():
+    lang = request.cookies.get('locale')
+    if lang in app.config['BABEL_SUPPORTED_LOCALES']:
+        return lang
+    return request.accept_languages.best_match(app.config['BABEL_SUPPORTED_LOCALES'])
 
 def create_app():
     dotenv_file = find_dotenv()
@@ -18,9 +24,10 @@ def create_app():
         set_key(dotenv_file, "FLASK_SECRET_KEY", os.environ["FLASK_SECRET_KEY"])
         
     app = Flask(__name__)
+    app.config['SECRET_KEY'] = os.environ['FLASK_SECRET_KEY']
     app.config.from_object(Development) # Sets the current mode between Development and Production
-    # app.config['SECRET_KEY'] = os.environ["FLASK_SECRET_KEY"]
-    # db.init_app(app)
+
+    babel = Babel(app, locale_selector=get_locale)
 
     return app
 

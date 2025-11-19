@@ -1,35 +1,35 @@
 {% extends 'base.html' %}
-{% block title %}Create Group - Attendance Manager{% endblock %}
+{% block title %}{{ _("Create Group") }}{% endblock %}
 
 {% block content %}
-    <h2 class="centered">Create a New Group</h2>
+    <h2 class="centered">{{ _("Create a New Group") }}</h2>
     <a href="{{ url_for('groups') }}" class="return-button">< Back</a>
     <form action="{{ url_for('create_group') }}" method="post" class="form-container">
-        <label for="group_name">Group Name:</label>
+        <label for="group_name">{{ _("Group Name:") }}</label>
         <input type="text" id="group_name" name="group_name" required>
 
-        <label for="frequency">Meeting Frequency:</label>
+        <label for="frequency">{{ _("Meeting Frequency:") }}</label>
         <select id="frequency" name="frequency" required>
-            <option value="1">Daily</option>
-            <option value="7">Weekly</option>
-            <option value="14">Biweekly</option>
-            <option value="28">Monthly (Every 4 weeks)</option>
+            <option value="1">{{ _("Daily") }}</option>
+            <option value="7">{{ _("Weekly") }}</option>
+            <option value="14">{{ _("Biweekly") }}</option>
+            <option value="28">{{ _("Monthly (Every 4 weeks)") }}</option>
         </select>
 
-        <label for="meeting_day">Meeting Day:</label>
+        <label for="meeting_day">{{ _("Meeting Day:")}}</label>
         <select id="meeting_day" name="start_day" required>
-            <option value="0">Monday</option>
-            <option value="1">Tuesday</option>
-            <option value="2">Wednesday</option>
-            <option value="3">Thursday</option>
-            <option value="4">Friday</option>
-            <option value="5">Saturday</option>
-            <option value="6">Sunday</option>
+            <option value="0">{{ _("Monday") }}</option>
+            <option value="1">{{ _("Tuesday") }}</option>
+            <option value="2">{{ _("Wednesday") }}</option>
+            <option value="3">{{ _("Thursday") }}</option>
+            <option value="4">{{ _("Friday") }}</option>
+            <option value="5">{{ _("Saturday") }}</option>
+            <option value="6">{{ _("Sunday") }}</option>
         </select>
 
-        <label for="meeting_time">Meeting Time:</label>
+        <label for="meeting_time">{{ _("Meeting Time:") }}</label>
         <input type="time" id="meeting_time" name="time" required> <br>
 
-        <button type="submit" class="button">Create Group</button>
+        <button type="submit" class="button">{{ _("Create Group") }}</button>
     </form>
 {% endblock %}
