@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}400 Bad Request{% endblock %}
+
+{% block content %}
+    <div class="centered">
+        <h2>400 Bad Request</h2>
+        <p>{{ _("The request did not meet the servers expectations.") }}</p>
+        <div>
+            <a href="{{ url_for('home') }}" class="button"><i class="fa-solid fa-house"></i> {{ _("Go to Home") }}</a>
+        </div>
+    </div>
+{% endblock %}

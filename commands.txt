@@ -1,0 +1,17 @@
+Create Messages.pot:
+pybabel extract -F babel.cfg -k _l -o messages.pot .
+
+Create Catalog:
+pybabel init -i messages.pot -d main/translations -l en
+
+Compile Catalog:
+pybabel compile -d main/translations
+
+
+
+
+babel.cfg:
+[python: main/**.py]
+
+
+[jinja2: main/templates/**.html]
