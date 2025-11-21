@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}Groups - Attendance Manager{% endblock %}
+{% block title %}{{ _('Groups') }} - Attendance Manager{% endblock %}
 
 {% block content %}
-    <h2 class="centered">Your Groups</h2>
+    <h2 class="centered">{{ _('Your Groups') }}</h2>
     <div>
-        <a href="{{ url_for('create_group') }}" class="button centered"><i class="fa-solid fa-plus"></i> Create New Group</a>
+        <a href="{{ url_for('create_group') }}" class="button centered"><i class="fa-solid fa-plus"></i> {{ _('Create New Group') }}</a>
     </div>
     <div class="groups-container">
         {% if groups %}
@@ -13,26 +13,26 @@
                     <h3>{{ group.group_name }}</h3>
                     <p>
                         {% if group.start_day == 0 %}
-                            Meeting Day: Monday
+                            {{ _('Meeting Day: Monday') }}
                         {% elif group.start_day == 1 %}
-                            Meeting Day: Tuesday
+                            {{ _('Meeting Day: Tuesday') }}
                         {% elif group.start_day == 2 %}
-                            Meeting Day: Wednesday
+                            {{ _('Meeting Day: Wednesday') }}
                         {% elif group.start_day == 3 %}
-                            Meeting Day: Thursday
+                            {{ _('Meeting Day: Thursday') }}
                         {% elif group.start_day == 4 %}
-                            Meeting Day: Friday
+                            {{ _('Meeting Day: Friday') }}
                         {% elif group.start_day == 5 %}
-                            Meeting Day: Saturday
+                            {{ _('Meeting Day: Saturday') }}
                         {% elif group.start_day == 6 %}
-                            Meeting Day: Sunday
+                            {{ _('Meeting Day: Sunday') }}
                         {% endif %}
                     </p>
-                    <a href="{{ url_for('view_group', group_id=group.id) }}" class="button"><i class="fa-solid fa-magnifying-glass"></i> View Group</a>
+                    <a href="{{ url_for('view_group', group_id=group.id) }}" class="button"><i class="fa-solid fa-magnifying-glass"></i> {{ _('View Group') }}</a>
                 </div>
             {% endfor %}
         {% else %}
-            <p class="centered">You have no groups.</p>
+            <p class="centered">{{ _('You have no groups.') }}</p>
         {% endif %}
     </div>
-{% endblock %} 
+{% endblock %}

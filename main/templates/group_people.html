@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% block title %}Group People - Attendance Manager{% endblock %}
+{% block title %}{{ _('Group People') }} - Attendance Manager{% endblock %}
 
 {% block content %}
-    <h2 class="centered">People in {{ group.group_name }}</h2>
-    <a href="{{ url_for('view_group', group_id=group.id) }}" class="return-button">< Back</a>
+    <h2 class="centered">{{ _('People in %(group)s', group=group.group_name) }}</h2>
+    <a href="{{ url_for('view_group', group_id=group.id) }}" class="return-button">&lt; {{ _('Back') }}</a>
     <div class="container centered">
         {% if people %}
             <div class="card-list">
@@ -13,7 +13,7 @@
                             <div class="person-card">
                                 <div class="person-name">{{ person.name }}</div>
                                 <div class="person-role role-2">
-                                    Leader
+                                    {{ _('Leader') }}
                                 </div>
                             </div>
                         </a>
@@ -24,7 +24,7 @@
                             <div class="person-card">
                                 <div class="person-name">{{ person.name }}</div>
                                 <div class="person-role role-1">
-                                    Counsil
+                                    {{ _('Counsil') }}
                                 </div>
                             </div>
                         </a>
@@ -35,7 +35,7 @@
                             <div class="person-card">
                                 <div class="person-name">{{ person.name }}</div>
                                 <div class="person-role">
-                                    Member
+                                    {{ _('Member') }}
                                 </div>
                             </div>
                         </a>
@@ -43,8 +43,8 @@
                 {% endfor %}
             </div>
         {% else %}
-            <p>No people in this group.</p>
+            <p>{{ _('No people in this group.') }}</p>
         {% endif %}
-        <a href="{{ url_for('create_person', group_id=group.id) }}" class="button"><i class="fa-solid fa-plus"></i> Add Person</a>
+        <a href="{{ url_for('create_person', group_id=group.id) }}" class="button"><i class="fa-solid fa-plus"></i> {{ _('Add Person') }}</a>
     </div>
 {% endblock %}

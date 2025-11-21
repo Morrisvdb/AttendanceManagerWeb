@@ -3,15 +3,15 @@
 {% block content %}
     <div>
         <h1 class="home-title">{{ _("Welcome to Attendance Manager") }}</h1>
-        <p class="home-description">This is the home page of your Attendance Manager application.</p>
+        <p class="home-description">{{ _("This is the home page of your Attendance Manager application.") }}</p>
         <!-- <a href="{{ url_for('signup') }}" class="button">Get Started</a> -->
-        <h3 class="centered">Getting Started</h3>
+        <h3 class="centered">{{ _('Getting Started') }}</h3>
 
         {% if user %}
-            <a href="{{ url_for('groups') }}" class="listed-button button">Groups</a>
-            <a href="{{ url_for('upcomming_meetings') }}" class="listed-button button">Meetings</a>
+            <a href="{{ url_for('groups') }}" class="listed-button button">{{ _('Groups') }}</a>
+            <a href="{{ url_for('upcomming_meetings') }}" class="listed-button button">{{ _('Meetings') }}</a>
         {% else %}
-            <a href="{{ url_for('login') }}" class="listed-button button">Login</a>
+            <a href="{{ url_for('login') }}" class="listed-button button">{{ _('Login') }}</a>
         {% endif %}
         
 

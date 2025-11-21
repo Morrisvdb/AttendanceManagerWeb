@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Login Required{% endblock %}
+{% block title %}{{ _('Login Required') }}{% endblock %}
 
 {% block content %}
     <div class="login-required-container">
-        <h2 class="login-required-title">Login Required</h2>
-        <p class="login-required-message">You must be logged in to access this page.</p>
-        <a href="{{ url_for('login') }}" class="login-required-button">Go to Login</a>
+        <h2 class="login-required-title">{{ _('Login Required') }}</h2>
+        <p class="login-required-message">{{ _('You must be logged in to access this page.') }}</p>
+        <a href="{{ url_for('login') }}" class="login-required-button">{{ _('Go to Login') }}</a>
     </div>
 {% endblock %}

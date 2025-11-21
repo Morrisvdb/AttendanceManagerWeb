@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
-{% block title %}View Meeting Materials - Attendance Manager{% endblock %}
+{% block title %}{{ _('View Meeting Materials') }} - Attendance Manager{% endblock %}
 
 {% block content %}
     <script src="{{ url_for('static', filename='selectAllCheckboxesInForm.js') }}"></script>
 
-    <h2 class="centered">Meeting Details</h2>
-    <a href="{{ url_for('view_meeting', meeting_id=meeting.id) }}" class="return-button">< Back</a>
+    <h2 class="centered">{{ _('Meeting Details') }}</h2>
+    <a href="{{ url_for('view_meeting', meeting_id=meeting.id) }}" class="return-button">&lt; {{ _('Back') }}</a>
     <div class="form-container centered">
-        <p><strong>Date and Time:</strong> {{ meeting.date_time }}</p>
-        {% if meeting.canceled %} <p><strong>Canceled</strong></p> {% endif %}
+        <p><strong>{{ _('Date and Time:') }}</strong> {{ meeting.date_time }}</p>
+        {% if meeting.canceled %} <p><strong>{{ _('Canceled') }}</strong></p> {% endif %}
 
 
 
@@ -17,8 +17,8 @@
     <div class="container centered">
         <fieldset {% if meeting.canceled %}disabled="disabled" class="disabled-form"{% endif %}>
             <form action="{{ url_for('meeting_materials', meeting_id=meeting.id) }}" method="post">            
-                <button type="submit" class="button">Save Materials</button>
-                <button onclick="selectAllCheckboxesInForm()" type="button" class="button">Select All</button>
+                <button type="submit" class="button">{{ _('Save Materials') }}</button>
+                <button onclick="selectAllCheckboxesInForm()" type="button" class="button">{{ _('Select All') }}</button>
 
                 {% if people %}
                     <div class="card-list">
@@ -29,7 +29,7 @@
                                         <div class="person-info">
                                             <div class="person-name">{{ person.name }}</div>
                                             <div class="person-role {% if person.role == 2 %}role-2{% elif person.role == 1 %}role-1{% endif %}">
-                                                {% if person.role == 2 %}Leader{% elif person.role == 1 %}Counsil{% else %}Member{% endif %}
+                                                {% if person.role == 2 %}{{ _('Leader') }}{% elif person.role == 1 %}{{ _('Counsil') }}{% else %}{{ _('Member') }}{% endif %}
                                             </div>
                                             
                                         </div>
@@ -44,11 +44,11 @@
                                             &nbsp;
                                             {% if person.attendance.material == 0 %}
                                                 <div class="person-role status-badge-red">
-                                                    Incomplete
+                                                    {{ _('Incomplete') }}
                                                 </div>
                                             {% elif person.attendance.material %}
                                                 <div class="person-role status-badge-teal">
-                                                    Complete
+                                                    {{ _('Complete') }}
                                                 </div>
                                             {% endif %}
                                         </div>
@@ -58,7 +58,7 @@
                         {% endfor %}
                     </div>
                 {% else %}
-                    <p>No people in this group.</p>
+                    <p>{{ _('No people in this group.') }}</p>
                 {% endif %}
             </form>
         </fieldset>

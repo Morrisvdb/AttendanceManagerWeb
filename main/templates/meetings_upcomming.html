@@ -1,20 +1,20 @@
 {% extends 'base.html' %}
-{% block title %}Meetings - Attendance Manager{% endblock %}
+{% block title %}{{ _('Meetings') }} - Attendance Manager{% endblock %}
 
 {% block content %}
-    <h2 class="centered">Meetings</h2>
+    <h2 class="centered">{{ _('Meetings') }}</h2>
     <div class="container centered">
         <form method="POST">
             <!-- TODO: Maybe want date filter -->
             <table class="attendance-table">
                 <th>
-                    Future Only
+                    {{ _('Future Only') }}
                 </th>
                 <th>
-                    Canceled
+                    {{ _('Canceled') }}
                 </th>
                 <th>
-                    Group
+                    {{ _('Group') }}
                 </th>
 
                 <tr>
@@ -26,7 +26,7 @@
                     </td>
                     <td>
                         <select name="group" id="group">
-                            <option value="all">All Groups</option>
+                            <option value="all">{{ _('All Groups') }}</option>
                             {% for group in groups %}
                                 <option value="{{ group.id }}" {% if selected_group|int == group.id|int %}selected{% endif %}>{{ group.group_name }}</option>
                             {% endfor %}
@@ -34,7 +34,7 @@
                     </td>
                 </tr>
             </table>
-            <button type="submit" class="button">Filter</button>
+            <button type="submit" class="button">{{ _('Filter') }}</button>
         </form>
     </div>
         <div class="card-list centered">
@@ -43,7 +43,7 @@
                     <div class="meeting-card">
                         <div class="meeting-name">{{ meeting.group.group_name }}</div>
                         <div class="meeting-date">
-                            {{ meeting.date_time.split("T")[0] }} at {{ meeting.date_time.split("T")[1][:5] }}
+                            {{ meeting.date_time.split("T")[0] }} {{ _('at') }} {{ meeting.date_time.split("T")[1][:5] }}
                         </div>
                     </div>
                 </a>    

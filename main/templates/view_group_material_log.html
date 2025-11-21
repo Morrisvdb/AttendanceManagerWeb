@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <button onclick="history.back()" class="return-button">< Back</button>
+    <button onclick="history.back()" class="return-button">&lt; {{ _('Back') }}</button>
 
-    <h2 class="centered">Material Log for {{ group.group_name }}</h2>
+    <h2 class="centered">{{ _('Material Log for %(group)s', group=group.group_name) }}</h2>
 
     <div class="centered">
         <table class="attendance-table">
             <tr>
-                <th>Name: </th>
-                <th>Stripes: </th>
-                <th>Clear Marks: </th>
+                <th>{{ _('Name') }}</th>
+                <th>{{ _('Stripes') }}</th>
+                <th>{{ _('Clear Marks') }}</th>
             </tr>
             
             {% for person in people %}
@@ -25,7 +25,7 @@
                             </span>
                         </td>
                         <td>
-                            <a href="{{ url_for('clear_checks', person_id=person.id) }}" class="button" {% if person.missing_material < 3 %}onclick="return confirm('Are you sure? This person does not have 3 strikes yet.')"{% endif %}>Clear Marks</a>
+                            <a href="{{ url_for('clear_checks', person_id=person.id) }}" class="button" {% if person.missing_material < 3 %}onclick="return confirm({{ _('Are you sure? This person does not have 3 strikes yet.')|tojson }})"{% endif %}>{{ _('Clear Marks') }}</a>
                         </td>
                     </tr>
                 {% endif %}

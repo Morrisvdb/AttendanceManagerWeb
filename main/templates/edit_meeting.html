@@ -1,35 +1,35 @@
 {% extends 'base.html' %}
-{% block title %}Edit Meeting - Attendance Manager{% endblock %}
+{% block title %}{{ _('Edit Meeting') }} - Attendance Manager{% endblock %}
 
 {% block content %}
     <script src="{{ url_for('static', filename='updateOrganiserSelect.js') }}"></script>
 
-    <h2 class="centered">Edit Meeting</h2>
-    <a href="{{ url_for('view_meeting', meeting_id=meeting.id) }}" class="return-button">< Back</a>
+    <h2 class="centered">{{ _('Edit Meeting') }}</h2>
+    <a href="{{ url_for('view_meeting', meeting_id=meeting.id) }}" class="return-button">&lt; {{ _('Back') }}</a>
 
     <div class="form-container centered">
         <form method="POST" action="{{ url_for('edit_meeting', meeting_id=meeting.id) }}">
-            <label for="date_time">Date and Time:</label>
+            <label for="date_time">{{ _('Date and Time:') }}</label>
             <input type="datetime-local" id="date_time" name="date_time" value="{{ meeting.date_time }}" required> <br>
 
             <span style="display:flex; gap:8px;">
-                <label for="canceled" style="margin:0;">Canceled: </label>
+                <label for="canceled" style="margin:0;">{{ _('Canceled:') }} </label>
                 <input type="checkbox" name="canceled" id="canceled" {% if meeting.canceled %}checked{% endif %}>
             </span> <br>
 
             <span class="tooltip-container">
                 <i class="fa-solid fa-circle-question"></i>
-                <span class="tooltip-text">Hold `ctrl` to select multiple. <br>`Command` on Mac</span>
+                <span class="tooltip-text">{{ _('Hold `ctrl` to select multiple. <br>`Command` on Mac')|safe }}</span>
             </span>
             <meta id="people" data-name="people" data-people='{{ people|tojson }}'>
-            <input type="text" name="filter_people" id="filter_people" oninput="updateOrganiserSelect()">
+            <input type="text" name="filter_people" id="filter_people" oninput="updateOrganiserSelect()" placeholder="{{ _('Filter people...') }}">
             <select name="organiser" id="organiser" class="multiselect" multiple>
                 {% for person in people %}
                     <option value="{{ person.id }}" {% if person.id in organisers %}selected{% endif %}>{{ person.name }}</option>
                 {% endfor %}
             </select> <br>
 
-            <button type="submit" class="button">Save Changes</button>
+            <button type="submit" class="button">{{ _('Save Changes') }}</button>
         </form>
     </div>
 {% endblock %}

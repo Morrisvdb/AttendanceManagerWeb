@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}View Meeting - Attendance Manager{% endblock %}
+{% block title %}{{ _('View Meeting') }} - Attendance Manager{% endblock %}
 
 {% block content %}
-    <h2 class="centered">Meeting Details</h2>
-    <a href="{{ url_for('group_meetings', group_id=meeting.group_id) }}" class="return-button">< Back</a>
+    <h2 class="centered">{{ _('Meeting Details') }}</h2>
+    <a href="{{ url_for('group_meetings', group_id=meeting.group_id) }}" class="return-button">&lt; {{ _('Back') }}</a>
     <div class="form-container centered">
-        <p><strong>Date and Time:</strong> {{ meeting.date_time }}</p>
-        {% if meeting.canceled %} <p><strong>Canceled</strong></p> {% endif %}
-        <a href="{{ url_for('edit_meeting', meeting_id=meeting.id) }}" class="button">Edit Meeting</a> &nbsp;
+        <p><strong>{{ _('Date and Time:') }}</strong> {{ meeting.date_time }}</p>
+        {% if meeting.canceled %} <p><strong>{{ _('Canceled') }}</strong></p> {% endif %}
+        <a href="{{ url_for('edit_meeting', meeting_id=meeting.id) }}" class="button">{{ _('Edit Meeting') }}</a> &nbsp;
 
-        <a href="{{ url_for('view_meeting_materials', meeting_id=meeting.id) }}" class="button">Material</a>
+        <a href="{{ url_for('view_meeting_materials', meeting_id=meeting.id) }}" class="button">{{ _('Material') }}</a>
 
 
     </div>
@@ -18,29 +18,29 @@
         <form action="{{ url_for('meeting_attendance', meeting_id=meeting.id) }}" method="post">
             {% if device.is_mobile  %}
                 <select name="attendance_type" id="attendance_type">
-                    <option value="before">Before Meeting</option>
-                    <option value="during">During Meeting</option> 
+                    <option value="before">{{ _('Before Meeting') }}</option>
+                    <option value="during">{{ _('During Meeting') }}</option> 
                 </select> <br>
 
                 <span class="tooltip-container">
                     <i class="fa-solid fa-circle-question"></i>
-                    <span class="tooltip-text">A checked box indicates the person will be present at the meeting. <br>Warning, check the drop down to select whether it is before the meeting or during! (calling in sick ect.)</span>
+                    <span class="tooltip-text">{{ _('A checked box indicates the person will be present at the meeting. <br>Warning, check the drop down to select whether it is before the meeting or during! (calling in sick etc.)')|safe }}</span>
                 </span>
                 <br>
             {% endif %}
 
             
-            <button type="submit" class="button">Save Attendances</button>
+            <button type="submit" class="button">{{ _('Save Attendances') }}</button>
 
             {% if device.is_mobile == false %}
                 <span class="tooltip-container">
                     <i class="fa-solid fa-circle-question"></i>
-                    <span class="tooltip-text">A checked box indicates the person will be present at the meeting. <br>Warning, check the drop down to select whether it is before the meeting or during! (calling in sick ect.)</span>
+                    <span class="tooltip-text">{{ _('A checked box indicates the person will be present at the meeting. <br>Warning, check the drop down to select whether it is before the meeting or during! (calling in sick etc.)')|safe }}</span>
                 </span>
 
                 <select name="attendance_type" id="attendance_type">
-                    <option value="before">Before Meeting</option>
-                    <option value="during">During Meeting</option> 
+                    <option value="before">{{ _('Before Meeting') }}</option>
+                    <option value="during">{{ _('During Meeting') }}</option> 
                 </select> <br> <br>
             {% endif %}
 
@@ -53,7 +53,7 @@
                                     <div class="person-info">
                                         <div class="person-name">{{ person.name }}</div>
                                         <div class="person-role {% if person.role == 2 %}role-2{% elif person.role == 1 %}role-1{% endif %}">
-                                            {% if person.role == 2 %}Leader{% elif person.role == 1 %}Counsil{% else %}Member{% endif %}
+                                            {% if person.role == 2 %}{{ _('Leader') }}{% elif person.role == 1 %}{{ _('Counsil') }}{% else %}{{ _('Member') }}{% endif %}
                                         </div>
                                         
                                     </div>
@@ -61,15 +61,15 @@
                                     <div class="person-attendance-status">
                                         {% if person.attendance.presence == 0 %}
                                             <div class="person-role status-badge-red">
-                                                Absent
+                                                {{ _('Absent') }}
                                             </div>
                                         {% elif person.attendance.presence == 2 or person.default_presence == 2 %}
                                             <div class="person-role status-badge-orange">
-                                                Late
+                                                {{ _('Late') }}
                                             </div>
                                         {% elif person.attendance.presence == 3 %}
                                             <div class="person-role status-badge-teal">
-                                                Excused
+                                                {{ _('Excused') }}
                                             </div>                                            
                                         {% endif %}
 
@@ -86,7 +86,7 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <p>No people in this group.</p>
+                <p>{{ _('No people in this group.') }}</p>
             {% endif %}
         </form>
     </div>

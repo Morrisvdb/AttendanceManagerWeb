@@ -1,5 +1,6 @@
 from flask import Flask, request
 from flask_babel import Babel
+from flask_babel_js import BabelJS
 from dotenv import load_dotenv, find_dotenv, set_key
 from main.config import Development, Production
 import os, random, string
@@ -28,6 +29,7 @@ def create_app():
     app.config.from_object(Development) # Sets the current mode between Development and Production
 
     babel = Babel(app, locale_selector=get_locale)
+    babel_js = BabelJS(app)
 
     return app
 

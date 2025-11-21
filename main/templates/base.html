@@ -7,11 +7,22 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
     <script src="https://kit.fontawesome.com/832e141ab8.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='changeTheme.js') }}"></script>
+    <script src="{{ url_for("babel_catalog") }}"></script>
 </head>
 <body>
     <header class="header" style="position: relative;">
         <a href="{{ url_for('home') }}" class="no-link-style"><h1 style="margin: 0;">Attendance Manager</h1></a>
         <div class="profile-menu">
+            <!-- Language Selector -->
+            <div class="language-selector">
+                <select onchange="window.location.href = this.value;" title="{{ _('Select Language') }}">
+                    <option value="#">🌐 {{ _('Language') }}</option>
+                    <option value="{{ url_for('change_locale', locale='en') }}">English</option>
+                    <option value="{{ url_for('change_locale', locale='nl') }}">Dutch</option>
+                </select>
+            </div>
+
             <button id="profileBtn" class="profile-icon" aria-label="Profile" onclick="toggleProfileMenu()">
                 <!-- Simple SVG user icon as placeholder -->
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -35,6 +46,9 @@
             
             {% endif %}
         </div>
+
+        
+
         <script>
         function toggleProfileMenu() {
             var dropdown = document.getElementById('profileDropdown');
