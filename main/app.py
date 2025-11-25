@@ -1,10 +1,12 @@
-from flask import request, render_template, make_response, redirect, url_for, abort, g, session
+from flask import request, render_template, make_response, redirect, url_for, abort, g, session, jsonify
 from user_agents import parse
 from main.__init__ import app, API_URL
 import requests
 from functools import wraps
 import datetime
 import re
+import base64
+
 
 # TODO: Improve error handeling. --> not 404.html for everything :facepalm:
 
@@ -55,6 +57,12 @@ def detect_device():
 def inject_device():
     return {'device': getattr(g, 'device', {})}
 
+# Help prevent the annoying flicker that happens when the js loads the theme after DOM load
+@app.context_processor
+def inject_theme():
+    theme = request.cookies.get("theme", "light")
+    return {"theme": theme}
+
 @app.errorhandler(400)
 def bad_request(e):
     return render_template('400.html')
@@ -88,12 +96,7 @@ def change_locale(user, key, locale):
     """
     if locale not in app.config['BABEL_SUPPORTED_LOCALES']:
         return abort(400)
-    
-    try:
-        previous_url = session.pop('origin')
-    except KeyError:
-        previous_url = 'home'
-        
+            
     if user is None:
         resp = make_response()
         resp.set_cookie('locale', locale)
@@ -106,25 +109,16 @@ def change_locale(user, key, locale):
         return abort(user_put_request.status_code)
     
     return {'status': 'ok'}, 200
-    
-@app.route('/theme/toggle/<string:url>', methods=['POST'])
+
+@app.route('/theme/toggle', methods=['POST'])
 @get_user
 def toggle_theme(user, key):
-    theme = "dark" if request.cookies['theme'] != "dark" else "light"
-        
-    # if user is None:
+    current_theme = request.cookies.get('theme')
+    new_theme = "light" if current_theme == 'dark' else "dark"
+    
     resp = make_response()
-    resp.set_cookie('theme', theme)
+    resp.set_cookie('theme', new_theme)
     return resp
-    
-    # MAYBE TO ADD ACCOUNT STORED THEME LATER? COOKIE BASED FOR NOW
-    # headers = {"Authorization": key}
-    
-    # user_put_request = requests.post(API_URL+"/user", headers=headers, json={"theme": theme})
-    # if user_put_request.status_code != 200:
-    #     return abort(user_put_request.status_code)
-    
-    # return redirect(url_for(previous_url))
     
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
@@ -197,6 +191,46 @@ def logout(user, key):
 @get_user
 def profile(user, key):
     return render_template('profile.html', user=user, key=key)
+
+@app.route('/profile/edit', methods=['POST', 'GET'])
+@login_required
+@get_user
+def edit_profile(user, key):
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password_old = request.form.get('password_old')
+        password_new = request.form.get('password_new')
+        profile_picture = request.files.get('profile_picture')
+                
+        data = {}
+        
+        if username is not None and len(username) > 0:
+            if len(username) < 80:
+                data['username'] = username
+            else:
+                return render_template('edit_profile.html', user=user, error="Your username is too long. The limit it 80 characters")
+        
+        if password_old is not None and password_new is not None and len(password_new) > 0:
+            data['password'] = password_new
+        
+        if profile_picture is not None:
+            data['profile_picture'] = base64.b64encode(profile_picture.stream.read()).decode("utf-8")
+            
+        headers = {"Authorization": key}
+        edit_profile_request = requests.post(API_URL+'/user', headers=headers, json=data)
+        status_code = edit_profile_request.status_code
+        if status_code != 200:
+            if status_code == 409:
+                return render_template('edit_profile.html', user=user, error="This username is already in use.")
+            if status_code == 401:
+                return render_template('edit_profile.html', user=user, error="The old password is incorrect")
+            return abort(edit_profile_request.status_code)
+        
+        return redirect(url_for("profile"))
+            
+            
+        
+    return render_template('edit_profile.html', user=user)
         
 @app.route('/profile/delete/<isConfirmed>')
 @login_required

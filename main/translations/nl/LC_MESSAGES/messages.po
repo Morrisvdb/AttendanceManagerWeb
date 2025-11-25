@@ -167,13 +167,13 @@ msgstr "Lid"
 #: main/templates/group_people.html:27 main/templates/view_meeting.html:56
 #: main/templates/view_meeting_materials.html:32
 msgid "Counsil"
-msgstr "Raad"
+msgstr "Besuur"
 
 #: main/templates/create_person.html:21 main/templates/edit_person.html:24
 #: main/templates/group_people.html:16 main/templates/view_meeting.html:56
 #: main/templates/view_meeting_materials.html:32
 msgid "Leader"
-msgstr "Leider"
+msgstr "Begeleiding"
 
 #: main/templates/create_person.html:24 main/templates/group_people.html:48
 msgid "Add Person"

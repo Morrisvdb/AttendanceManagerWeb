@@ -1,3 +1,85 @@
+/* Theme CSS Variables */
+:root {
+    --bg-primary: #f4f6f8;
+    --bg-secondary: #fff;
+    --bg-header: #2d3e50;
+    --text-primary: #222;
+    --text-secondary: #555;
+    --text-header: #fff;
+    --card-shadow: rgba(44, 62, 80, 0.175);
+    --card-shadow-hover: rgba(44, 62, 80, 0.18);
+    --border-color: #ccc;
+    --border-light: #ddd;
+    --dropdown-bg: #f4f6f8;
+    --form-bg: #fff;
+    --form-border: #ccc;
+    --button-primary: #3498db;
+    --button-primary-hover: #219150;
+    --button-success: #27ae60;
+    --button-success-hover: #219150;
+    --button-danger: #e74c3c;
+    --button-danger-hover: #c0392b;
+    --heading-color: #2d3e50;
+    --role-bg: #f4f6f8;
+    --role-text: #888;
+}
+
+html[data-theme="dark"] {
+    --bg-primary: #1e1e1e;
+    --bg-secondary: #2d2d2d;
+    --bg-header: #0d0d0d;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --text-header: #e0e0e0;
+    --card-shadow: rgba(0, 0, 0, 0.3);
+    --card-shadow-hover: rgba(0, 0, 0, 0.5);
+    --border-color: #444;
+    --border-light: #555;
+    --dropdown-bg: #333;
+    --form-bg: #2d2d2d;
+    --form-border: #555;
+    --button-primary: #1a5277;
+    --button-primary-hover: #13375e;
+    --button-success: #229954;
+    --button-success-hover: #1a7d3e;
+    --button-danger: #c0392b;
+    --button-danger-hover: #992d22;
+    --heading-color: #e0e0e0;
+    --role-bg: #3d3d3d;
+    --role-text: #b0b0b0;
+}
+
+/* Add smooth transition to all elements */
+html {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Lets hope I got every class :3 */
+body,
+header,
+footer,
+main,
+.person-card,
+.meeting-card,
+.person-attendance-card,
+.form-container input,
+.form-container textarea,
+.form-group input,
+.attendance-table,
+.profile-dropdown,
+.language-selector select,
+.theme-button,
+select {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid var(--border-light);
+    margin: 1.5rem 0;
+    width: 100%;
+}
+
 /* Card layout for people list */
 .card-list {
     display: grid;
@@ -12,9 +94,9 @@
 }
 
 .person-card {
-    background: #fff;
+    background: var(--bg-secondary);
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.175);
+    box-shadow: 0 2px 8px var(--card-shadow);
     padding: 1.25rem 1.5rem;
     min-width: 180px;
     max-width: 220px;
@@ -25,13 +107,13 @@
     transition: box-shadow 0.2s;
 }
 .person-card:hover {
-    box-shadow: 0 4px 16px rgba(44, 62, 80, 0.18);
+    box-shadow: 0 4px 16px var(--card-shadow-hover);
 }
 
 .meeting-card {
-    background: #fff;
+    background: var(--bg-secondary);
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.175);
+    box-shadow: 0 2px 8px var(--card-shadow);
     padding: 1.25rem 1.5rem;
     min-width: 180px;
     max-width: 220px;
@@ -42,28 +124,28 @@
     transition: box-shadow 0.2s;
 }
 .meeting-card:hover {
-    box-shadow: 0 4px 16px rgba(44, 62, 80, 0.18);
+    box-shadow: 0 4px 16px var(--card-shadow-hover);
 }
 
 .meeting-name {
     font-size: 1.25rem;
     font-weight: bold;
     margin-bottom: 0.75rem;
-    color: #2d3e50;
+    color: var(--heading-color);
 }
 
 .meeting-date {
     font-size: 1rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
-    color: #2d3e50;
+    color: var(--heading-color);
 }
 
 .person-name {
     font-size: 1.15rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
-    color: #2d3e50;
+    color: var(--heading-color);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -72,8 +154,8 @@
 
 .person-role {
     font-size: 0.95rem;
-    color: #888;
-    background: #f4f6f8;
+    color: var(--role-text);
+    background: var(--role-bg);
     padding: 0.25rem 0.75rem;
     border-radius: 6px;
 }
@@ -102,9 +184,9 @@
 }
 
 .person-attendance-card {
-    background: #fff;
+    background: var(--bg-secondary);
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.175);
+    box-shadow: 0 2px 8px var(--card-shadow);
     padding: 1.25rem 1.5rem;
     width: 270px;
     max-width: 270px;
@@ -177,15 +259,15 @@
 /* Base styles */
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background-color: #f4f6f8;
+    background-color: var(--bg-primary);
     margin: 0;
     padding: 0;
-    color: #222;
+    color: var(--text-primary);
 }
 
 header, footer {
-    background-color: #2d3e50;
-    color: #fff;
+    background-color: var(--bg-header);
+    color: var(--text-header);
     padding: 1rem 2rem;
     text-align: center;
 }
@@ -194,9 +276,9 @@ main {
     max-width: 900px;
     margin: 2rem auto;
     padding: 2rem;
-    background: #fff;
+    background: var(--bg-secondary);
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+    box-shadow: 0 2px 8px var(--card-shadow);
 }
 
 form br {
@@ -206,7 +288,7 @@ form br {
 .signup-button {
     display: inline-block;
     padding: 0.75rem 1.5rem;
-    background-color: #27ae60;
+    background-color: var(--button-success);
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -217,7 +299,7 @@ form br {
     margin-left: 0.5rem;
 }
 .signup-button:hover {
-    background-color: #219150;
+    background-color: var(--button-success-hover);
 }
 /* Profile icon and dropdown styles */
 .profile-menu {
@@ -239,17 +321,17 @@ form br {
 }
 .profile-icon svg {
     display: block;
-    background: #3498db;
+    background: var(--button-primary);
     border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+    box-shadow: 0 2px 8px var(--card-shadow);
 }
 .profile-dropdown {
     position: absolute;
     top: 40px;
     right: 0;
-    background: #fff;
+    background: var(--bg-secondary);
     border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.15);
+    box-shadow: 0 2px 8px var(--card-shadow);
     min-width: 120px;
     padding: 0.5rem 0;
     text-align: left;
@@ -257,20 +339,20 @@ form br {
 .dropdown-item {
     display: block;
     padding: 0.5rem 1rem;
-    color: #2d3e50;
+    color: var(--text-primary);
     text-decoration: none;
     font-size: 1rem;
     transition: background 0.2s;
 }
 .dropdown-item:hover {
-    background: #f4f6f8;
+    background: var(--dropdown-bg);
 }
 
 /* Home page styles */
 .home-title {
     font-size: 2.5rem;
     margin-bottom: 1rem;
-    color: #2d3e50;
+    color: var(--heading-color);
     text-align: center;
 }
 
@@ -278,13 +360,13 @@ form br {
     font-size: 1.2rem;
     margin-bottom: 2rem;
     text-align: center;
-    color: #555;
+    color: var(--text-secondary);
 }
 
 .button {
     display: inline-block;
     padding: 0.75rem 1.5rem;
-    background-color: #3498db;
+    background-color: var(--button-primary);
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -295,7 +377,7 @@ form br {
 }
 
 .button:hover {
-    background-color: #219150;
+    background-color: var(--button-primary-hover);
     transition: background 0.5s;
 }
 
@@ -327,6 +409,33 @@ form br {
     margin: 0 auto;
     padding: 1rem; /* Added padding for spacing around the form */
 }
+.form-container label {
+    display: block;
+    margin-bottom: 0.5rem; /* Increased spacing below label */
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+.form-container input {
+    width: 100%;
+    padding: 0.8rem; /* Increased input padding for larger spacing */
+    border: 1px solid var(--form-border);
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: var(--form-bg);
+    color: var(--text-primary);
+}
+.form-container textarea {
+    width: 100%;
+    height: 100px;
+    padding: 0.8rem; /* Increased textarea padding for larger spacing */
+    border: 1px solid var(--form-border);
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: var(--form-bg);
+    color: var(--text-primary);
+    resize: vertical;
+}
+
 .form-group {
     margin-bottom: 2rem; /* Increased spacing between form elements */
 }
@@ -334,24 +443,36 @@ form br {
     display: block;
     float: left;
     margin-bottom: 0; /* Slightly increased spacing below label */
-    color: #333;
+    color: var(--text-primary);
     font-size: 0.8rem;
 }
 .form-group input {
     width: 100%;
     padding: 0.8rem; /* Increased input padding for larger spacing */
-    border: 1px solid #ccc;
+    border: 1px solid var(--form-border);
     border-radius: 5px;
     font-size: 1rem;
+    background-color: var(--form-bg);
+    color: var(--text-primary);
 }
 .form-group input:focus {
-    border-color: #3498db;
+    border-color: var(--button-primary);
     outline: none;
+}
+.form-container input[type="checkbox"] {
+    width: auto;
+    margin-right: 0.5rem;
+    background-color: var(--input-bg);
+    padding: 1rem;
+}
+.form-container input[type='file'] {
+    background-color: var(--input-bg);
+    padding: 1rem;    
 }
 .form-button {
     width: 100%;
     padding: 0.75rem;
-    background-color: #3498db;
+    background-color: var(--button-primary);
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -360,7 +481,7 @@ form br {
     transition: background 0.2s;
 }
 .form-button:hover {
-    background-color: #219150;
+    background-color: var(--button-primary-hover);
 }
 
 .return-button {
@@ -388,8 +509,12 @@ form br {
 }
 
 .alert-danger {
-    background-color: #e74c3c;
+    background-color: var(--button-danger);
     color: #fff;
+}
+
+.alert-danger:hover {
+    background-color: var(--button-danger-hover);
 }
 
 .bold {
@@ -397,7 +522,8 @@ form br {
 }
 
 input, label {
-    display:block
+    display:block;
+    color: var(--text-primary);
 }
 
 .no-link-style {
@@ -410,12 +536,14 @@ input, label {
     border-collapse: collapse;
     margin-top: 1rem;
     margin-bottom: 1rem;
+    background-color: var(--bg-secondary);
 }
 
 .attendance-table th, .attendance-table td {
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-light);
     padding: 0.75rem;
     text-align: center;
+    color: var(--text-primary);
 }
 
 .attendance-table input[type="checkbox"] {
@@ -427,18 +555,21 @@ input, label {
     width: 100%;
     height: 150px;
     padding: 0.5rem;
-    border: 1px solid #ccc;
+    border: 1px solid var(--form-border);
     border-radius: 5px;
     font-size: 1rem;
-    background-color: #fff;
+    background-color: var(--form-bg);
+    color: var(--text-primary);
     cursor: pointer;
 }
 
 select {
     padding: 0.75rem 1.5rem;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--form-border);
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    background-color: var(--form-bg);
+    color: var(--text-primary);
 }
 
 fieldset {
@@ -461,6 +592,7 @@ fieldset {
 
 .redtablecell {
     background-color: #f8d7da;
+    color: var(--text-primary);
 }
 
 .language-selector {
@@ -469,31 +601,27 @@ fieldset {
 
 .language-selector select {
     padding: 8px 12px;
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: var(--form-bg);
+    border: 1px solid var(--form-border);
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .language-selector select:hover {
-    background-color: #f5f5f5;
+    background-color: var(--dropdown-bg);
 }
 
-.theme-selector {
-    margin-left: auto;
-    /* float: left; */
-}
-
-.theme-selector a {
-    color: #fff;
-    text-decoration: none;
+.theme-button {
+    padding: 8px 12px;
+    background-color: var(--form-bg);
+    border: 1px solid var(--form-border);
+    border-radius: 8px;
+    cursor: pointer;
     font-size: 14px;
-}
-
-.theme-selector a:hover {
-    text-decoration: underline;
+    color: var(--text-primary);
+    text-align: center;
 }
 
 /* ----------------------

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('Profile') }}{% endblock %}
+
+{% block content %}
+<script src="{{ url_for('static', filename='confirmDanger.js') }}"></script>
+
+<div class="centered">
+    <h2>{{ _('Profile') }}</h2>
+    <p>{{ _("Editing, %(username)s!'s profile", username=user.username) }}</p>
+    <div>
+        <form method="post", class="form-container" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="username">{{ _('Username') }}</label>
+                <input type="text" id="username" name="username">
+            </div>
+            <hr>
+            <div class="form-group">
+                <label for="password_old">{{ _('Old Password') }}</label>
+                <input type="password" id="password_old" name="password_old">
+            </div>
+            <div class="form-group">
+                <label for="password_new">{{ _('New Password') }}</label>
+                <input type="password" id="password_new" name="password_new">
+            </div>
+            <hr>
+            <div class="form-group">
+                <label for="profile_pictire">{{ _('Profile Picture') }}</label>
+                <input type="file" id="profile_picture" name="profile_picture" accept="image">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="button">{{ _('Update') }}</button>
+            </div>
+        </form>
+        {% if error %}
+            <div class="alert alert-danger mt-3">{{ error }}</div>
+        {% endif %}
+    
+</div>
+{% endblock %}
