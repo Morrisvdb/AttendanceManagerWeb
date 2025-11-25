@@ -65,7 +65,7 @@ def not_found(e):
 
 @app.errorhandler(404)
 def not_found(e):
-    return render_template("404.html", url=request.url)
+    return render_template("404.html")
 
 @app.errorhandler(409)
 def not_found(e):
@@ -77,7 +77,7 @@ def not_found(e):
 def home(user, key):
     return render_template("home.html", user=user)
 
-@app.route('/locale/<string:locale>')
+@app.route('/locale/<string:locale>', methods=['POST'])
 @get_user
 def change_locale(user, key, locale):
     """Changes the locale of the current browser to the given string. 
@@ -86,7 +86,6 @@ def change_locale(user, key, locale):
     Args:
         locale (string): The locale to change to. Is of app config BABEL_SUPPORTED_LOCALES
     """
-    print(request.cookies.get('locale'))
     if locale not in app.config['BABEL_SUPPORTED_LOCALES']:
         return abort(400)
     
@@ -95,10 +94,37 @@ def change_locale(user, key, locale):
     except KeyError:
         previous_url = 'home'
         
-    if user is not None:
-        resp = make_response(redirect(url_for(previous_url)))
+    if user is None:
+        resp = make_response()
         resp.set_cookie('locale', locale)
         return resp
+    
+    headers = {"Authorization": key}
+    
+    user_put_request = requests.post(API_URL+"/user", headers=headers, json={"locale": locale})
+    if user_put_request.status_code != 200:
+        return abort(user_put_request.status_code)
+    
+    return {'status': 'ok'}, 200
+    
+@app.route('/theme/toggle/<string:url>', methods=['POST'])
+@get_user
+def toggle_theme(user, key):
+    theme = "dark" if request.cookies['theme'] != "dark" else "light"
+        
+    # if user is None:
+    resp = make_response()
+    resp.set_cookie('theme', theme)
+    return resp
+    
+    # MAYBE TO ADD ACCOUNT STORED THEME LATER? COOKIE BASED FOR NOW
+    # headers = {"Authorization": key}
+    
+    # user_put_request = requests.post(API_URL+"/user", headers=headers, json={"theme": theme})
+    # if user_put_request.status_code != 200:
+    #     return abort(user_put_request.status_code)
+    
+    # return redirect(url_for(previous_url))
     
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
@@ -346,9 +372,6 @@ def upcomming_meetings(user, key):
         group = request.form.get('group')
         if group == 'all':
             group = None
-        # Let user filter meetings, default `future_only:True`
-    
-    
     
     headers = {"Authorization": key}
     data = {'future_only': future_only, 'canceled': canceled, 'group_id': group}
@@ -368,7 +391,7 @@ def upcomming_meetings(user, key):
     
         return render_template('meetings_upcomming.html', meetings = meetings, groups=groups, future_only=future_only, canceled=canceled, selected_group=group)
             
-    return render_template('404.html', user=user, key=key)
+    return abort(404)
 
 @app.route('/meetings/edit/<int:meeting_id>', methods=['GET', 'POST'])
 @login_required

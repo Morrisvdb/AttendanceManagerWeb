@@ -3,11 +3,22 @@ from flask_babel import Babel
 from flask_babel_js import BabelJS
 from dotenv import load_dotenv, find_dotenv, set_key
 from main.config import Development, Production
-import os, random, string
+import os, random, string, requests
 
 API_URL = "http://localhost:5001"
 
 def get_locale():
+    AuthKey = request.cookies.get("Authorization")
+    headers = {"Authorization": AuthKey}
+    r = requests.get(API_URL+"/user", headers=headers)
+    
+    if r.status_code == 200:
+        user = r.json()['user']
+        locale = user['locale']
+        if locale in app.config['BABEL_SUPPORTED_LOCALES']:
+            return locale
+            
+    
     lang = request.cookies.get('locale')
     if lang in app.config['BABEL_SUPPORTED_LOCALES']:
         return lang
