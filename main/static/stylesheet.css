@@ -304,7 +304,7 @@ form br {
 /* Profile icon and dropdown styles */
 .profile-menu {
     position: absolute;
-    top: 1.2rem;
+    top: 0.75rem;
     right: 2rem;
     z-index: 10;
     display: flex;
@@ -319,11 +319,12 @@ form br {
     margin-left: 1rem;
     vertical-align: middle;
 }
-.profile-icon svg {
+.profile-icon img {
     display: block;
     background: var(--button-primary);
-    border-radius: 50%;
+    border-radius: 100%;
     box-shadow: 0 2px 8px var(--card-shadow);
+    width: 75%
 }
 .profile-dropdown {
     position: absolute;
@@ -346,6 +347,15 @@ form br {
 }
 .dropdown-item:hover {
     background: var(--dropdown-bg);
+}
+
+.dropdown-item-text {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.2s;
 }
 
 /* Home page styles */

@@ -37,15 +37,21 @@
             </div>
 
             <button id="profileBtn" class="profile-icon" aria-label="Profile" onclick="toggleProfileMenu()">
-                <!-- Simple SVG user icon as placeholder -->
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="8" r="4"/>
-                  <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
-                </svg>
+                {% if user.profile_picture %}
+                    <img src="data:image/png;base64,{{user.profile_picture}}" alt="Profile Picture">
+                {% else %}
+                    <!-- Simple SVG user icon as placeholder -->
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="8" r="4"/>
+                    <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+                    </svg>
+                {% endif %}
+
             </button>
             {% if user %}
 
                 <div id="profileDropdown" class="profile-dropdown" style="display: none;">
+                    <p class="dropdown-item-text">{{ _("Logged in as") }}: {{ user.username }}</p>
                     <a href="{{ url_for('profile') }}" class="dropdown-item">{{ _("Profile") }}</a>
                     <a href="{{ url_for('logout') }}" class="dropdown-item">{{ _("Sign Out") }}</a>
                 </div>
