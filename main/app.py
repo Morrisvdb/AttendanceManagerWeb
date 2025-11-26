@@ -331,6 +331,13 @@ def view_group_material_log(user, key, group_id=None):
     
     return render_template('view_group_material_log.html', user=user, people=people, group=group)
 
+@app.route('/groups/tasks/view/<int:group_id>')
+@login_required
+@get_user
+def group_tasks(user, key, group_id):
+    
+    return render_template('group_tasks.html', user=user)
+
 @app.route('/groups/edit/<int:group_id>', methods=['GET', 'POST'])
 @login_required
 @get_user
