@@ -331,12 +331,179 @@ def view_group_material_log(user, key, group_id=None):
     
     return render_template('view_group_material_log.html', user=user, people=people, group=group)
 
-@app.route('/groups/tasks/view/<int:group_id>')
+@app.route('/groups/<int:group_id>/tasks/view')
 @login_required
 @get_user
 def group_tasks(user, key, group_id):
+    headers = {'Authorization': key}
+    group_request = requests.get(API_URL+'/groups/'+str(group_id), headers={"Authorization": key})
+    if group_request.status_code != 200:
+        return abort(group_request.status_code)
     
-    return render_template('group_tasks.html', user=user)
+    group = group_request.json()
+    
+    data = {'group_id': group_id}
+    tasks_request = requests.get(API_URL+'/tasks', json=data, headers=headers)
+    if tasks_request.status_code != 200:
+        return abort(tasks_request.status_code)
+    
+    tasks = tasks_request.json().get('tasks')
+
+    
+    return render_template('group_tasks.html', user=user, tasks=tasks, group=group)
+
+@app.route('/groups/<int:group_id>/tasks/create', methods=['GET', 'POST'])
+@login_required
+@get_user
+def create_task(user, key, group_id):
+    headers = {'Authorization': key}
+    if request.method == 'POST':
+        name = request.form.get('task_name')
+        rotate = request.form.get('rotate')
+        number = request.form.get('number')
+        people = request.form.getlist('people_select')
+        
+        data = {
+            "name": name,
+            "amount": number,
+            "rotate": rotate,
+            "people": people
+        }
+        
+        create_task_request = requests.post(API_URL+'/tasks/'+str(group_id), json=data, headers=headers)
+        if create_task_request.status_code != 201:
+            return abort(create_task_request.status_code)
+        
+        return redirect(url_for('group_tasks', group_id=group_id))
+    
+    group_request = requests.get(API_URL+'/groups/'+str(group_id), headers={"Authorization": key})
+    if group_request.status_code != 200:
+        return abort(group_request.status_code)
+    
+    group = group_request.json()
+    
+    data = {"group_id": group['id']}
+    people_request = requests.get(API_URL+'/people', headers=headers, json=data)
+    if people_request.status_code != 200:
+        return abort(people_request.status_code)
+    people = people_request.json()['people']
+    
+    return render_template('create_task.html', group=group, people=people)
+
+@app.route('/groups/tasks/<task_id>/edit', methods=['GET', 'POST'])
+@login_required
+@get_user
+def task_edit(user, key, task_id):
+    headers = {"Authorization": key}
+    
+    if request.method == 'POST':
+        name = request.form.get('task_name')
+        rotate = True if request.form.get('rotate') == 'on' else False
+        number = request.form.get('number')
+        people = request.form.getlist('people-select')
+        
+        data = {
+            "task_id": task_id,
+            "name": name,
+            "rotate": rotate,
+            "amount": number,
+            "people": people
+            }
+        
+        task_put_request = requests.put(API_URL+'/tasks', json=data, headers=headers)
+        if task_put_request.status_code != 200:
+            return abort(task_put_request.status_code)
+        
+        return redirect(url_for("group_tasks", group_id=task_put_request.json().get('task').get('group_id')))
+    
+    data = {"task_id": task_id}
+    task_get_request = requests.get(API_URL+'/tasks', json=data, headers=headers)
+    if task_get_request.status_code != 200:
+        return abort(task_get_request.status_code)
+    
+    task = task_get_request.json().get('task')
+    
+    group_id = task.get('group_id')
+    data = {'group_id': group_id}
+    people_get_request = requests.get(API_URL+'/people', json=data, headers=headers)
+    if people_get_request.status_code != 200:
+        return abort(people_get_request.status_code)
+    
+    people = people_get_request.json().get('people')
+    
+    return render_template('edit_task.html', user=user, task=task, people=people)
+    
+@app.route('/group/<int:group_id>/tasks/distribute')
+@login_required
+@get_user
+def distribute_tasks(user, key, group_id):
+    headers = {'Authorization': key}
+
+    distr_tasks_request = requests.get(API_URL+'/group/'+str(group_id)+'/tasks/distribute', headers=headers)
+    if distr_tasks_request.status_code != 200:
+        return abort(distr_tasks_request.status_code)
+    
+    assignments = distr_tasks_request.json().get('assignments')
+    
+    group_request = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
+    if group_request.status_code != 200:
+        return abort(group_request.status_code)
+    
+    group = group_request.json()
+    
+    payload = {'group_id': group_id}
+    people_request = requests.get(API_URL+'/people', json=payload, headers=headers)
+    if people_request.status_code != 200:
+        return abort(people_request.status_code)
+    people = people_request.json()['people']
+    
+    data = {'group_id': group_id}
+    task_get_request = requests.get(API_URL+'/tasks', json=data, headers=headers)
+    if task_get_request.status_code != 200:
+        return abort(task_get_request.status_code)
+    
+    tasks = task_get_request.json().get('tasks')
+    
+    complete_assignments = []
+                    
+    for assignment in assignments:
+        person_id = assignment
+        task_id = assignments[person_id]
+        
+        entry = {}
+        person = next((person for person in people if str(person["id"]) == str(person_id)), None)
+                
+        entry['person'] = person
+        task = next((task for task in tasks if task["id"] == task_id), None)
+        entry['task'] = task
+        complete_assignments.append(entry)
+        
+        
+    groups_by_task = {}
+    for entry in complete_assignments:
+        tid = int(entry['task']['id'])
+        groups_by_task.setdefault(tid, []).append(entry)
+
+    # Create ordered list of lists
+    assignments_by_task = [groups_by_task[tid] for tid in sorted(groups_by_task.keys())]
+
+    meeting = group['next_meeting']
+    meeting['group'] = group
+
+    return render_template("display_assignments.html", user=user, assignments=assignments_by_task, meeting=meeting, group_id=group_id)
+
+@app.route('/group/<int:group_id>/tasks/reset_seed')
+@login_required
+@get_user
+def reset_task_seed(group_id, user, key):
+    headers = {'Authorization': key}
+    data = {'reset_seed': True}
+    reset_task_seed_request = requests.post(API_URL+'/group/'+str(group_id)+'/tasks/distribute', headers=headers, json=data)
+    if reset_task_seed_request.status_code != 204:
+        return abort(reset_task_seed_request.status_code)
+    
+    return redirect(url_for('distribute_tasks', group_id=group_id))
+
 
 @app.route('/groups/edit/<int:group_id>', methods=['GET', 'POST'])
 @login_required
@@ -631,9 +798,7 @@ def view_meeting(user, key, meeting_id=None):
                 meeting_attendance_request = requests.get(API_URL+'/attendance/'+str(meeting['id']), headers=headers)
                 
                 if meeting_attendance_request.status_code == 200:
-                    print(meeting_attendance_request.json())
                     for person in people:
-                        print(person)
                         for attendance in meeting_attendance_request.json()['attendances']:
                             if attendance['person_id'] == person['id']:
                                 person['attendance'] = attendance

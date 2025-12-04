@@ -13,19 +13,19 @@
                     <h3>{{ group.group_name }}</h3>
                     <p>
                         {% if group.start_day == 0 %}
-                            {{ _('Meeting Day: Monday') }}
+                            {{ _('Meeting Day: ') }}{{ _('Monday') }}
                         {% elif group.start_day == 1 %}
-                            {{ _('Meeting Day: Tuesday') }}
+                            {{ _('Meeting Day: ') }}{{ _('Tuesday') }}
                         {% elif group.start_day == 2 %}
-                            {{ _('Meeting Day: Wednesday') }}
+                            {{ _('Meeting Day: ') }}{{ _('Wednesday') }}
                         {% elif group.start_day == 3 %}
-                            {{ _('Meeting Day: Thursday') }}
+                            {{ _('Meeting Day: ') }}{{ _('Thursday') }}
                         {% elif group.start_day == 4 %}
-                            {{ _('Meeting Day: Friday') }}
+                            {{ _('Meeting Day: ') }}{{ _('Friday') }}
                         {% elif group.start_day == 5 %}
-                            {{ _('Meeting Day: Saturday') }}
+                            {{ _('Meeting Day: ') }}{{ _('Saturday') }}
                         {% elif group.start_day == 6 %}
-                            {{ _('Meeting Day: Sunday') }}
+                            {{ _('Meeting Day: ') }}{{ _('Sunday') }}
                         {% endif %}
                     </p>
                     <a href="{{ url_for('view_group', group_id=group.id) }}" class="button"><i class="fa-solid fa-magnifying-glass"></i> {{ _('View Group') }}</a>

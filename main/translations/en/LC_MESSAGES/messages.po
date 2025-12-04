@@ -1,4 +1,4 @@
-# Dutch translations for PROJECT.
+# English translations for PROJECT.
 # Copyright (C) 2025 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2025-12-04 11:35+0100\n"
-"PO-Revision-Date: 2025-12-04 11:35+0100\n"
+"PO-Revision-Date: 2025-12-04 11:38+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: nl\n"
-"Language-Team: nl <LL@li.org>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -20,171 +20,171 @@ msgstr ""
 
 #: main/static/confirmDanger.js:2
 msgid "Type \"CONFIRM\" to proceed:"
-msgstr "Typ \"BEVESTIGEN\" om door te gaan:"
+msgstr ""
 
 #: main/templates/400.html:7
 msgid "The request did not meet the servers expectations."
-msgstr "Het verzoek voldeed niet aan de verwachtingen van de server."
+msgstr ""
 
 #: main/templates/400.html:9 main/templates/401.html:9
 #: main/templates/404.html:9 main/templates/409.html:9
 msgid "Go to Home"
-msgstr "Ga naar Thuis"
+msgstr ""
 
 #: main/templates/401.html:7
 msgid "You do not have the right permissions to access this resource."
-msgstr "U beschikt niet over de juiste rechten om toegang te krijgen tot deze bron."
+msgstr ""
 
 #: main/templates/404.html:7
 msgid "The requested resource was not found on the server."
-msgstr "De gevraagde bron is niet gevonden op de server."
+msgstr ""
 
 #: main/templates/409.html:7
 msgid ""
 "The requested resource conflicts with the current state of the server. "
 "E.g. the name of that group/person is already in use."
-msgstr "De aangevraagde bron conflicteert met de huidige status van de server. "
+msgstr ""
 
 #: main/templates/base.html:32
 msgid "Select Language"
-msgstr "Selecteer Taal"
+msgstr ""
 
 #: main/templates/base.html:53
 msgid "Logged in as"
-msgstr "Ingelogd als"
+msgstr ""
 
 #: main/templates/base.html:54 main/templates/edit_profile.html:3
 #: main/templates/edit_profile.html:9 main/templates/profile.html:3
 #: main/templates/profile.html:9
 msgid "Profile"
-msgstr "Profiel"
+msgstr ""
 
 #: main/templates/base.html:55 main/templates/profile.html:13
 msgid "Sign Out"
-msgstr "Afmelden"
+msgstr ""
 
 #: main/templates/base.html:61 main/templates/home.html:14
 #: main/templates/login.html:3 main/templates/login.html:7
 #: main/templates/login.html:18
 msgid "Login"
-msgstr "Inloggen"
+msgstr ""
 
 #: main/templates/create_group.html:2 main/templates/create_group.html:33
 msgid "Create Group"
-msgstr "Groep aanmaken"
+msgstr ""
 
 #: main/templates/create_group.html:5
 msgid "Create a New Group"
-msgstr "Maak een nieuwe groep"
+msgstr ""
 
 #: main/templates/create_group.html:8 main/templates/edit_group.html:9
 #: main/templates/view_group.html:34
 msgid "Group Name:"
-msgstr "Groepsnaam:"
+msgstr ""
 
 #: main/templates/create_group.html:11 main/templates/edit_group.html:12
 #: main/templates/view_group.html:35
 msgid "Meeting Frequency:"
-msgstr "Ontmoetsfrequentie:"
+msgstr ""
 
 #: main/templates/create_group.html:13 main/templates/edit_group.html:14
 msgid "Daily"
-msgstr "Dagelijks"
+msgstr ""
 
 #: main/templates/create_group.html:14 main/templates/edit_group.html:15
 msgid "Weekly"
-msgstr "Wekelijks"
+msgstr ""
 
 #: main/templates/create_group.html:15 main/templates/edit_group.html:16
 msgid "Biweekly"
-msgstr "Tweewekelijks"
+msgstr ""
 
 #: main/templates/create_group.html:16 main/templates/edit_group.html:17
 msgid "Monthly (Every 4 weeks)"
-msgstr "Maandelijks (elke 4 weken)"
+msgstr ""
 
 #: main/templates/create_group.html:19 main/templates/edit_group.html:20
 #: main/templates/view_group.html:36
 msgid "Meeting Day:"
-msgstr "Ontmoetingsdag:"
+msgstr ""
 
 #: main/templates/create_group.html:21 main/templates/edit_group.html:22
 #: main/templates/groups.html:16 main/templates/view_group.html:6
 msgid "Monday"
-msgstr "maandag"
+msgstr ""
 
 #: main/templates/create_group.html:22 main/templates/edit_group.html:23
 #: main/templates/groups.html:18 main/templates/view_group.html:9
 msgid "Tuesday"
-msgstr "dinsdag"
+msgstr ""
 
 #: main/templates/create_group.html:23 main/templates/edit_group.html:24
 #: main/templates/groups.html:20 main/templates/view_group.html:12
 msgid "Wednesday"
-msgstr "woensdag"
+msgstr ""
 
 #: main/templates/create_group.html:24 main/templates/edit_group.html:25
 #: main/templates/groups.html:22 main/templates/view_group.html:15
 msgid "Thursday"
-msgstr "Donderdag"
+msgstr ""
 
 #: main/templates/create_group.html:25 main/templates/edit_group.html:26
 #: main/templates/groups.html:24 main/templates/view_group.html:18
 msgid "Friday"
-msgstr "Vrijdag"
+msgstr ""
 
 #: main/templates/create_group.html:26 main/templates/edit_group.html:27
 #: main/templates/groups.html:26 main/templates/view_group.html:21
 msgid "Saturday"
-msgstr "Zaterdag"
+msgstr ""
 
 #: main/templates/create_group.html:27 main/templates/edit_group.html:28
 #: main/templates/groups.html:28 main/templates/view_group.html:23
 msgid "Sunday"
-msgstr "zondag"
+msgstr ""
 
 #: main/templates/create_group.html:30 main/templates/edit_group.html:31
 #: main/templates/view_group.html:37
 msgid "Meeting Time:"
-msgstr "Ontmoetstijd:"
+msgstr ""
 
 #: main/templates/create_person.html:8
 msgid "Names:"
-msgstr "Namen:"
+msgstr ""
 
 #: main/templates/create_person.html:11
 msgid "Enter one name per line."
-msgstr "Voer één naam per regel in."
+msgstr ""
 
 #: main/templates/create_person.html:11
 msgid "Or seperate the names with a comma."
-msgstr "Of scheid de namen met een komma."
+msgstr ""
 
 #: main/templates/create_person.html:17 main/templates/edit_person.html:20
 msgid "Role:"
-msgstr "Rol:"
+msgstr ""
 
 #: main/templates/create_person.html:19 main/templates/edit_person.html:22
 #: main/templates/group_people.html:38 main/templates/view_meeting.html:56
 #: main/templates/view_meeting_materials.html:32
 msgid "Member"
-msgstr "Lid"
+msgstr ""
 
 #: main/templates/create_person.html:20 main/templates/edit_person.html:23
 #: main/templates/group_people.html:27 main/templates/view_meeting.html:56
 #: main/templates/view_meeting_materials.html:32
 msgid "Counsil"
-msgstr "Bestuur"
+msgstr ""
 
 #: main/templates/create_person.html:21 main/templates/edit_person.html:24
 #: main/templates/group_people.html:16 main/templates/view_meeting.html:56
 #: main/templates/view_meeting_materials.html:32
 msgid "Leader"
-msgstr "Begeleiding"
+msgstr ""
 
 #: main/templates/create_person.html:24 main/templates/group_people.html:48
 msgid "Add Person"
-msgstr "Persoon toevoegen"
+msgstr ""
 
 #: main/templates/create_task.html:6 main/templates/display_assignments.html:8
 #: main/templates/edit_meeting.html:8 main/templates/edit_person.html:5
@@ -195,53 +195,53 @@ msgstr "Persoon toevoegen"
 #: main/templates/view_meeting.html:7
 #: main/templates/view_meeting_materials.html:9
 msgid "Back"
-msgstr "Terug"
+msgstr ""
 
 #: main/templates/create_task.html:10
 msgid "Create a New Task"
-msgstr "Maak een nieuwe taak"
+msgstr ""
 
 #: main/templates/create_task.html:15 main/templates/edit_task.html:15
 msgid "Task Name"
-msgstr "Taaknaam"
+msgstr ""
 
 #: main/templates/create_task.html:20 main/templates/edit_task.html:20
 msgid "Rotates the task randomly"
-msgstr "Roteert de taak willekeurig"
+msgstr ""
 
 #: main/templates/create_task.html:20 main/templates/edit_task.html:20
 msgid "Selected people will always be part of this task"
-msgstr "Geselecteerde mensen zullen altijd deel uitmaken van deze taak"
+msgstr ""
 
 #: main/templates/create_task.html:31 main/templates/edit_meeting.html:25
 #: main/templates/edit_task.html:32
 msgid "Filter people..."
-msgstr "Filter mensen..."
+msgstr ""
 
 #: main/templates/create_task.html:38 main/templates/group_tasks.html:21
 msgid "Create Task"
-msgstr "Taak maken"
+msgstr ""
 
 #: main/templates/create_task.html:41 main/templates/edit_task.html:42
 msgid "Warning: The number exceeds the selected people."
-msgstr "Waarschuwing: het aantal overschrijdt het geselecteerde aantal personen."
+msgstr ""
 
 #: main/templates/display_assignments.html:4
 msgid "Task Assignments"
-msgstr "Taaktoewijzingen"
+msgstr ""
 
 #: main/templates/display_assignments.html:10
 msgid "Reroll"
-msgstr "Opnieuw rollen"
+msgstr ""
 
 #: main/templates/display_assignments.html:17
 msgid "People Needed: "
-msgstr "Mensen nodig: "
+msgstr ""
 
 #: main/templates/edit_group.html:3 main/templates/edit_group.html:6
 #: main/templates/view_group.html:50
 msgid "Edit Group"
-msgstr "Groep bewerken"
+msgstr ""
 
 #: main/templates/edit_group.html:3 main/templates/home.html:7
 msgid "Attendance Manager"
@@ -249,369 +249,370 @@ msgstr "RSA 186 Attendance Manager"
 
 #: main/templates/edit_group.html:7
 msgid "< Back"
-msgstr "< Terug"
+msgstr ""
 
 #: main/templates/edit_group.html:34
 msgid "Update Group"
-msgstr "Groep bijwerken"
+msgstr ""
 
 #: main/templates/edit_meeting.html:2 main/templates/edit_meeting.html:7
 #: main/templates/view_meeting.html:11
 msgid "Edit Meeting"
-msgstr "Ontmoeting bewerken"
+msgstr ""
 
 #: main/templates/edit_meeting.html:12 main/templates/view_meeting.html:9
 #: main/templates/view_meeting_materials.html:11
 msgid "Date and Time:"
-msgstr "Datum en tijd:"
+msgstr ""
 
 #: main/templates/edit_meeting.html:16
 msgid "Canceled:"
-msgstr "Geannuleerd:"
+msgstr ""
 
 #: main/templates/edit_meeting.html:22
 msgid "Hold `ctrl` to select multiple. <br>`Command` on Mac"
-msgstr "Houd `ctrl` ingedrukt om meerdere te selecteren. "
+msgstr ""
 
 #: main/templates/edit_meeting.html:32 main/templates/edit_person.html:27
 msgid "Save Changes"
-msgstr "Wijzigingen opslaan"
+msgstr ""
 
 #: main/templates/edit_person.html:2 main/templates/edit_person.html:4
 msgid "Edit Person"
-msgstr "Persoon bewerken"
+msgstr ""
 
 #: main/templates/edit_person.html:10
 msgid "Name:"
-msgstr "Naam:"
+msgstr ""
 
 #: main/templates/edit_person.html:13
 msgid "Default Presence:"
-msgstr "Standaardaanwezigheid:"
+msgstr ""
 
 #: main/templates/edit_person.html:15 main/templates/view_meeting.html:64
 msgid "Absent"
-msgstr "Afwezig"
+msgstr ""
 
 #: main/templates/edit_person.html:16
 msgid "Present"
-msgstr "Aanwezig"
+msgstr ""
 
 #: main/templates/edit_person.html:17 main/templates/view_meeting.html:68
 msgid "Late"
-msgstr "Laat"
+msgstr ""
 
 #: main/templates/edit_profile.html:10
 #, python-format
 msgid "Editing, %(username)s!'s profile"
-msgstr "Bewerken, %(gebruikersnaam)s!'s profiel"
+msgstr ""
 
 #: main/templates/edit_profile.html:14 main/templates/login.html:10
 #: main/templates/signup.html:11
 msgid "Username"
-msgstr "Gebruikersnaam"
+msgstr ""
 
 #: main/templates/edit_profile.html:19
 msgid "Old Password"
-msgstr "Oud wachtwoord"
+msgstr ""
 
 #: main/templates/edit_profile.html:23
 msgid "New Password"
-msgstr "Nieuw wachtwoord"
+msgstr ""
 
 #: main/templates/edit_profile.html:28
 msgid "Profile Picture"
-msgstr "Profielfoto"
+msgstr ""
 
 #: main/templates/edit_profile.html:32
 msgid "Update"
-msgstr "Bijwerken"
+msgstr ""
 
 #: main/templates/edit_task.html:10 main/templates/group_tasks.html:43
 msgid "Edit Task"
-msgstr "Taak bewerken"
+msgstr ""
 
 #: main/templates/edit_task.html:27
 msgid "Number of people"
-msgstr "Aantal personen"
+msgstr ""
 
 #: main/templates/edit_task.html:39
 msgid "Update Task"
-msgstr "Updatetaak"
+msgstr ""
 
 #: main/templates/group_people.html:2
 msgid "Group People"
-msgstr "Groepsmensen"
+msgstr ""
 
 #: main/templates/group_people.html:5
 #, python-format
 msgid "People in %(group)s"
-msgstr "Mensen in %(groep)s"
+msgstr ""
 
 #: main/templates/group_people.html:46 main/templates/view_meeting.html:89
 #: main/templates/view_meeting_materials.html:61
 msgid "No people in this group."
-msgstr "Geen mensen in deze groep."
+msgstr ""
 
 #: main/templates/group_tasks.html:22
 msgid "Distribute Tasks"
-msgstr "Taken verdelen"
+msgstr ""
 
 #: main/templates/group_tasks.html:27
 msgid "-- Select Task --"
-msgstr "-- Taak selecteren --"
+msgstr ""
 
 #: main/templates/group_tasks.html:35
 msgid "Number of people for this task: "
-msgstr "Aantal mensen voor deze taak: "
+msgstr ""
 
 #: main/templates/group_tasks.html:38
 msgid "People assigned to this task:"
-msgstr "Mensen toegewezen aan deze taak:"
+msgstr ""
 
 #: main/templates/groups.html:2 main/templates/home.html:11
 msgid "Groups"
-msgstr "Groepen"
+msgstr ""
 
 #: main/templates/groups.html:5
 msgid "Your Groups"
-msgstr "Uw groepen"
+msgstr ""
 
 #: main/templates/groups.html:7
 msgid "Create New Group"
-msgstr "Nieuwe groep maken"
+msgstr ""
 
 #: main/templates/groups.html:16 main/templates/groups.html:18
 #: main/templates/groups.html:20 main/templates/groups.html:22
 #: main/templates/groups.html:24 main/templates/groups.html:26
 #: main/templates/groups.html:28
 msgid "Meeting Day: "
-msgstr "Ontmoetingsdag: "
+msgstr ""
 
 #: main/templates/groups.html:31 main/templates/view_group.html:2
 msgid "View Group"
-msgstr "Groep bekijken"
+msgstr ""
 
 #: main/templates/groups.html:35
 msgid "You have no groups."
-msgstr "Je hebt geen groepen."
+msgstr ""
 
 #: main/templates/home.html:7
 msgid "Welcome to"
-msgstr "Welkom bij"
+msgstr ""
 
 #: main/templates/home.html:8
 msgid "Getting Started"
-msgstr "Aan de slag"
+msgstr ""
 
 #: main/templates/home.html:12 main/templates/meetings.html:2
 #: main/templates/meetings_upcomming.html:2
 #: main/templates/meetings_upcomming.html:5 main/templates/view_group.html:46
 msgid "Meetings"
-msgstr "Ontmoetingen"
+msgstr ""
 
 #: main/templates/login.html:14 main/templates/signup.html:15
 msgid "Password"
-msgstr "Wachtwoord"
+msgstr ""
 
 #: main/templates/login.html:25
 msgid "Don't have an account?"
-msgstr "Heeft u geen account?"
+msgstr ""
 
 #: main/templates/login.html:25
 msgid "Sign up here"
-msgstr "Meld je hier aan"
+msgstr ""
 
 #: main/templates/login_required.html:3 main/templates/login_required.html:7
 msgid "Login Required"
-msgstr "Inloggen vereist"
+msgstr ""
 
 #: main/templates/login_required.html:8
 msgid "You must be logged in to access this page."
-msgstr "Je moet ingelogd zijn om toegang te krijgen tot deze pagina."
+msgstr ""
 
 #: main/templates/login_required.html:9
 msgid "Go to Login"
-msgstr "Ga naar Inloggen"
+msgstr ""
 
 #: main/templates/meetings.html:5
 #, python-format
 msgid "Meetings in %(group)s"
-msgstr "Ontmoetingen in %(groep)s"
+msgstr ""
 
 #: main/templates/meetings.html:14 main/templates/meetings_upcomming.html:46
 msgid "at"
-msgstr "op"
+msgstr ""
 
 #: main/templates/meetings.html:18
 msgid "Organisers: "
-msgstr "Organisatoren: "
+msgstr ""
 
 #: main/templates/meetings.html:19
 msgid "Attendees: "
-msgstr "Deelnemers: "
+msgstr ""
 
 #: main/templates/meetings_upcomming.html:11
 msgid "Future Only"
-msgstr "Alleen toekomst"
+msgstr ""
 
 #: main/templates/meetings_upcomming.html:14
 #: main/templates/view_meeting.html:10
 #: main/templates/view_meeting_materials.html:12
 msgid "Canceled"
-msgstr "Geannuleerd"
+msgstr ""
 
 #: main/templates/meetings_upcomming.html:17
 msgid "Group"
-msgstr "Groep"
+msgstr ""
 
 #: main/templates/meetings_upcomming.html:29
 msgid "All Groups"
-msgstr "Alle groepen"
+msgstr ""
 
 #: main/templates/meetings_upcomming.html:37
 msgid "Filter"
-msgstr "Filteren"
+msgstr ""
 
 #: main/templates/profile.html:10
 #, python-format
 msgid "Welcome, %(username)s!"
-msgstr "Welkom, %(gebruikersnaam)s!"
+msgstr ""
 
 #: main/templates/profile.html:14
 msgid "Delete Account"
-msgstr "Account verwijderen"
+msgstr ""
 
 #: main/templates/signup.html:8
 msgid "Signup"
-msgstr "Aanmelden"
+msgstr ""
 
 #: main/templates/signup.html:19
 msgid "Password Confirm"
-msgstr "Wachtwoord bevestigen"
+msgstr ""
 
 #: main/templates/signup.html:23
 msgid "Passwords must match."
-msgstr "Wachtwoorden moeten overeenkomen."
+msgstr ""
 
 #: main/templates/signup.html:26
 msgid "Sign Up"
-msgstr "Aanmelden"
+msgstr ""
 
 #: main/templates/signup.html:33
 msgid "Already have an account?"
-msgstr "Heb je al een account?"
+msgstr ""
 
 #: main/templates/signup.html:33
 msgid "Login here"
-msgstr "Log hier in"
+msgstr ""
 
 #: main/templates/view_group.html:31
 msgid "Group Details"
-msgstr "Groepsdetails"
+msgstr ""
 
 #: main/templates/view_group.html:35
 msgid "days"
-msgstr "dagen"
+msgstr ""
 
 #: main/templates/view_group.html:39 main/templates/view_group.html:42
 msgid "Next Meeting:"
-msgstr "Volgende ontmoeting:"
+msgstr ""
 
 #: main/templates/view_group.html:42
 msgid "No upcoming meetings scheduled."
-msgstr "Geen aankomende Ontmoetingen gepland."
+msgstr ""
 
 #: main/templates/view_group.html:45
 msgid "People"
-msgstr "Mensen"
+msgstr ""
 
 #: main/templates/view_group.html:47
 msgid "Materials"
-msgstr "Materialen"
+msgstr ""
 
 #: main/templates/view_group.html:48
 msgid "Tasks"
-msgstr "Taken"
+msgstr ""
 
 #: main/templates/view_group.html:51
 msgid "Delete Group"
-msgstr "Groep verwijderen"
+msgstr ""
 
 #: main/templates/view_group_material_log.html:6
 #, python-format
 msgid "Material Log for %(group)s"
-msgstr "Materiaallogboek voor %(groep)s"
+msgstr ""
 
 #: main/templates/view_group_material_log.html:11
 msgid "Name"
-msgstr "Naam"
+msgstr ""
 
 #: main/templates/view_group_material_log.html:12
 msgid "Stripes"
-msgstr "Strepen"
+msgstr ""
 
 #: main/templates/view_group_material_log.html:13
 #: main/templates/view_group_material_log.html:28
 msgid "Clear Marks"
-msgstr "Duidelijke markeringen"
+msgstr ""
 
 #: main/templates/view_group_material_log.html:28
 msgid "Are you sure? This person does not have 3 strikes yet."
-msgstr "Weet je het zeker? "
+msgstr ""
 
 #: main/templates/view_meeting.html:3
 msgid "View Meeting"
-msgstr "Ontmoeting bekijken"
+msgstr ""
 
 #: main/templates/view_meeting.html:6
 #: main/templates/view_meeting_materials.html:8
 msgid "Meeting Details"
-msgstr "Ontmoetingsdetails"
+msgstr ""
 
 #: main/templates/view_meeting.html:13
 msgid "Material"
-msgstr "Materiaal"
+msgstr ""
 
 #: main/templates/view_meeting.html:21 main/templates/view_meeting.html:42
 msgid "Before Meeting"
-msgstr "Vóór de Ontmoeting"
+msgstr ""
 
 #: main/templates/view_meeting.html:22 main/templates/view_meeting.html:43
 msgid "During Meeting"
-msgstr "Tijdens Ontmoeting"
+msgstr ""
 
 #: main/templates/view_meeting.html:27 main/templates/view_meeting.html:38
 msgid ""
 "A checked box indicates the person will be present at the meeting. "
 "<br>Warning, check the drop down to select whether it is before the "
 "meeting or during! (calling in sick etc.)"
-msgstr "Een aangevinkt vakje geeft aan dat de persoon aanwezig zal zijn bij de Ontmoeting. "
+msgstr ""
 
 #: main/templates/view_meeting.html:33
 msgid "Save Attendances"
-msgstr "Aanwezigheden opslaan"
+msgstr ""
 
 #: main/templates/view_meeting.html:72
 msgid "Excused"
-msgstr "Excuses"
+msgstr ""
 
 #: main/templates/view_meeting_materials.html:3
 msgid "View Meeting Materials"
-msgstr "Ontmoetsmateriaal bekijken"
+msgstr ""
 
 #: main/templates/view_meeting_materials.html:20
 msgid "Save Materials"
-msgstr "Materialen opslaan"
+msgstr ""
 
 #: main/templates/view_meeting_materials.html:21
 msgid "Select All"
-msgstr "Alles selecteren"
+msgstr ""
 
 #: main/templates/view_meeting_materials.html:47
 msgid "Incomplete"
-msgstr "Onvolledig"
+msgstr ""
 
 #: main/templates/view_meeting_materials.html:51
 msgid "Complete"
-msgstr "Voltooid"
+msgstr ""
+

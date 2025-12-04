@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ _("Task Assignments") }}
+{% endblock %}
+
+{% block content %}
+    <button onclick="history.back()" class="return-button">&lt; {{ _('Back') }}</button>
+
+    <a href="{{ url_for('reset_task_seed', group_id=group_id) }}" style="float:right;" class="button">{{ _('Reroll') }}</a>
+
+    <div class="centered">
+        <h2>{{ meeting.group.group_name }} | {{ meeting.date_time }}</h2>
+
+        {% for assignment in assignments %}
+            <h2 style="margin-bottom: 0;">{{ assignment[0].task.name }}</h2>
+            <h3>{{ _("People Needed: ") }}{{ assignment[0].task.amount }}</h3>
+            {% for person in assignment %}
+                {{ person.person.name }} <br>
+            {% endfor %}
+            <hr>
+        {% endfor %}
+    </div>
+
+{% endblock %}

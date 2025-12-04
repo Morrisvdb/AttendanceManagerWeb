@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Tasks
+{% endblock %}
+
+{% block content %}
+    <script>
+        window.TASKS = {{ tasks | tojson }}; // Stop whininggggg
+        window.URLS = {
+            userPage: "{{ url_for('task_edit', task_id='__ID__') }}"
+        };
+    </script>
+    <button onclick="history.back()" class="return-button">&lt; {{ _('Back') }}</button>
+
+    <meta id="tasks-data" data-tasks="{{tasks}}">
+
+    <script src="{{ url_for('static', filename='displayTask.js') }}"></script>
+    <div class="container centered">
+        <div>
+            <a href="{{ url_for('create_task', group_id=group.id)}}" class="button">{{ _('Create Task') }}</a>
+            <a href="{{ url_for('distribute_tasks', group_id=group.id) }}" class="button">{{ _('Distribute Tasks') }}</a> <hr>
+        </div>
+
+        <div>
+            <select name="task-select" id="task-select" oninput="switchTask()">
+                <option value="none">{{ _("-- Select Task --") }}</option>
+                {% for task in tasks %}
+                    <option value="{{ task.id }}">{{ task.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div id="task-display" style="display:none;">
+            <h2 id="task-name"></h2>
+            {{ _("Number of people for this task: ") }}<p id="task-amount"></p>
+
+            <div id="task-people-container">
+                <h3>{{ _("People assigned to this task:") }}</h3>
+                <ul id="task-people-list">
+                </ul>
+            </div>
+
+            <a class="button" id="task-edit-button">{{ _('Edit Task') }}</a>
+        </div>
+    </div>
+    
+
+{% endblock %}
