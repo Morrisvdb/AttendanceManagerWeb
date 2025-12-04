@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Task{% endblock %}
+
+{% block content %}
+    <button onclick="history.back()" class="return-button">&lt; {{ _('Back') }}</button>
+
+    <script src="{{ url_for('static', filename='createTask.js') }}"></script>
+    <div class="container centered">
+        <h2>{{ _("Create a New Task") }}</h2>
+    </div>
+
+    <form method="POST" action="{{ url_for('create_task', group_id=group.id) }}">
+        <div class="form-group">
+            <label for="task_name">{{ _("Task Name") }}</label>
+            <input type="text" id="task_name" name="task_name" required>
+        </div>
+        <span class="tooltip-container">
+            <i class="fa-solid fa-circle-question"></i>
+            <span class="tooltip-text">{{ _("Rotates the task randomly") }} <br> {{ _("Selected people will always be part of this task") }}</span>
+        </span>
+        <div class="form-group">
+            <label for="rotate">Rotate: </label>
+            <input type="checkbox" name="rotate" id="rotate" checked>
+        </div>
+        <div class="form-group">
+            <input type="number" name="number" id="number" min="1" value="1" required oninput="warnNumber()">
+        </div>
+        <div class="form-group">
+            <meta id="people" data-name="people" data-people='{{ people|tojson }}'>
+            <input type="text" name="filter_people" id="filter_people" oninput="updatePeopleSelect()" placeholder="{{ _('Filter people...') }}">
+            <select name="people-select" id="people-select" class="multiselect" multiple oninput="updateNumber()">
+                {% for person in people %}
+                    <option value="{{ person.id }}" {% if person.id in organisers %}selected{% endif %}>{{ person.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="button">{{ _("Create Task") }}</button>
+    </form>
+    <div>
+        <p id="number-warning" class="error-text" style="display: none; word-wrap:break-word;">{{ _("Warning: The number exceeds the selected people.") }}</p>
+    </div>
+{% endblock %}
