@@ -5,7 +5,9 @@ from dotenv import load_dotenv, find_dotenv, set_key
 from main.config import Development, Production
 import os, random, string, requests
 
-API_URL = "http://localhost:5001"
+
+API_URL = os.environ.get("API_URL") if "API_URL" in os.environ else 'http://localhost:5001'
+
 
 def get_locale():
     AuthKey = request.cookies.get("Authorization")
