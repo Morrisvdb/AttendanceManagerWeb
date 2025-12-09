@@ -51,6 +51,9 @@
 
                 <div id="profileDropdown" class="profile-dropdown" style="display: none;">
                     <p class="dropdown-item-text">{{ _("Logged in as") }}: {{ user.username }}</p>
+                    {% if not user.verified_email %}
+                        <a class="dropdown-item alert alert-warning" href="{{ url_for('verify_email') }}">{{ _("Verify your Email") }}</a>
+                    {% endif %}
                     <a href="{{ url_for('profile') }}" class="dropdown-item">{{ _("Profile") }}</a>
                     <a href="{{ url_for('logout') }}" class="dropdown-item">{{ _("Sign Out") }}</a>
                 </div>

@@ -1,4 +1,5 @@
 from flask import request, render_template, make_response, redirect, url_for, abort, g, session, jsonify
+from flask_babel import _
 from user_agents import parse
 from main.__init__ import app, API_URL
 import requests
@@ -124,25 +125,31 @@ def toggle_theme(user, key):
 def signup():
     if request.method == 'POST':
         username = request.form.get('username')
+        email = request.form.get('email')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
-        if not(username and password1 and password2):
-            return render_template('signup.html', error="Not all boxes are filled in")
+        if not(username and password1 and password2 and email):
+            return render_template('signup.html', error=_("Missing arguments"))
 
         if password1 != password2:
-            return render_template('signup.html', error="Passwords do not match")
+            return render_template('signup.html', error=_("Passwords do not match"))
 
         json = {
             "username": username,
+            "email": email,
             "password": password1
         }
         signup_request = requests.post(API_URL + "/signup", json=json)
         if signup_request.status_code == 201:
             return redirect(url_for('login'))
+        elif signup_request.status_code == 400:
+            return render_template('signup.html', error=_("Invalid Email"))
         elif signup_request.status_code == 409:
-            return render_template('signup.html', error="Username already in use")
+            return render_template('signup.html', error=_("Username already in use"))
         elif signup_request.status_code == 422:
-            return render_template('signup.html', error="Malformed request")
+            return render_template('signup.html', error=_("Malformed request"))
+        else:
+            return abort(signup_request.status_code)
             
     
     return render_template("signup.html")
@@ -244,7 +251,37 @@ def delete_profile(user, key, isConfirmed):
     else:
         return redirect(url_for('profile'))
         
-        
+@app.route('/user/email/verify', methods=['GET'])
+@login_required
+@get_user
+def verify_email(user, key):
+    headers = {'Authorization': key}
+    data = {"resend": False}
+    email_request = requests.get(API_URL+'/user/email', headers=headers, json=data)
+    if email_request.status_code != 200:
+        return abort(email_request.status_code)
+    
+    expires = email_request.json().get('expires')
+    
+    return render_template('verify_email.html', user=user, expires=expires)
+    
+@app.route('/user/email/verify/resend', methods=['GET', 'POST'])
+@login_required
+@get_user
+def verify_email_resend(user, key):
+    headers = {'Authorization': key}
+    data = {"resend": True}
+    email_request = requests.get(API_URL+'/user/email', headers=headers, json=data)
+    if email_request.status_code != 200:
+        return abort(email_request.status_code)
+    
+    return redirect(url_for('verify_email'))
+    
+@app.route('/user/email/verify/<email_key>')
+@login_required
+@get_user
+def verify_email_key(user, key, email_key):
+    ...
         
 @app.route('/groups')
 @login_required
