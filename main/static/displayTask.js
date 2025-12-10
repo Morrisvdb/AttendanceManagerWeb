@@ -22,8 +22,11 @@ function switchTask() {
                 peopleList.appendChild(li);
             }
             link = document.getElementById("task-edit-button")
-            const url = window.URLS.userPage.replace("__ID__", task.id);
-            link.href = url;
+            delete_button = document.getElementById("task-delete-button")
+            const task_url = window.URLS.taskPage.replace("__ID__", task.id);
+            const delete_url = window.URLS.deletePage.replace("__ID__", task.id);
+            link.href = task_url;
+            delete_button.href = delete_url;
             return;
         }
     }

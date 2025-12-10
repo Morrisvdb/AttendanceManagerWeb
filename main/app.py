@@ -398,8 +398,8 @@ def create_task(user, key, group_id):
         name = request.form.get('task_name')
         rotate = request.form.get('rotate')
         number = request.form.get('number')
-        people = request.form.getlist('people_select')
-        
+        people = request.form.getlist('people-select')
+                
         data = {
             "name": name,
             "amount": number,
@@ -469,6 +469,25 @@ def task_edit(user, key, task_id):
     people = people_get_request.json().get('people')
     
     return render_template('edit_task.html', user=user, task=task, people=people)
+    
+@app.route('/task/delete/<task_id>') # Don't cast to int to prevent error when inserting placeholder in js
+@login_required
+@get_user
+def delete_task(user, key, task_id):
+    headers = {"Authorization": key}
+    get_task_request = requests.get(API_URL+'/tasks', headers=headers, json={'task_id': task_id})
+    
+    if get_task_request.status_code != 200:
+        return abort(get_task_request.status_code)
+    
+    task = get_task_request.json().get('task')
+    group_id = task.get('group_id')
+    
+    delete_task_request = requests.delete(API_URL+'/tasks', headers=headers, json={'task_id': task_id})
+    if delete_task_request.status_code != 204:
+        return abort(delete_task_request.status_code)
+    
+    return redirect(url_for('group_tasks', group_id=group_id))
     
 @app.route('/group/<int:group_id>/tasks/distribute')
 @login_required
@@ -741,12 +760,12 @@ def view_meeting_materials(user, key, meeting_id=None):
                 people = people_request.json()['people']
                 people = sorted(sorted(people, key=lambda d: d['name']), key=lambda d: int(d['role']), reverse=True) # Sort the higher roles before the lower ones
 
-                
                 meeting_attendance_request = requests.get(API_URL+'/attendance/'+str(meeting['id']), headers=headers)
                 
                 if meeting_attendance_request.status_code == 200:
                     for person in people:
                         for attendance in meeting_attendance_request.json()['attendances']:
+                            print(person, attendance)
                             if attendance['person_id'] == person['id']:
                                 person['attendance'] = attendance
                 else:
