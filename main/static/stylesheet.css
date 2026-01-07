@@ -19,6 +19,8 @@
     --button-success-hover: #219150;
     --button-danger: #e74c3c;
     --button-danger-hover: #c0392b;
+    --button-warning: #fff3cd;
+    --button-warning-hover: #ffe8a1;
     --heading-color: #2d3e50;
     --role-bg: #f4f6f8;
     --role-text: #888;
@@ -44,6 +46,8 @@ html[data-theme="dark"] {
     --button-success-hover: #1a7d3e;
     --button-danger: #c0392b;
     --button-danger-hover: #992d22;
+    --button-warning: #856404;
+    --button-warning-hover: #66520a;
     --heading-color: #e0e0e0;
     --role-bg: #3d3d3d;
     --role-text: #b0b0b0;
@@ -391,6 +395,11 @@ form br {
     transition: background 0.5s;
 }
 
+a.disabled {
+    pointer-events: none;
+    color: #ccc;
+}
+
 .listed-button {
     display: block;
     width: 100%;
@@ -516,6 +525,11 @@ form br {
     border-radius: 4px;
     margin-top: 1rem;
     font-size: 1rem;
+}
+
+.alert-warning {
+    background-color: var(--button-warning);
+    color: #fff;
 }
 
 .alert-danger {

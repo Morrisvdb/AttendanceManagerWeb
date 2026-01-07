@@ -22,7 +22,7 @@
 
                 {% if people %}
                     <div class="card-list">
-                        {% for person in people %}
+                        {% for person in people if person.attendance.presence == 1 or person.attendance.presence == 2 %} <!-- Loop only trough present people -->
                             <a href="{{ url_for('view_person', person_id=person.id) }}" class="no-link-style">
                                 <div class="person-attendance-card">
                                     <div class="person-row">
