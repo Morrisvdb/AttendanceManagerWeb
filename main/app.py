@@ -545,8 +545,6 @@ def delete_group(group_id, user, key):
     else:
         return abort(group_request.status_code)
     
-    return redirect(url_for("view_group", group_id = group_id))     
-
 @app.route('/meetings/<int:group_id>')
 @login_required
 @get_user
@@ -870,6 +868,13 @@ def create_person(user, key, group_id=None):
                     
         people_request = requests.post(API_URL+'/people', headers={"Authorization": key}, json={"people": people})
         
+        if people_request.status_code == 409:
+            if group_id is not None:
+                group_request = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
+                if group_request.status_code != 200:
+                    return abort(group_request.status_code)   
+            return render_template("create_person.html", group=group_request.json(), user=user, error=f"A person with the name '{people_request.json().get('person').get('name')}' already exists!")
+        
         if people_request.status_code != 201:
             return abort(people_request.status_code)
         return redirect(url_for('group_people', group_id=group_id))
@@ -894,7 +899,7 @@ def delete_person(user, key, person_id=None):
         
         group_id = people_request.json()['person']['group_id']
         people_delete_request = requests.delete(API_URL+'/people/'+str(person_id), headers={"Authorization": key})
-        if people_delete_request.status_code != 204 or people_delete_request.status_code != 200:
+        if people_delete_request.status_code not in [200, 204]:
             return abort(people_delete_request.status_code)
         
         return redirect(url_for('group_people', group_id=group_id))

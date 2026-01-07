@@ -7,6 +7,8 @@
     <div class="container centered">
         <div class="card-list">
             {% for meeting in meetings %}
+                {{meeting}}
+
                 <a href="{{ url_for('view_meeting', meeting_id=meeting.id) }}" class="no-link-style">
                     <div class="meeting-card">
                         <div class="meeting-name">{{ meeting.group_name }}</div>
@@ -14,8 +16,7 @@
                                 {{ meeting.date_time.split("T")[0] }} {{ _('at') }} {{ meeting.date_time.split("T")[1][:5] }}
                         </div>
                         <div style="text-align: left;">
-                            <!-- {{ meeting }} -->
-                            {{ _("Organisers: ") }}{% for organiser in meeting.organisers %}{% if organiser != "" %}{{organiser['person']['name']}} {% endif %}{% endfor %}
+                            {{ _("Organisers: ") }}{% for organiser in meeting.organisers %}{% if organiser != "" %}{{organiser['person']['name']}} {% endif %}{% endfor %} <br>
                             {{ _('Attendees: ') }}{{ meeting.attendances|length }}
                         </div>
                     </div>
