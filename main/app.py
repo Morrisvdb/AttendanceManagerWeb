@@ -255,14 +255,13 @@ def delete_profile(user, key, isConfirmed):
 @login_required
 @get_user
 def verify_email(user, key):
+    print(user)
+    if user['verified_email']:
+        return redirect(url_for('profile'))
+    
     headers = {'Authorization': key}
-    data = {"resend": False}
-    try:
-        # add a short timeout so the request doesn't hang the web process
-        email_request = requests.get(API_URL + '/user/email', headers=headers, json=data, timeout=5)
-    except requests.exceptions.RequestException:
-        # If the backend can't be reached, surface a friendly error on the page
-        return render_template('verify_email.html', user=user, expires=None, error=_("Unable to contact email service. Please try again later."))
+    data = {"resend": False, "verify_url": url_for('verify_email_key', email_key='key_placeholder', _external=True)}
+    email_request = requests.get(API_URL + '/user/email', headers=headers, json=data)
 
     if email_request.status_code != 200:
         return abort(email_request.status_code)
@@ -275,26 +274,31 @@ def verify_email(user, key):
 @login_required
 @get_user
 def verify_email_resend(user, key):
+    if user['verified_email']:
+        return redirect(url_for('profile'))
     headers = {'Authorization': key}
-    data = {"resend": True}
-    try:
-        # request the backend to resend the email; protect with timeout
-        email_request = requests.get(API_URL + '/user/email', headers=headers, json=data)
-    except requests.exceptions.RequestException:
-        # If the backend can't be reached, render the verify page with an error
-        return render_template('verify_email.html', user=user, expires=None, error=_("Unable to contact email service. Please try again later."))
-
+    data = {"resend": True, "verify_url": url_for('verify_email_key', email_key='key_placeholder', _external=True)}
+    email_request = requests.get(API_URL + '/user/email', headers=headers, json=data)
     if email_request.status_code != 200:
         return abort(email_request.status_code)
-
+    
     return redirect(url_for('verify_email'))
     
 @app.route('/user/email/verify/<email_key>')
 @login_required
 @get_user
 def verify_email_key(user, key, email_key):
-    ...
-        
+    if user['verified_email']:
+        return redirect(url_for('profile'))
+    headers = {'Authorization': key}
+    data = {"key": email_key}
+    verify_request = requests.post(API_URL + '/user/email', headers=headers, json=data)
+    if verify_request.status_code == 200:
+        return redirect(url_for('profile'))
+    else:
+        return abort(verify_request.status_code)
+    
+    
 @app.route('/groups')
 @login_required
 @get_user
