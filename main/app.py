@@ -257,12 +257,18 @@ def delete_profile(user, key, isConfirmed):
 def verify_email(user, key):
     headers = {'Authorization': key}
     data = {"resend": False}
-    email_request = requests.get(API_URL+'/user/email', headers=headers, json=data)
+    try:
+        # add a short timeout so the request doesn't hang the web process
+        email_request = requests.get(API_URL + '/user/email', headers=headers, json=data, timeout=5)
+    except requests.exceptions.RequestException:
+        # If the backend can't be reached, surface a friendly error on the page
+        return render_template('verify_email.html', user=user, expires=None, error=_("Unable to contact email service. Please try again later."))
+
     if email_request.status_code != 200:
         return abort(email_request.status_code)
-    
+
     expires = email_request.json().get('expires')
-    
+
     return render_template('verify_email.html', user=user, expires=expires)
     
 @app.route('/user/email/verify/resend', methods=['GET', 'POST'])
@@ -271,10 +277,16 @@ def verify_email(user, key):
 def verify_email_resend(user, key):
     headers = {'Authorization': key}
     data = {"resend": True}
-    email_request = requests.get(API_URL+'/user/email', headers=headers, json=data)
+    try:
+        # request the backend to resend the email; protect with timeout
+        email_request = requests.get(API_URL + '/user/email', headers=headers, json=data)
+    except requests.exceptions.RequestException:
+        # If the backend can't be reached, render the verify page with an error
+        return render_template('verify_email.html', user=user, expires=None, error=_("Unable to contact email service. Please try again later."))
+
     if email_request.status_code != 200:
         return abort(email_request.status_code)
-    
+
     return redirect(url_for('verify_email'))
     
 @app.route('/user/email/verify/<email_key>')
