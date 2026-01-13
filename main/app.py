@@ -181,6 +181,43 @@ def login():
     
     return render_template("login.html")
 
+@app.route('/login/forgot', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        if not email:
+            return render_template('forgot_password.html', error="Please provide an email address.")
+        
+        json = {"email": email, "reset_url": url_for('reset_password', reset_key='key_placeholder', _external=True)}
+        forgot_request = requests.put(API_URL+'/login', json=json)
+        if forgot_request.status_code == 200:
+            expires = forgot_request.json().get('expires')
+            return render_template('forgot_password.html', message="A password reset email has been sent.", expires=expires)
+        elif forgot_request.status_code == 404:
+            return render_template('forgot_password.html', error="An account with that email does not exist.")
+        else:
+            return abort(forgot_request.status_code)
+        
+    return render_template('forgot_password.html')
+
+@app.route('/login/reset/<reset_key>', methods=['GET', 'POST'])
+def reset_password(reset_key):
+    if request.method == 'POST':
+        password = request.form.get('password')
+        if not password:
+            return render_template('reset_password.html', error="Please provide a new password.")
+        
+        json = {"reset_key": reset_key, "password": password}
+        reset_request = requests.put(API_URL+'/login', json=json)
+        if reset_request.status_code == 200:
+            return redirect(url_for('login'))
+        elif reset_request.status_code == 400:
+            return render_template('reset_password.html', error="Invalid reset key.")
+        else:
+            return abort(reset_request.status_code)
+    
+    return render_template('reset_password.html')
+
 # TODO: Logout route
 @app.route("/logout")
 @login_required
@@ -255,7 +292,6 @@ def delete_profile(user, key, isConfirmed):
 @login_required
 @get_user
 def verify_email(user, key):
-    print(user)
     if user['verified_email']:
         return redirect(url_for('profile'))
     
