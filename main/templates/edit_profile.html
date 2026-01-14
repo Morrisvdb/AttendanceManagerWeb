@@ -3,6 +3,8 @@
 {% block title %}{{ _('Profile') }}{% endblock %}
 
 {% block content %}
+<a href="{{ url_for('profile') }}" class="return-button">< {{ _('Back') }}</a>
+
 <script src="{{ url_for('static', filename='confirmDanger.js') }}"></script>
 
 <div class="centered">

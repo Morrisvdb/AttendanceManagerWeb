@@ -170,7 +170,10 @@ def login():
                 key = login_request.json()['key']
             else:
                 return render_template('login.html', error="Unexpected response from server.")
-            url = url_for('home')
+            if login_request.json().get('user')['verified_email'] == False:
+                url = url_for('verify_email')
+            else:
+                url = url_for('home')
             resp = make_response(redirect(url))
             resp.set_cookie('Authorization', key)
             return resp
@@ -520,7 +523,7 @@ def task_edit(user, key, task_id):
     
     people = people_get_request.json().get('people')
     
-    return render_template('edit_task.html', user=user, task=task, people=people)
+    return render_template('edit_task.html', user=user, task=task, people=people, group_id=group_id)
     
 @app.route('/group/<int:group_id>/tasks/distribute')
 @login_required
@@ -791,8 +794,22 @@ def view_meeting_materials(user, key, meeting_id=None):
             people_request = requests.get(API_URL+'/people', json={'group_id': meeting['group_id']}, headers=headers)
             if people_request.status_code == 200:
                 people = people_request.json()['people']
+                
                 people = sorted(sorted(people, key=lambda d: d['name']), key=lambda d: int(d['role']), reverse=True) # Sort the higher roles before the lower ones
-
+                attendances_request = requests.get(API_URL+'/attendance/'+str(meeting['id']), headers=headers)
+                if attendances_request.status_code != 200:
+                    return abort(attendances_request.status_code)
+                
+                attendances = attendances_request.json().get('attendances', [])
+                for person in people:
+                    for attendance in attendances:
+                        if attendance['person_id'] == person['id']:
+                            person['presence'] = attendance['presence']
+                            break
+                        
+                people = list(filter(lambda p: p.get('presence') in (0, 1), people))
+                        
+                print(people)
                 
                 meeting_attendance_request = requests.get(API_URL+'/attendance/'+str(meeting['id']), headers=headers)
                 
@@ -872,6 +889,7 @@ def meeting_attendance(user, key, meeting_id=None):
 @login_required
 @get_user
 def view_meeting(user, key, meeting_id=None):
+    # TODO: Show attendance correctly excluding defaut absences
     if meeting_id is not None:
         headers = {"Authorization": key}
         meeting_request = requests.get(API_URL+'/meetings/'+str(meeting_id), headers=headers)
@@ -889,12 +907,17 @@ def view_meeting(user, key, meeting_id=None):
                 if meeting_attendance_request.status_code == 200:
                     for person in people:
                         for attendance in meeting_attendance_request.json()['attendances']:
+                            print(attendance)
                             if attendance['person_id'] == person['id']:
                                 person['attendance'] = attendance
                 else:
                     return abort(meeting_attendance_request.status_code)
-                        
-                return render_template('view_meeting.html', user=user, meeting=meeting, people=people)
+                
+                print(people)
+                
+                attendances = len(list(filter(lambda p: p.get('attendance') and p['attendance'].get('presence') in (1, 3), people)))
+                
+                return render_template('view_meeting.html', user=user, meeting=meeting, people=people, attendances=attendances)
             else:
                 return abort(people_request.status_code)
         else:

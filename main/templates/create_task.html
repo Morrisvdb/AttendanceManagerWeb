@@ -3,8 +3,7 @@
 {% block title %}Create Task{% endblock %}
 
 {% block content %}
-    <button onclick="history.back()" class="return-button">&lt; {{ _('Back') }}</button>
-
+    <a href="{{ url_for('group_tasks', group_id=group.id) }}" class="return-button">< {{ _('Back') }}</a>
     <script src="{{ url_for('static', filename='createTask.js') }}"></script>
     <div class="container centered">
         <h2>{{ _("Create a New Task") }}</h2>

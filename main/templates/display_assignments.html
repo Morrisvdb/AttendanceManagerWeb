@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <button onclick="history.back()" class="return-button">&lt; {{ _('Back') }}</button>
+    <a href="{{ url_for('group_tasks', group_id=group_id) }}" class="return-button">< {{ _('Back') }}</a>
 
     <a href="{{ url_for('reset_task_seed', group_id=group_id) }}" style="float:right;" class="button">{{ _('Reroll') }}</a>
 
