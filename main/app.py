@@ -667,8 +667,8 @@ def upcomming_meetings(user, key):
     canceled = False
     group = None
     if request.method == 'POST':
-        future_only = request.form.get('future_only')
-        canceled = request.form.get('canceled')
+        future_only = True if request.form.get('future_only') == 'on' else False
+        canceled = True if request.form.get('canceled') == 'on' else False
         group = request.form.get('group')
         if group == 'all':
             group = None
