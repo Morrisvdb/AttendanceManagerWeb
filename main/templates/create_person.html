@@ -19,9 +19,12 @@
                 <option value="0">{{ _("Member") }}</option>
                 <option value="1">{{ _("Counsil") }}</option>
                 <option value="2">{{ _("Leader") }}</option>
-            </select> <br>
+            </select> <br> <br>
 
             <button type="submit" class="button"><i class="fa-solid fa-plus"></i> {{ _("Add Person") }}</button>
         </form>
+        {% if error %}
+            <div class="error-text">{{ error }}</div>
+        {% endif %}
     </div>
 {% endblock %}

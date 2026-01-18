@@ -8,7 +8,8 @@
     <script>
         window.TASKS = {{ tasks | tojson }}; // Stop whininggggg
         window.URLS = {
-            userPage: "{{ url_for('task_edit', task_id='__ID__') }}"
+            taskPage: "{{ url_for('task_edit', task_id='__ID__') }}",
+            deletePage: "{{ url_for('delete_task', task_id='__ID__') }}",
         };
     </script>
 
@@ -42,6 +43,7 @@
             </div>
 
             <a class="button" id="task-edit-button">{{ _('Edit Task') }}</a>
+            <a class="button alert-danger" id="task-delete-button">{{ _('Delete Task') }}</a>
         </div>
     </div>
     

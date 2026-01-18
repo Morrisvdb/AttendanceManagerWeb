@@ -453,8 +453,8 @@ def create_task(user, key, group_id):
         name = request.form.get('task_name')
         rotate = request.form.get('rotate')
         number = request.form.get('number')
-        people = request.form.getlist('people_select')
-        
+        people = request.form.getlist('people-select')
+                
         data = {
             "name": name,
             "amount": number,
@@ -524,6 +524,25 @@ def task_edit(user, key, task_id):
     people = people_get_request.json().get('people')
     
     return render_template('edit_task.html', user=user, task=task, people=people, group_id=group_id)
+    
+@app.route('/task/delete/<task_id>') # Don't cast to int to prevent error when inserting placeholder in js
+@login_required
+@get_user
+def delete_task(user, key, task_id):
+    headers = {"Authorization": key}
+    get_task_request = requests.get(API_URL+'/tasks', headers=headers, json={'task_id': task_id})
+    
+    if get_task_request.status_code != 200:
+        return abort(get_task_request.status_code)
+    
+    task = get_task_request.json().get('task')
+    group_id = task.get('group_id')
+    
+    delete_task_request = requests.delete(API_URL+'/tasks', headers=headers, json={'task_id': task_id})
+    if delete_task_request.status_code != 204:
+        return abort(delete_task_request.status_code)
+    
+    return redirect(url_for('group_tasks', group_id=group_id))
     
 @app.route('/group/<int:group_id>/tasks/distribute')
 @login_required
@@ -637,8 +656,6 @@ def delete_group(group_id, user, key):
     else:
         return abort(group_request.status_code)
     
-    return redirect(url_for("view_group", group_id = group_id))     
-
 @app.route('/meetings/<int:group_id>')
 @login_required
 @get_user
@@ -796,26 +813,13 @@ def view_meeting_materials(user, key, meeting_id=None):
                 people = people_request.json()['people']
                 
                 people = sorted(sorted(people, key=lambda d: d['name']), key=lambda d: int(d['role']), reverse=True) # Sort the higher roles before the lower ones
-                attendances_request = requests.get(API_URL+'/attendance/'+str(meeting['id']), headers=headers)
-                if attendances_request.status_code != 200:
-                    return abort(attendances_request.status_code)
-                
-                attendances = attendances_request.json().get('attendances', [])
-                for person in people:
-                    for attendance in attendances:
-                        if attendance['person_id'] == person['id']:
-                            person['presence'] = attendance['presence']
-                            break
-                        
-                people = list(filter(lambda p: p.get('presence') in (0, 1), people))
-                        
-                print(people)
-                
+
                 meeting_attendance_request = requests.get(API_URL+'/attendance/'+str(meeting['id']), headers=headers)
                 
                 if meeting_attendance_request.status_code == 200:
                     for person in people:
                         for attendance in meeting_attendance_request.json()['attendances']:
+                            print(person, attendance)
                             if attendance['person_id'] == person['id']:
                                 person['attendance'] = attendance
                 else:
@@ -981,6 +985,13 @@ def create_person(user, key, group_id=None):
                     
         people_request = requests.post(API_URL+'/people', headers={"Authorization": key}, json={"people": people})
         
+        if people_request.status_code == 409:
+            if group_id is not None:
+                group_request = requests.get(API_URL+"/groups/"+str(group_id), headers={"Authorization": key})
+                if group_request.status_code != 200:
+                    return abort(group_request.status_code)   
+            return render_template("create_person.html", group=group_request.json(), user=user, error=f"A person with the name '{people_request.json().get('person').get('name')}' already exists!")
+        
         if people_request.status_code != 201:
             return abort(people_request.status_code)
         return redirect(url_for('group_people', group_id=group_id))
@@ -1005,7 +1016,7 @@ def delete_person(user, key, person_id=None):
         
         group_id = people_request.json()['person']['group_id']
         people_delete_request = requests.delete(API_URL+'/people/'+str(person_id), headers={"Authorization": key})
-        if people_delete_request.status_code != 204 or people_delete_request.status_code != 200:
+        if people_delete_request.status_code not in [200, 204]:
             return abort(people_delete_request.status_code)
         
         return redirect(url_for('group_people', group_id=group_id))
