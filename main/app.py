@@ -913,9 +913,8 @@ def view_meeting(user, key, meeting_id=None):
                 else:
                     return abort(meeting_attendance_request.status_code)
                 
-                print(people)
                 
-                attendances = len(list(filter(lambda p: p.get('attendance') and p['attendance'].get('presence') in (1, 3), people)))
+                attendances = len(list(filter(lambda p: p.get('attendance') and p['attendance'].get('presence') in (1, 2), people)))
                 
                 return render_template('view_meeting.html', user=user, meeting=meeting, people=people, attendances=attendances)
             else:
