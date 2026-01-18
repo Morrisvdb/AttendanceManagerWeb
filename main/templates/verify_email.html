@@ -10,6 +10,9 @@
 
     <div class="centered">
         <h2>{{ _('Verify Your Email') }}</h2>
+        {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
         <p>{{ _('A verification email has been sent to your email address. ') }}<i>({{user.email}})</i> {{ _('Please check your inbox and click on the verification link to verify your email.') }}</p>
         <p>{{ _('If you did not receive the email, please check your spam folder or click the button below to resend the verification email.') }}</p>
         <a class="button" href="{{ url_for('verify_email_resend') }}" id="resend-email-button" disabled>{{ _('Resend Verification Email') }}</a>

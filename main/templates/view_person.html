@@ -15,6 +15,7 @@
                     Member
                 {% endif %}
             </p>
+            <p><strong>Default Presence:</strong> {{ 'Present' if person.default_presence == 1 else 'Late' if person.default_presence == 2 else 'Absent' }}</p>
             <p><strong>Group ID:</strong> {{ person.group_id }}</p>
             <p><strong>Person ID:</strong> {{ person.id }}</p>
 

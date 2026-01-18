@@ -12,7 +12,8 @@
             deletePage: "{{ url_for('delete_task', task_id='__ID__') }}",
         };
     </script>
-    <button onclick="history.back()" class="return-button">&lt; {{ _('Back') }}</button>
+
+    <a href="{{ url_for('view_group', group_id=group.id) }}" class="return-button">< {{ _('Back') }}</a>
 
     <meta id="tasks-data" data-tasks="{{tasks}}">
 

@@ -3,6 +3,7 @@
 {% block title %}{{ _('Login Required') }}{% endblock %}
 
 {% block content %}
+    <button onclick="window.location = history.back()" class="return-button">< Back</button>
     <div class="login-required-container">
         <h2 class="login-required-title">{{ _('Login Required') }}</h2>
         <p class="login-required-message">{{ _('You must be logged in to access this page.') }}</p>

@@ -170,7 +170,10 @@ def login():
                 key = login_request.json()['key']
             else:
                 return render_template('login.html', error="Unexpected response from server.")
-            url = url_for('home')
+            if login_request.json().get('user')['verified_email'] == False:
+                url = url_for('verify_email')
+            else:
+                url = url_for('home')
             resp = make_response(redirect(url))
             resp.set_cookie('Authorization', key)
             return resp
@@ -180,6 +183,43 @@ def login():
             return render_template('login.html')
     
     return render_template("login.html")
+
+@app.route('/login/forgot', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        if not email:
+            return render_template('forgot_password.html', error="Please provide an email address.")
+        
+        json = {"email": email, "reset_url": url_for('reset_password', reset_key='key_placeholder', _external=True)}
+        forgot_request = requests.put(API_URL+'/login', json=json)
+        if forgot_request.status_code == 200:
+            expires = forgot_request.json().get('expires')
+            return render_template('forgot_password.html', message="A password reset email has been sent.", expires=expires)
+        elif forgot_request.status_code == 404:
+            return render_template('forgot_password.html', error="An account with that email does not exist.")
+        else:
+            return abort(forgot_request.status_code)
+        
+    return render_template('forgot_password.html')
+
+@app.route('/login/reset/<reset_key>', methods=['GET', 'POST'])
+def reset_password(reset_key):
+    if request.method == 'POST':
+        password = request.form.get('password')
+        if not password:
+            return render_template('reset_password.html', error="Please provide a new password.")
+        
+        json = {"reset_key": reset_key, "password": password}
+        reset_request = requests.put(API_URL+'/login', json=json)
+        if reset_request.status_code == 200:
+            return redirect(url_for('login'))
+        elif reset_request.status_code == 400:
+            return render_template('reset_password.html', error="Invalid reset key.")
+        else:
+            return abort(reset_request.status_code)
+    
+    return render_template('reset_password.html')
 
 # TODO: Logout route
 @app.route("/logout")
@@ -255,23 +295,29 @@ def delete_profile(user, key, isConfirmed):
 @login_required
 @get_user
 def verify_email(user, key):
+    if user['verified_email']:
+        return redirect(url_for('profile'))
+    
     headers = {'Authorization': key}
-    data = {"resend": False}
-    email_request = requests.get(API_URL+'/user/email', headers=headers, json=data)
+    data = {"resend": False, "verify_url": url_for('verify_email_key', email_key='key_placeholder', _external=True)}
+    email_request = requests.get(API_URL + '/user/email', headers=headers, json=data)
+
     if email_request.status_code != 200:
         return abort(email_request.status_code)
-    
+
     expires = email_request.json().get('expires')
-    
+
     return render_template('verify_email.html', user=user, expires=expires)
     
 @app.route('/user/email/verify/resend', methods=['GET', 'POST'])
 @login_required
 @get_user
 def verify_email_resend(user, key):
+    if user['verified_email']:
+        return redirect(url_for('profile'))
     headers = {'Authorization': key}
-    data = {"resend": True}
-    email_request = requests.get(API_URL+'/user/email', headers=headers, json=data)
+    data = {"resend": True, "verify_url": url_for('verify_email_key', email_key='key_placeholder', _external=True)}
+    email_request = requests.get(API_URL + '/user/email', headers=headers, json=data)
     if email_request.status_code != 200:
         return abort(email_request.status_code)
     
@@ -281,8 +327,17 @@ def verify_email_resend(user, key):
 @login_required
 @get_user
 def verify_email_key(user, key, email_key):
-    ...
-        
+    if user['verified_email']:
+        return redirect(url_for('profile'))
+    headers = {'Authorization': key}
+    data = {"key": email_key}
+    verify_request = requests.post(API_URL + '/user/email', headers=headers, json=data)
+    if verify_request.status_code == 200:
+        return redirect(url_for('profile'))
+    else:
+        return abort(verify_request.status_code)
+    
+    
 @app.route('/groups')
 @login_required
 @get_user
@@ -468,7 +523,7 @@ def task_edit(user, key, task_id):
     
     people = people_get_request.json().get('people')
     
-    return render_template('edit_task.html', user=user, task=task, people=people)
+    return render_template('edit_task.html', user=user, task=task, people=people, group_id=group_id)
     
 @app.route('/task/delete/<task_id>') # Don't cast to int to prevent error when inserting placeholder in js
 @login_required
@@ -629,8 +684,8 @@ def upcomming_meetings(user, key):
     canceled = False
     group = None
     if request.method == 'POST':
-        future_only = request.form.get('future_only')
-        canceled = request.form.get('canceled')
+        future_only = True if request.form.get('future_only') == 'on' else False
+        canceled = True if request.form.get('canceled') == 'on' else False
         group = request.form.get('group')
         if group == 'all':
             group = None
@@ -756,6 +811,7 @@ def view_meeting_materials(user, key, meeting_id=None):
             people_request = requests.get(API_URL+'/people', json={'group_id': meeting['group_id']}, headers=headers)
             if people_request.status_code == 200:
                 people = people_request.json()['people']
+                
                 people = sorted(sorted(people, key=lambda d: d['name']), key=lambda d: int(d['role']), reverse=True) # Sort the higher roles before the lower ones
 
                 meeting_attendance_request = requests.get(API_URL+'/attendance/'+str(meeting['id']), headers=headers)
@@ -837,6 +893,7 @@ def meeting_attendance(user, key, meeting_id=None):
 @login_required
 @get_user
 def view_meeting(user, key, meeting_id=None):
+    # TODO: Show attendance correctly excluding defaut absences
     if meeting_id is not None:
         headers = {"Authorization": key}
         meeting_request = requests.get(API_URL+'/meetings/'+str(meeting_id), headers=headers)
@@ -854,12 +911,16 @@ def view_meeting(user, key, meeting_id=None):
                 if meeting_attendance_request.status_code == 200:
                     for person in people:
                         for attendance in meeting_attendance_request.json()['attendances']:
+                            print(attendance)
                             if attendance['person_id'] == person['id']:
                                 person['attendance'] = attendance
                 else:
                     return abort(meeting_attendance_request.status_code)
-                        
-                return render_template('view_meeting.html', user=user, meeting=meeting, people=people)
+                
+                
+                attendances = len(list(filter(lambda p: p.get('attendance') and p['attendance'].get('presence') in (1, 2), people)))
+                
+                return render_template('view_meeting.html', user=user, meeting=meeting, people=people, attendances=attendances)
             else:
                 return abort(people_request.status_code)
         else:

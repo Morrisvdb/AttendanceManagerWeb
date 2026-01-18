@@ -3,6 +3,8 @@
 {% block title %}{{ _('Profile') }}{% endblock %}
 
 {% block content %}
+<a href="{{ url_for('profile') }}" class="return-button">< {{ _('Back') }}</a>
+
 <script src="{{ url_for('static', filename='confirmDanger.js') }}"></script>
 
 <div class="centered">
@@ -13,6 +15,10 @@
             <div class="form-group">
                 <label for="username">{{ _('Username') }}</label>
                 <input type="text" id="username" name="username">
+            </div>
+            <div class="form-group">
+                <label for="email">{{ _('Email') }}</label>
+                <input type="email" id="email" name="email">
             </div>
             <hr>
             <div class="form-group">
