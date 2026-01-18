@@ -1,4 +1,4 @@
-# git pull
+git pull
 
 python3 -m venv .
 
@@ -8,4 +8,4 @@ pip install -r requirements.txt
 
 export set FLASK_APP=main.app
 
-flask run --host 0.0.0.0 --port 5002 --debug
+gunicorn -c main/gunicorn_config.py main.app:app --certfile=cert.pem --keyfile=key.pem

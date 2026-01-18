@@ -9,4 +9,6 @@
 /var
 .env
 pyvenv.cfg
+cert.pem
+key.pem
 commands.txt

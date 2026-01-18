@@ -8,6 +8,7 @@ COPY . .
 
 ENV FLASK_APP=main.app
 
-CMD ["flask", "run", "--host", "0.0.0.0", "--port", "5000"]
+# CMD ["flask", "run", "--host", "0.0.0.0", "--port", "5000"]
+CMD ["gunicorn", "-c", "main/gunicorn_config.py", "main.app:app"]
 
 EXPOSE 5000
