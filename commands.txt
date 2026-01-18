@@ -1,4 +1,4 @@
-Create Messages.pot:
+Create messages.pot:
 pybabel extract -F babel.cfg -k _l -o messages.pot .
 
 Create Catalog:

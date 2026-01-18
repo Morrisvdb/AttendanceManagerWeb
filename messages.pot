@@ -1,14 +1,14 @@
 # Translations template for PROJECT.
-# Copyright (C) 2025 ORGANIZATION
+# Copyright (C) 2026 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-12-04 11:35+0100\n"
+"POT-Creation-Date: 2026-01-18 15:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,36 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
+#: main/app.py:132
+msgid "Missing arguments"
+msgstr ""
+
+#: main/app.py:135
+msgid "Passwords do not match"
+msgstr ""
+
+#: main/app.py:146
+msgid "Invalid Email"
+msgstr ""
+
+#: main/app.py:148
+msgid "Username already in use"
+msgstr ""
+
+#: main/app.py:150
+msgid "Malformed request"
+msgstr ""
+
 #: main/static/confirmDanger.js:2
 msgid "Type \"CONFIRM\" to proceed:"
+msgstr ""
+
+#: main/static/emailTimer.js:12
+msgid "Email expired, use the button below to request a new one."
+msgstr ""
+
+#: main/static/emailTimer.js:29
+msgid "Email expires in: "
 msgstr ""
 
 #: main/templates/400.html:7
@@ -52,17 +80,21 @@ msgstr ""
 msgid "Logged in as"
 msgstr ""
 
-#: main/templates/base.html:54 main/templates/edit_profile.html:3
-#: main/templates/edit_profile.html:9 main/templates/profile.html:3
+#: main/templates/base.html:55
+msgid "Verify your Email"
+msgstr ""
+
+#: main/templates/base.html:57 main/templates/edit_profile.html:3
+#: main/templates/edit_profile.html:11 main/templates/profile.html:3
 #: main/templates/profile.html:9
 msgid "Profile"
 msgstr ""
 
-#: main/templates/base.html:55 main/templates/profile.html:13
+#: main/templates/base.html:58 main/templates/profile.html:13
 msgid "Sign Out"
 msgstr ""
 
-#: main/templates/base.html:61 main/templates/home.html:14
+#: main/templates/base.html:64 main/templates/home.html:14
 #: main/templates/login.html:3 main/templates/login.html:7
 #: main/templates/login.html:18
 msgid "Login"
@@ -164,19 +196,19 @@ msgid "Role:"
 msgstr ""
 
 #: main/templates/create_person.html:19 main/templates/edit_person.html:22
-#: main/templates/group_people.html:38 main/templates/view_meeting.html:56
+#: main/templates/group_people.html:38 main/templates/view_meeting.html:58
 #: main/templates/view_meeting_materials.html:32
 msgid "Member"
 msgstr ""
 
 #: main/templates/create_person.html:20 main/templates/edit_person.html:23
-#: main/templates/group_people.html:27 main/templates/view_meeting.html:56
+#: main/templates/group_people.html:27 main/templates/view_meeting.html:58
 #: main/templates/view_meeting_materials.html:32
 msgid "Counsil"
 msgstr ""
 
 #: main/templates/create_person.html:21 main/templates/edit_person.html:24
-#: main/templates/group_people.html:16 main/templates/view_meeting.html:56
+#: main/templates/group_people.html:16 main/templates/view_meeting.html:58
 #: main/templates/view_meeting_materials.html:32
 msgid "Leader"
 msgstr ""
@@ -187,41 +219,41 @@ msgstr ""
 
 #: main/templates/create_task.html:6 main/templates/display_assignments.html:8
 #: main/templates/edit_meeting.html:8 main/templates/edit_person.html:5
-#: main/templates/edit_task.html:6 main/templates/group_people.html:6
-#: main/templates/group_tasks.html:14 main/templates/meetings.html:6
-#: main/templates/view_group.html:32
+#: main/templates/edit_profile.html:6 main/templates/edit_task.html:6
+#: main/templates/group_people.html:6 main/templates/group_tasks.html:16
+#: main/templates/meetings.html:6 main/templates/view_group.html:32
 #: main/templates/view_group_material_log.html:4
 #: main/templates/view_meeting.html:7
 #: main/templates/view_meeting_materials.html:9
 msgid "Back"
 msgstr ""
 
-#: main/templates/create_task.html:10
+#: main/templates/create_task.html:9
 msgid "Create a New Task"
 msgstr ""
 
-#: main/templates/create_task.html:15 main/templates/edit_task.html:15
+#: main/templates/create_task.html:14 main/templates/edit_task.html:15
 msgid "Task Name"
 msgstr ""
 
-#: main/templates/create_task.html:20 main/templates/edit_task.html:20
+#: main/templates/create_task.html:19 main/templates/edit_task.html:20
 msgid "Rotates the task randomly"
 msgstr ""
 
-#: main/templates/create_task.html:20 main/templates/edit_task.html:20
+#: main/templates/create_task.html:19 main/templates/edit_task.html:20
 msgid "Selected people will always be part of this task"
 msgstr ""
 
-#: main/templates/create_task.html:31 main/templates/edit_meeting.html:25
+#: main/templates/create_task.html:30 main/templates/edit_meeting.html:25
 #: main/templates/edit_task.html:32
 msgid "Filter people..."
 msgstr ""
 
-#: main/templates/create_task.html:38 main/templates/group_tasks.html:21
+#: main/templates/create_task.html:37 main/templates/group_tasks.html:23
 msgid "Create Task"
 msgstr ""
 
-#: main/templates/create_task.html:41 main/templates/edit_task.html:42
+#: main/templates/create_task.html:40 main/templates/edit_task.html:42
 msgid "Warning: The number exceeds the selected people."
 msgstr ""
 
@@ -244,7 +276,7 @@ msgstr ""
 
 #: main/templates/edit_group.html:3 main/templates/home.html:7
 msgid "Attendance Manager"
-msgstr "RSA 186 Attendance Manager"
+msgstr ""
 
 #: main/templates/edit_group.html:7
 msgid "< Back"
@@ -255,7 +287,7 @@ msgid "Update Group"
 msgstr ""
 
 #: main/templates/edit_meeting.html:2 main/templates/edit_meeting.html:7
-#: main/templates/view_meeting.html:11
+#: main/templates/view_meeting.html:12
 msgid "Edit Meeting"
 msgstr ""
 
@@ -288,7 +320,7 @@ msgstr ""
 msgid "Default Presence:"
 msgstr ""
 
-#: main/templates/edit_person.html:15 main/templates/view_meeting.html:64
+#: main/templates/edit_person.html:15 main/templates/view_meeting.html:66
 msgid "Absent"
 msgstr ""
 
@@ -296,37 +328,41 @@ msgstr ""
 msgid "Present"
 msgstr ""
 
-#: main/templates/edit_person.html:17 main/templates/view_meeting.html:68
+#: main/templates/edit_person.html:17 main/templates/view_meeting.html:70
 msgid "Late"
 msgstr ""
 
-#: main/templates/edit_profile.html:10
+#: main/templates/edit_profile.html:12
 #, python-format
 msgid "Editing, %(username)s!'s profile"
 msgstr ""
 
-#: main/templates/edit_profile.html:14 main/templates/login.html:10
-#: main/templates/signup.html:11
+#: main/templates/edit_profile.html:16 main/templates/login.html:10
+#: main/templates/signup.html:14
 msgid "Username"
 msgstr ""
 
-#: main/templates/edit_profile.html:19
+#: main/templates/edit_profile.html:20
+msgid "Email"
+msgstr ""
+
+#: main/templates/edit_profile.html:25
 msgid "Old Password"
 msgstr ""
 
-#: main/templates/edit_profile.html:23
+#: main/templates/edit_profile.html:29 main/templates/reset_password.html:10
 msgid "New Password"
 msgstr ""
 
-#: main/templates/edit_profile.html:28
+#: main/templates/edit_profile.html:34
 msgid "Profile Picture"
 msgstr ""
 
-#: main/templates/edit_profile.html:32
+#: main/templates/edit_profile.html:38
 msgid "Update"
 msgstr ""
 
-#: main/templates/edit_task.html:10 main/templates/group_tasks.html:43
+#: main/templates/edit_task.html:10 main/templates/group_tasks.html:45
 msgid "Edit Task"
 msgstr ""
 
@@ -338,6 +374,29 @@ msgstr ""
 msgid "Update Task"
 msgstr ""
 
+#: main/templates/forgot_password.html:3 main/templates/forgot_password.html:7
+#: main/templates/reset_password.html:3
+msgid "Forgot Password"
+msgstr ""
+
+#: main/templates/forgot_password.html:10
+msgid "Email Address"
+msgstr ""
+
+#: main/templates/forgot_password.html:14 main/templates/reset_password.html:7
+#: main/templates/reset_password.html:18
+msgid "Reset Password"
+msgstr ""
+
+#: main/templates/forgot_password.html:24 main/templates/reset_password.html:28
+msgid "Remembered your password?"
+msgstr ""
+
+#: main/templates/forgot_password.html:24 main/templates/reset_password.html:28
+#: main/templates/signup.html:40
+msgid "Login here"
+msgstr ""
+
 #: main/templates/group_people.html:2
 msgid "Group People"
 msgstr ""
@@ -347,25 +406,29 @@ msgstr ""
 msgid "People in %(group)s"
 msgstr ""
 
-#: main/templates/group_people.html:46 main/templates/view_meeting.html:89
+#: main/templates/group_people.html:46 main/templates/view_meeting.html:91
 #: main/templates/view_meeting_materials.html:61
 msgid "No people in this group."
 msgstr ""
 
-#: main/templates/group_tasks.html:22
+#: main/templates/group_tasks.html:24
 msgid "Distribute Tasks"
 msgstr ""
 
-#: main/templates/group_tasks.html:27
+#: main/templates/group_tasks.html:29
 msgid "-- Select Task --"
 msgstr ""
 
-#: main/templates/group_tasks.html:35
+#: main/templates/group_tasks.html:37
 msgid "Number of people for this task: "
 msgstr ""
 
-#: main/templates/group_tasks.html:38
+#: main/templates/group_tasks.html:40
 msgid "People assigned to this task:"
+msgstr ""
+
+#: main/templates/group_tasks.html:46
+msgid "Delete Task"
 msgstr ""
 
 #: main/templates/groups.html:2 main/templates/home.html:11
@@ -409,7 +472,7 @@ msgstr ""
 msgid "Meetings"
 msgstr ""
 
-#: main/templates/login.html:14 main/templates/signup.html:15
+#: main/templates/login.html:14 main/templates/signup.html:22
 msgid "Password"
 msgstr ""
 
@@ -421,15 +484,19 @@ msgstr ""
 msgid "Sign up here"
 msgstr ""
 
-#: main/templates/login_required.html:3 main/templates/login_required.html:7
+#: main/templates/login.html:26
+msgid "Forgot your password?"
+msgstr ""
+
+#: main/templates/login_required.html:3 main/templates/login_required.html:8
 msgid "Login Required"
 msgstr ""
 
-#: main/templates/login_required.html:8
+#: main/templates/login_required.html:9
 msgid "You must be logged in to access this page."
 msgstr ""
 
-#: main/templates/login_required.html:9
+#: main/templates/login_required.html:10
 msgid "Go to Login"
 msgstr ""
 
@@ -438,15 +505,15 @@ msgstr ""
 msgid "Meetings in %(group)s"
 msgstr ""
 
-#: main/templates/meetings.html:14 main/templates/meetings_upcomming.html:46
+#: main/templates/meetings.html:16 main/templates/meetings_upcomming.html:46
 msgid "at"
 msgstr ""
 
-#: main/templates/meetings.html:18
+#: main/templates/meetings.html:19
 msgid "Organisers: "
 msgstr ""
 
-#: main/templates/meetings.html:19
+#: main/templates/meetings.html:20
 msgid "Attendees: "
 msgstr ""
 
@@ -455,7 +522,7 @@ msgid "Future Only"
 msgstr ""
 
 #: main/templates/meetings_upcomming.html:14
-#: main/templates/view_meeting.html:10
+#: main/templates/view_meeting.html:11
 #: main/templates/view_meeting_materials.html:12
 msgid "Canceled"
 msgstr ""
@@ -481,28 +548,56 @@ msgstr ""
 msgid "Delete Account"
 msgstr ""
 
-#: main/templates/signup.html:8
-msgid "Signup"
+#: main/templates/reset_password.html:14
+msgid "Confirm New Password"
 msgstr ""
 
-#: main/templates/signup.html:19
-msgid "Password Confirm"
-msgstr ""
-
-#: main/templates/signup.html:23
-msgid "Passwords must match."
-msgstr ""
-
-#: main/templates/signup.html:26
+#: main/templates/signup.html:4 main/templates/signup.html:33
 msgid "Sign Up"
 msgstr ""
 
-#: main/templates/signup.html:33
+#: main/templates/signup.html:11
+msgid "Signup"
+msgstr ""
+
+#: main/templates/signup.html:18
+msgid "Email Adress"
+msgstr ""
+
+#: main/templates/signup.html:26
+msgid "Password Confirm"
+msgstr ""
+
+#: main/templates/signup.html:30
+msgid "Passwords must match."
+msgstr ""
+
+#: main/templates/signup.html:40
 msgid "Already have an account?"
 msgstr ""
 
-#: main/templates/signup.html:33
-msgid "Login here"
+#: main/templates/verify_email.html:4 main/templates/verify_email.html:12
+msgid "Verify Your Email"
+msgstr ""
+
+#: main/templates/verify_email.html:16
+msgid "A verification email has been sent to your email address. "
+msgstr ""
+
+#: main/templates/verify_email.html:16
+msgid ""
+"Please check your inbox and click on the verification link to verify your"
+" email."
+msgstr ""
+
+#: main/templates/verify_email.html:17
+msgid ""
+"If you did not receive the email, please check your spam folder or click "
+"the button below to resend the verification email."
+msgstr ""
+
+#: main/templates/verify_email.html:18
+msgid "Resend Verification Email"
 msgstr ""
 
 #: main/templates/view_group.html:31
@@ -537,25 +632,25 @@ msgstr ""
 msgid "Delete Group"
 msgstr ""
 
-#: main/templates/view_group_material_log.html:6
+#: main/templates/view_group_material_log.html:7
 #, python-format
 msgid "Material Log for %(group)s"
 msgstr ""
 
-#: main/templates/view_group_material_log.html:11
+#: main/templates/view_group_material_log.html:12
 msgid "Name"
 msgstr ""
 
-#: main/templates/view_group_material_log.html:12
+#: main/templates/view_group_material_log.html:13
 msgid "Stripes"
 msgstr ""
 
-#: main/templates/view_group_material_log.html:13
-#: main/templates/view_group_material_log.html:28
+#: main/templates/view_group_material_log.html:14
+#: main/templates/view_group_material_log.html:29
 msgid "Clear Marks"
 msgstr ""
 
-#: main/templates/view_group_material_log.html:28
+#: main/templates/view_group_material_log.html:29
 msgid "Are you sure? This person does not have 3 strikes yet."
 msgstr ""
 
@@ -568,30 +663,34 @@ msgstr ""
 msgid "Meeting Details"
 msgstr ""
 
-#: main/templates/view_meeting.html:13
+#: main/templates/view_meeting.html:10
+msgid "Attendees:"
+msgstr ""
+
+#: main/templates/view_meeting.html:15
 msgid "Material"
 msgstr ""
 
-#: main/templates/view_meeting.html:21 main/templates/view_meeting.html:42
+#: main/templates/view_meeting.html:23 main/templates/view_meeting.html:44
 msgid "Before Meeting"
 msgstr ""
 
-#: main/templates/view_meeting.html:22 main/templates/view_meeting.html:43
+#: main/templates/view_meeting.html:24 main/templates/view_meeting.html:45
 msgid "During Meeting"
 msgstr ""
 
-#: main/templates/view_meeting.html:27 main/templates/view_meeting.html:38
+#: main/templates/view_meeting.html:29 main/templates/view_meeting.html:40
 msgid ""
 "A checked box indicates the person will be present at the meeting. "
 "<br>Warning, check the drop down to select whether it is before the "
 "meeting or during! (calling in sick etc.)"
 msgstr ""
 
-#: main/templates/view_meeting.html:33
+#: main/templates/view_meeting.html:35
 msgid "Save Attendances"
 msgstr ""
 
-#: main/templates/view_meeting.html:72
+#: main/templates/view_meeting.html:74
 msgid "Excused"
 msgstr ""
 
