@@ -7,8 +7,6 @@
     <div class="container centered">
         <div class="card-list">
             {% for meeting in meetings %}
-                {{meeting}}
-
                 <a href="{{ url_for('view_meeting', meeting_id=meeting.id) }}" class="no-link-style">
                     <div class="meeting-card">
                         <div class="meeting-name">{{ meeting.group_name }}</div>
