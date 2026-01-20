@@ -116,7 +116,6 @@ def change_locale(user, key, locale):
 def toggle_theme(user, key):
     current_theme = request.cookies.get('theme')
     new_theme = "light" if current_theme == 'dark' else "dark"
-    
     resp = make_response()
     resp.set_cookie('theme', new_theme)
     return resp
@@ -143,7 +142,7 @@ def signup():
         if signup_request.status_code == 201:
             return redirect(url_for('login'))
         elif signup_request.status_code == 400:
-            return render_template('signup.html', error=_("Invalid Email"))
+            return render_template('signup.html', error=_("Email invalid or already in use"))
         elif signup_request.status_code == 409:
             return render_template('signup.html', error=_("Username already in use"))
         elif signup_request.status_code == 422:
