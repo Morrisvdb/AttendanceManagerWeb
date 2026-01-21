@@ -7,6 +7,7 @@ from functools import wraps
 import datetime
 import re
 import base64
+import time
 
 
 # TODO: Improve error handeling. --> not 404.html for everything :facepalm:
@@ -174,7 +175,8 @@ def login():
             else:
                 url = url_for('home')
             resp = make_response(redirect(url))
-            resp.set_cookie('Authorization', key)
+            expiry_time = time.time() + 60*60*24*365  # 1 year
+            resp.set_cookie('Authorization', key, expires=expiry_time, max_age=expiry_time)
             return resp
         elif login_request.status_code == 404 or login_request.status_code == 401:
             return render_template('login.html', error="Password or Username incorrect.")
